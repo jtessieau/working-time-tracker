@@ -14,26 +14,31 @@ class UserController extends AbstractController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Form processing
             echo 'form processing';
-            $email = $_POST['email'];
+            $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
             $password = $_POST['password'];
 
-            // Todo: Validation
+            if ($email !== false) {
+                // Retrieve user
+                $user = new UserModel();
+                $data = $user->findUserByEmail($email);
 
-            // Retrieve user
-            $user = new UserModel();
-            $data = $user->findUserByEmail($email);
+                if ($data !== false) {
+                    // check password
+                    if (password_verify($password, $data['password'])) {
+                        $_SESSION['USER'] = [
+                            'firstName' => $data['firstName'],
+                            'lastName' => $data['lastName'],
+                            'email' => $data['email']
+                        ];
 
-            if ($data !== false) {
-                // check password
-                if (password_verify($password, $data['password'])) {
-                    echo 'Access granted';
+                        $this->redirect('/');
+                    } else {
+                        echo 'Password Error';
+                    }
                 } else {
-                    echo 'Password Error';
+                    echo 'User not found';
                 }
-            } else {
-                echo 'User not found';
             }
-
         }
 
         echo $this->render('logInForm');
@@ -52,21 +57,53 @@ class UserController extends AbstractController
         $user = new UserModel();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // TODO: Validation
+            // Validations
+            // Validate first name
+            if (!isset($_POST['firstName'])) {
+                $error['firstName'] = 'First name not set';
+            } else {
+                $firstName = trim($_POST['firstName']);
+                $firstName = filter_var($firstName, FILTER_SANITIZE_STRING);
+                $firstName = ucfirst($firstName);
+            }
+
+            // Validate last name
+            if (!isset($_POST['lastName'])) {
+                $error['lastName'] = 'Last name not set';
+            } else {
+                $lastName = trim($_POST['lastName']);
+                $lastName = filter_var($lastName, FILTER_SANITIZE_STRING);
+                $lastName = strtoupper($lastName);
+            }
+
+            // Validate email
+            if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) === false) {
+                $error['email'] = 'Email is not a valid E-mail';
+            } else {
+                $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+            }
+
+            // Validate password
             if ($_POST['password'] !== $_POST['password2']) {
                 $error['password'] = 'Passwords do not match.';
+            } else {
+                $password = $_POST['password'];
             }
 
             // Populate new user
             if (!isset($error)) {
                 $newUser = [
-                    'firstName' => $_POST['firstName'],
-                    'lastName' => $_POST['lastName'],
-                    'email' => $_POST['email'],
-                    'password' => password_hash($_POST['password'], PASSWORD_BCRYPT)
+                    'firstName' => $firstName,
+                    'lastName' => $lastName,
+                    'email' => $email,
+                    'password' => password_hash($password, PASSWORD_BCRYPT)
                 ];
 
                 $user->createUser($newUser);
+                $this->redirect('/');
+            }
+            else {
+                echo 'Error';
             }
         }
 

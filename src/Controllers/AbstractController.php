@@ -10,11 +10,12 @@ class AbstractController
         exit;
     }
 
-    public function render(string $path): string
+    public function render(string $path)
     {
         ob_start();
         require_once __DIR__ . '/../Views/' . $path . '.php';
+        $content = ob_get_clean();
 
-        return ob_get_clean();
+        require_once __DIR__ . '/../Views/Layouts/defaultLayout.php';
     }
 }
