@@ -25,12 +25,12 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-            <a class="navbar-item">
+            <a href="/" class="navbar-item">
                 Home
             </a>
 
-            <a class="navbar-item">
-                Documentation
+            <a href="/job/my-jobs" class="navbar-item">
+                My jobs
             </a>
         </div>
 
@@ -40,8 +40,8 @@
                 if (!isset($_SESSION['USER'])) {
                     ?>
                     <div class="buttons">
-                        <a href="/signup" class="button is-primary">
-                            <strong>Sign up</strong>
+                        <a href="/signin" class="button is-primary">
+                            <strong>Sign in</strong>
                         </a>
                         <a href="login" class="button is-light">
                             Log in

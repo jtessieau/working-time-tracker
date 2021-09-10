@@ -9,6 +9,7 @@ class UserModel extends AbstractModel
     private string $lastName;
     private string $email;
     private string $password;
+    private int $currentJob_id;
 
     /**
      * @return int
@@ -42,6 +43,11 @@ class UserModel extends AbstractModel
      */
     public function setFirstName(string $firstName): UserModel
     {
+
+        $firstName = trim($_POST['firstName']);
+        $firstName = filter_var($firstName, FILTER_SANITIZE_STRING);
+        $firstName = ucfirst($firstName);
+
         $this->firstName = $firstName;
         return $this;
     }
@@ -60,6 +66,10 @@ class UserModel extends AbstractModel
      */
     public function setLastName(string $lastName): UserModel
     {
+        $lastName = trim($_POST['lastName']);
+        $lastName = filter_var($lastName, FILTER_SANITIZE_STRING);
+        $lastName = strtoupper($lastName);
+
         $this->lastName = $lastName;
         return $this;
     }
@@ -78,6 +88,9 @@ class UserModel extends AbstractModel
      */
     public function setEmail(string $email): UserModel
     {
+        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $email = strtolower($email);
+
         $this->email = $email;
         return $this;
     }
@@ -96,20 +109,46 @@ class UserModel extends AbstractModel
      */
     public function setPassword(string $password): UserModel
     {
+        $password = password_hash($password, PASSWORD_BCRYPT);
+
         $this->password = $password;
         return $this;
     }
 
-    public function createUser($user)
+    /**
+     * @return int
+     */
+    public function getCurrentJobId(): int
     {
-        $pdo = $this->getPDO();
-        $stmt = $pdo->prepare('INSERT INTO users (firstName, lastName, email, password) VALUES (?,?,?,?)');
-        $stmt->execute([
-            $user['firstName'],
-            $user['lastName'],
-            $user['email'],
-            $user['password']
-        ]);
+        return $this->currentJob_id;
+    }
+
+    /**
+     * @param int $currentJob_id
+     * @return UserModel
+     */
+    public function setCurrentJobId(int $currentJob_id): UserModel
+    {
+        $this->currentJob_id = $currentJob_id;
+        return $this;
+    }
+
+    public function createUser()
+    {
+        if ($this->getFirstName() !== null
+            && $this->getLastName() !== null
+            && $this->getEmail() !== null
+            && $this->getPassword() !== null
+        ) {
+            $pdo = $this->getPDO();
+            $stmt = $pdo->prepare('INSERT INTO users (firstName, lastName, email, password) VALUES (?,?,?,?)');
+            $stmt->execute([
+                $this->getFirstName(),
+                $this->getLastName(),
+                $this->getEmail(),
+                $this->getPassword()
+            ]);
+        }
     }
 
     public function findUserByEmail($email)

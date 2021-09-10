@@ -11,16 +11,21 @@ class UserController extends AbstractController
 {
     public function logIn()
     {
+        if (isset($_SESSION['USER'])) {
+            $this->redirect('/');
+        }
+
+        $error = '';
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Form processing
-            echo 'form processing';
-            $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-            $password = $_POST['password'];
+            if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) !== false) {
+                $password = $_POST['password'];
 
-            if ($email !== false) {
                 // Retrieve user
                 $user = new UserModel();
-                $data = $user->findUserByEmail($email);
+                $user->setEmail($_POST['email']);
+                $data = $user->findUserByEmail($user->getEmail());
 
                 if ($data !== false) {
                     // check password
@@ -33,18 +38,22 @@ class UserController extends AbstractController
 
                         $this->redirect('/');
                     } else {
-                        echo 'Password Error';
+                        // echo 'Password Error';
                     }
                 } else {
-                    echo 'User not found';
+                    // echo 'User not found';
                 }
             }
+
+            $error = 'Email or password incorrect';
         }
 
-        echo $this->render('logInForm');
+        $this->render('logInForm',[
+            'error' => $error
+        ]);
     }
 
-    public function logOut()
+    public function logOut(): void
     {
         session_unset();
         session_destroy();
@@ -54,60 +63,68 @@ class UserController extends AbstractController
 
     public function signIn()
     {
+        if (isset($_SESSION['USER'])) {
+            $this->redirect('/');
+        }
+
         $user = new UserModel();
+
+        // Init errors array for the view.
+        $errors = [
+            'firstName' => '',
+            'lastName' => '',
+            'email' => '',
+            'password' => ''
+        ];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Validations
             // Validate first name
             if (!isset($_POST['firstName'])) {
-                $error['firstName'] = 'First name not set';
+                $errors['firstName'] = 'First name must be set.';
             } else {
-                $firstName = trim($_POST['firstName']);
-                $firstName = filter_var($firstName, FILTER_SANITIZE_STRING);
-                $firstName = ucfirst($firstName);
+                $user->setFirstName($_POST['firstName']);
             }
 
             // Validate last name
             if (!isset($_POST['lastName'])) {
-                $error['lastName'] = 'Last name not set';
+                $errors['lastName'] = 'Last name must be set.';
             } else {
-                $lastName = trim($_POST['lastName']);
-                $lastName = filter_var($lastName, FILTER_SANITIZE_STRING);
-                $lastName = strtoupper($lastName);
+                $user->setLastName($_POST['lastName']);
             }
 
             // Validate email
             if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) === false) {
-                $error['email'] = 'Email is not a valid E-mail';
-            } else {
-                $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+                $errors['email'] = 'Email is not a valid E-mail.';
+            }
+            else {
+                $user->setEmail($_POST['email']);
+            }
+
+            if ($user->findUserByEmail($user->getEmail()) !== false) {
+                $errors['email'] = 'Email address already in use.';
             }
 
             // Validate password
-            if ($_POST['password'] !== $_POST['password2']) {
-                $error['password'] = 'Passwords do not match.';
+            if (!isset($_POST['password'])) {
+                $errors['password'] = 'Password must be set.';
+            }
+            else if ($_POST['password'] !== $_POST['password2']) {
+                $errors['password'] = 'Passwords do not match.';
             } else {
-                $password = $_POST['password'];
+                $user->setPassword($_POST['password']);
             }
 
             // Populate new user
-            if (!isset($error)) {
-                $newUser = [
-                    'firstName' => $firstName,
-                    'lastName' => $lastName,
-                    'email' => $email,
-                    'password' => password_hash($password, PASSWORD_BCRYPT)
-                ];
-
-                $user->createUser($newUser);
+            if (!isset($errors)) {
+                $user->createUser();
                 $this->redirect('/');
-            }
-            else {
-                echo 'Error';
             }
         }
 
-        echo $this->render('signInForm');
+        $this->render('signInForm', [
+            'errors' => $errors
+        ]);
     }
 
     public function deleteAccount()

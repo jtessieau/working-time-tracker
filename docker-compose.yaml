@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  db:
+    image: mysql/mysql-server
+    container_name: db_working_time_tracker
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_DB: db
+      MYSQL_USER: acronyme
+      MYSQL_PASSWORD: acronyme
+    networks:
+      - dev
+
+  www:
+    image: php:8.1-rc-apache
+    container_name: httpd_working_time_tracker
+    restart: always
+    volumes:
+      - ./:/var/www/
+    command:
+      - export APACHE_DOCUMENT_ROOT=/var/www/public
+      - sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+      - sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+    ports:
+      - 8080:80
+    networks:
+      - dev
+
+
+volumes:
+  db-data:
+
+networks:
+  dev:

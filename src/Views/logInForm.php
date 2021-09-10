@@ -4,7 +4,13 @@
             <div class="field">
                 <label class="label" for="email">Email</label>
                 <div class="control has-icons-left">
-                    <input class="input" type="email" id="email" name="email" required>
+                    <input
+                            class="input"
+                            type="email"
+                            id="email"
+                            name="email"
+                            value="<?php echo isset($_POST['email']) ? $_POST['email'] : '' ?>"
+                            required>
                     <span class="icon is-small is-left">
                     <i class="fas fa-envelope"></i>
                 </span>
@@ -16,8 +22,13 @@
                 <div class="control has-icons-left">
                     <input class="input" type="password" id="password" name="password" required>
                     <span class="icon is-small is-left">
-                    <i class="fas fa-key"></i>
-                </span>
+                        <i class="fas fa-key"></i>
+                    </span>
+                    <?php
+                    if ($error !== '') {
+                        echo '<p class="help is-danger">' . $error . '</p>';
+                    }
+                    ?>
                 </div>
             </div>
 
