@@ -9,7 +9,9 @@ class JobModel
     private int $rate;
     private \DateTime $startingDate;
     private \DateTime $endingDate;
-    private int $startingDayOfTheWeek;
+
+    private string $periodOfWork;
+    private int $firstDayOfTheWeek;
 
     private int $user_id;
     private int $company_id;

@@ -48,7 +48,7 @@ class UserController extends AbstractController
             $error = 'Email or password incorrect';
         }
 
-        $this->render('logInForm',[
+        $this->render('user/logInForm',[
             'error' => $error
         ]);
     }
@@ -116,13 +116,14 @@ class UserController extends AbstractController
             }
 
             // Populate new user
-            if (!isset($errors)) {
+            if (!$this->checkError($errors)) {
+                echo 'no error';
                 $user->createUser();
                 $this->redirect('/');
             }
         }
 
-        $this->render('signInForm', [
+        $this->render('user/signInForm', [
             'errors' => $errors
         ]);
     }

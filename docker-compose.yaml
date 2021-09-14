@@ -1,36 +1,71 @@
-version: "3.8"
-services:
-  db:
-    image: mysql/mysql-server
-    container_name: db_working_time_tracker
-    restart: always
-    volumes:
-      - db-data:/var/lib/mysql
-    environment:
-      MYSQL_DB: db
-      MYSQL_USER: acronyme
-      MYSQL_PASSWORD: acronyme
-    networks:
-      - dev
-
-  www:
-    image: php:8.1-rc-apache
-    container_name: httpd_working_time_tracker
-    restart: always
-    volumes:
-      - ./:/var/www/
-    command:
-      - export APACHE_DOCUMENT_ROOT=/var/www/public
-      - sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-      - sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-    ports:
-      - 8080:80
-    networks:
-      - dev
-
-
-volumes:
-  db-data:
+version: '3.8'
 
 networks:
-  dev:
+  webdev:
+    driver: bridge
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx-wtt
+    ports:
+      - 8000:80
+    depends_on:
+      - php
+      - mysql
+    volumes:
+      - ./:/var/www/project
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - webdev
+
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    container_name: php-wtt
+    ports:
+      - 9000:9000
+    volumes:
+      - ./:/var/www/project
+    networks:
+      - webdev
+
+  mysql:
+    image: mariadb
+    container_name: mysql-wtt
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wtt
+      MYSQL_USER: wtt
+      MYSQL_PASSWORD: wtt
+    ports:
+      - 4306:3306
+    expose:
+      - 3306
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    networks:
+      - webdev
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin-wtt
+    depends_on:
+      - mysql
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mysql
+    networks:
+      - webdev
+
+  maildev:
+    image: maildev/maildev
+    container_name: maildev-wtt
+    ports:
+      - 1080:80
+    networks:
+      - webdev

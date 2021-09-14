@@ -135,13 +135,14 @@ class UserModel extends AbstractModel
 
     public function createUser()
     {
+        echo 'create';
         if ($this->getFirstName() !== null
             && $this->getLastName() !== null
             && $this->getEmail() !== null
             && $this->getPassword() !== null
         ) {
             $pdo = $this->getPDO();
-            $stmt = $pdo->prepare('INSERT INTO users (firstName, lastName, email, password) VALUES (?,?,?,?)');
+            $stmt = $pdo->prepare('INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?)');
             $stmt->execute([
                 $this->getFirstName(),
                 $this->getLastName(),

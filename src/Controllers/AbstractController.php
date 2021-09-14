@@ -26,4 +26,15 @@ class AbstractController
 
         echo ob_get_clean();
     }
+
+    public function checkError(array $errors): bool
+    {
+        foreach ($errors as $error) {
+            if (!empty($error)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

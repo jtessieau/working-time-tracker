@@ -1,4 +1,5 @@
 .idea/
 databases/
+docker/mysql
 vendor/
 .env
