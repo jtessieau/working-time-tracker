@@ -37,7 +37,7 @@
         <div class="navbar-end">
             <div class="navbar-item">
                 <?php
-                if (!isset($_SESSION['USER'])) {
+                if (!isset($_SESSION['user'])) {
                     ?>
                     <div class="buttons">
                         <a href="/signin" class="button is-primary">
@@ -52,7 +52,7 @@
                     ?>
                     <div class="buttons">
                         <a href="#" class="button is-primary">
-                            <?= $_SESSION['USER']['firstName'] . ' ' . $_SESSION['USER']['lastName'] ?>
+                            <?= $_SESSION['user']['firstName'] . ' ' . $_SESSION['USER']['lastName'] ?>
                         </a>
                         <a href="/logout" class="button is-light">
                             Log out

@@ -4,51 +4,54 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 
-// use Symfony\Component\Validator\Constraints as Assert;
-// use Symfony\Component\Validator\Validation;
-
 class UserController extends AbstractController
 {
     public function logIn()
     {
+        // Block access if an user is allready logged in
         if (isset($_SESSION['USER'])) {
             $this->redirect('/');
         }
 
+        // Initialize error variable needed by the view
         $error = '';
 
+        // If form data have been submit ...
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Form processing
+            // Check if email is valid then retrieve user form db
             if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) !== false) {
                 $password = $_POST['password'];
 
-                // Retrieve user
+                // Retrieve user by email
                 $user = new UserModel();
                 $user->setEmail($_POST['email']);
                 $data = $user->findUserByEmail($user->getEmail());
 
+                // if an user have been found in database
                 if ($data !== false) {
                     // check password
                     if (password_verify($password, $data['password'])) {
                         $_SESSION['USER'] = [
-                            'firstName' => $data['firstName'],
-                            'lastName' => $data['lastName'],
+                            'firstName' => $data['first_name'],
+                            'lastName' => $data['last_name'],
                             'email' => $data['email']
                         ];
 
                         $this->redirect('/');
                     } else {
-                        // echo 'Password Error';
+//                         echo 'Password Error';
                     }
                 } else {
-                    // echo 'User not found';
+//                     echo 'User not found';
                 }
             }
 
+            // If not found in db or email invalid, fill $error
             $error = 'Email or password incorrect';
         }
 
-        $this->render('user/logInForm',[
+        $this->render('user/logInForm', [
             'error' => $error
         ]);
     }
@@ -96,20 +99,18 @@ class UserController extends AbstractController
             // Validate email
             if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) === false) {
                 $errors['email'] = 'Email is not a valid E-mail.';
-            }
-            else {
+            } else {
                 $user->setEmail($_POST['email']);
             }
 
-            if ($user->findUserByEmail($user->getEmail()) !== false) {
+            if ($user->findOneByEmail($user->getEmail()) !== false) {
                 $errors['email'] = 'Email address already in use.';
             }
 
             // Validate password
             if (!isset($_POST['password'])) {
                 $errors['password'] = 'Password must be set.';
-            }
-            else if ($_POST['password'] !== $_POST['password2']) {
+            } else if ($_POST['password'] !== $_POST['password2']) {
                 $errors['password'] = 'Passwords do not match.';
             } else {
                 $user->setPassword($_POST['password']);

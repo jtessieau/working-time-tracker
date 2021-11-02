@@ -11,36 +11,24 @@ class UserModel extends AbstractModel
     private string $password;
     private int $currentJob_id;
 
-    /**
-     * @return int
-     */
+
+    // Getters and Setters
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return UserModel
-     */
     public function setId(int $id): UserModel
     {
         $this->id = $id;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFirstName(): string
     {
         return $this->firstName;
     }
 
-    /**
-     * @param string $firstName
-     * @return UserModel
-     */
     public function setFirstName(string $firstName): UserModel
     {
 
@@ -52,18 +40,11 @@ class UserModel extends AbstractModel
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLastName(): string
     {
         return $this->lastName;
     }
 
-    /**
-     * @param string $lastName
-     * @return UserModel
-     */
     public function setLastName(string $lastName): UserModel
     {
         $lastName = trim($_POST['lastName']);
@@ -74,18 +55,11 @@ class UserModel extends AbstractModel
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     * @return UserModel
-     */
     public function setEmail(string $email): UserModel
     {
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
@@ -95,18 +69,11 @@ class UserModel extends AbstractModel
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    /**
-     * @param string $password
-     * @return UserModel
-     */
     public function setPassword(string $password): UserModel
     {
         $password = password_hash($password, PASSWORD_BCRYPT);
@@ -115,32 +82,22 @@ class UserModel extends AbstractModel
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getCurrentJobId(): int
     {
         return $this->currentJob_id;
     }
 
-    /**
-     * @param int $currentJob_id
-     * @return UserModel
-     */
+
     public function setCurrentJobId(int $currentJob_id): UserModel
     {
         $this->currentJob_id = $currentJob_id;
         return $this;
     }
 
+    // Database interaction
+
     public function createUser()
     {
-        echo 'create';
-        if ($this->getFirstName() !== null
-            && $this->getLastName() !== null
-            && $this->getEmail() !== null
-            && $this->getPassword() !== null
-        ) {
             $pdo = $this->getPDO();
             $stmt = $pdo->prepare('INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?)');
             $stmt->execute([
@@ -149,10 +106,9 @@ class UserModel extends AbstractModel
                 $this->getEmail(),
                 $this->getPassword()
             ]);
-        }
     }
 
-    public function findUserByEmail($email)
+    public function findOneByEmail($email)
     {
         $pdo = $this->getPDO();
         $stmt = $pdo->prepare('SELECT * FROM users WHERE email=?');

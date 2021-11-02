@@ -6,31 +6,30 @@
                 <div class="control has-icons-left">
                     <input
                             class="input"
-                            type="email"
+                            type="text"
                             id="email"
                             name="email"
-                            value="<?php echo isset($_POST['email']) ? $_POST['email'] : '' ?>"
-                            required>
+                            value="<?php echo $_POST['email'] ?? '' ?>"
+                            >
                     <span class="icon is-small is-left">
                     <i class="fas fa-envelope"></i>
                 </span>
                 </div>
+                <span class="help is-danger"><?php echo $errorMessages['email'] ?? '' ?></span>
             </div>
-            <div class="field">
 
+            <div class="field">
                 <label class="label" for="password">Password</label>
                 <div class="control has-icons-left">
-                    <input class="input" type="password" id="password" name="password" required>
+                    <input class="input" type="password" id="password" name="password">
                     <span class="icon is-small is-left">
                         <i class="fas fa-key"></i>
                     </span>
-                    <?php
-                    if ($error !== '') {
-                        echo '<p class="help is-danger">' . $error . '</p>';
-                    }
-                    ?>
                 </div>
+                <span class="help is-danger"><?php echo $errorMessages['password'] ?? '' ?></span>
             </div>
+
+            <span class="help is-danger"><?php echo $errorMessages['connection'] ?? '' ?></span>
 
             <div class="field is-grouped is-grouped-centered">
                 <div class="control">

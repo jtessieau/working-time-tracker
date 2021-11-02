@@ -1,10 +1,13 @@
+<?php
+var_dump($_POST);
+?>
 <div class="container">
     <div class="block mx-auto" style="width: 300px">
         <form method="post">
             <div class="field">
                 <label class="label" for="designation">Job Title</label>
                 <div class="control has-icons-left">
-                    <input class="input" type="text" id="designation" name="designation" required>
+                    <input class="input" type="text" id="designation" name="designation">
                     <span class="icon is-small is-left">
                         <i class="fas fa-briefcase"></i>
                     </span>
@@ -13,16 +16,25 @@
             <div class="field">
                 <label class="label" for="rate">Rate</label>
                 <div class="control has-icons-left">
-                    <input class="input" type="text" id="rate" name="rate" required>
+                    <input class="input" type="text" id="rate" name="rate">
                     <span class="icon is-small is-left">
                         <i class="fas fa-hand-holding-usd"></i>
                     </span>
                 </div>
             </div>
             <div class="field">
-                <label class="label" for="company">Company</label>
+                <label class="label" for="companyName">Company name</label>
                 <div class="control has-icons-left">
-                    <input class="input" type="text" id="company" name="company" required>
+                    <input class="input" type="text" id="companyName" name="companyName">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-building"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="companyCity">Company city</label>
+                <div class="control has-icons-left">
+                    <input class="input" type="text" id="companyCity" name="companyCity">
                     <span class="icon is-small is-left">
                         <i class="fas fa-building"></i>
                     </span>
@@ -31,7 +43,7 @@
             <div class="field">
                 <label class="label" for="startDate">Starting date</label>
                 <div class="control has-icons-left">
-                    <input class="input" type="date" id="startDate" name="startDate" required>
+                    <input class="input" type="date" id="startDate" name="startDate">
                     <span class="icon is-small is-left">
                         <i class="fas fa-calendar-alt"></i>
                     </span>
@@ -40,7 +52,7 @@
             <div class="field">
                 <label class="label" for="endDate">Ending date</label>
                 <div class="control has-icons-left">
-                    <input class="input" type="date" id="endDate" name="endDate" required>
+                    <input class="input" type="date" id="endDate" name="endDate">
                     <span class="icon is-small is-left">
                         <i class="fas fa-calendar-alt"></i>
                     </span>
