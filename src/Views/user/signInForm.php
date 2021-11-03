@@ -10,7 +10,6 @@
                             id="firstName"
                             name="firstName"
                             value="<?php echo isset($_POST['firstName']) ? $_POST['firstName'] : '' ?>"
-                            required
                     >
                     <span class="icon is-small is-left">
                         <i class="fas fa-user-circle"></i>
@@ -31,7 +30,6 @@
                             id="lastName"
                             name="lastName"
                             value="<?php echo isset($_POST['lastName']) ? $_POST['lastName'] : '' ?>"
-                            required
                     >
                     <span class="icon is-small is-left">
                         <i class="fas fa-user-circle"></i>
@@ -49,12 +47,12 @@
                 <label class="label" for="email">Email</label>
                 <div class="control has-icons-left">
                     <input
-                            class="input"
-                            type="email"
-                            id="email"
-                            name="email"
-                            value="<?php echo isset($_POST['email']) ? $_POST['email'] : '' ?>"
-                            required>
+                        class="input"
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="<?php echo isset($_POST['email']) ? $_POST['email'] : '' ?>"
+                    >
                     <span class="icon is-small is-left">
                         <i class="fas fa-envelope"></i>
                     </span>
@@ -69,7 +67,7 @@
             <div class="field">
                 <label class="label" for="password">Password</label>
                 <div class="control has-icons-left">
-                    <input class="input" type="password" id="password" name="password" required>
+                    <input class="input" type="password" id="password" name="password">
                     <span class="icon is-small is-left">
                         <i class="fas fa-key"></i>
                     </span>
@@ -84,7 +82,7 @@
             <div class="field">
                 <label class="label" for="password2">Re-enter Password</label>
                 <div class="control has-icons-left">
-                    <input class="input" type="password" id="password2" name="password2" required>
+                    <input class="input" type="password" id="password2" name="password2">
                     <span class="icon is-small is-left">
                         <i class="fas fa-key"></i>
                     </span>

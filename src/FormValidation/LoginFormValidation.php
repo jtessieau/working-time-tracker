@@ -1,18 +1,14 @@
 <?php
 namespace App\FormValidation;
 
-class LoginFormValidation {
+use App\FormValidation\ValidationInterface;
+use App\FormValidation\FormValidation;
 
-    private array $data;
-    private array $errors = [];
-    private static array $fields = ['email', 'password'];
+class LoginFormValidation extends FormValidation implements ValidationInterface
+{
+    protected static array $fields = ['email', 'password'];
 
-    public function __construct(array $post_data)
-    {
-        $this->data = $post_data;
-    }
-
-    public function validateLoginForm(): ?array
+    public function validate(): array
     {
         foreach (self::$fields as $field) {
             if(!array_key_exists($field, $this->data)){
@@ -45,10 +41,5 @@ class LoginFormValidation {
         if(empty($password)) {
             $this->addError('password', 'Password cannot be empty.');
         }
-    }
-
-    private function addError(string $field, string $errorMessage): void
-    {
-        $this->errors[$field] = $errorMessage;
     }
 }

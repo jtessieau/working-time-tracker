@@ -23,12 +23,10 @@ class AuthController extends AbstractController
         * If an user is found, compare password form POST with database result.
         */
 
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $validator = new LoginFormValidation($_POST);
-            $errorMessages = $validator->validateLoginForm();
-
+            $errorMessages = $validator->validate();
 
             if (empty($errorMessages)) {
                 // Look for existing user in database
