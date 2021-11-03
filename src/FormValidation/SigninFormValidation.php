@@ -7,7 +7,7 @@ class SigninFormValidation extends FormValidation implements ValidationInterface
 {
     protected static array $fields = ['firstName', 'lastName', 'email', 'password', 'password2'];
 
-    public function validate(): ?array
+    public function validate(): array
     {
         foreach (self::$fields as $field) {
             if(!array_key_exists($field, $this->data)){
@@ -26,22 +26,22 @@ class SigninFormValidation extends FormValidation implements ValidationInterface
 
     private function validateFirstName(): void
     {
-        $firstName = trim($this->date['firstName']);
+        $firstName = trim($this->data['firstName']);
 
         if(empty($firstName)) {
             $this->addError('firstName', 'This field is required');
-        } else if(!preg_match("^[A-Za-z]*(([,.] |[ '-])[A-Za-z][a-z]*)*(\.?)( [IVXLCDM]+)?$",$firstName)){
+        } else if(!preg_match("/^[A-Za-z]*(([,.] |[ '-])[A-Za-z][a-z]*)*(\.?)( [IVXLCDM]+)?$/",$firstName)){
             $this->addError('firstName', 'Please provide a valid first name.');
         }
     }
 
     private function validateLastName(): void
     {
-        $lastName = trim($this->date['lastName']);
+        $lastName = trim($this->data['lastName']);
 
         if(empty($lastName)) {
             $this->addError('lastName', 'This field is required');
-        } else if(!preg_match("^[A-Za-z]*(([,.] |[ '-])[A-Za-z][a-z]*)*(\.?)( [IVXLCDM]+)?$",$lastName)){
+        } else if(!preg_match("/^[A-Za-z]*(([,.] |[ '-])[A-Za-z][a-z]*)*(\.?)( [IVXLCDM]+)?$/",$lastName)){
             $this->addError('lastName', 'Please provide a valid last name.');
         }
     }

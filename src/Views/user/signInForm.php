@@ -5,43 +5,39 @@
                 <label class="label" for="firstName">First Name</label>
                 <div class="control has-icons-left">
                     <input
-                            class="input"
-                            type="text"
-                            id="firstName"
-                            name="firstName"
-                            value="<?php echo isset($_POST['firstName']) ? $_POST['firstName'] : '' ?>"
+                        class="input"
+                        type="text"
+                        id="firstName"
+                        name="firstName"
+                        value="<?php echo $_POST['firstName'] ?? '' ?>"
                     >
                     <span class="icon is-small is-left">
                         <i class="fas fa-user-circle"></i>
                     </span>
-                    <?php
-                        if (!empty($errors['firstName'])) {
-                            echo '<p class="help is-danger">' . $errors['firstName'] . '</p>';
-                        }
-                    ?>
                 </div>
+                <span class="help is-danger">
+                    <?php echo $errorMessages['firstName'] ?? ''; ?>
+                </span>
             </div>
+
             <div class="field">
                 <label class="label" for="lastName">Last Name</label>
                 <div class="control has-icons-left">
                     <input
-                            class="input"
-                            type="text"
-                            id="lastName"
-                            name="lastName"
-                            value="<?php echo isset($_POST['lastName']) ? $_POST['lastName'] : '' ?>"
+                        class="input"
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        value="<?php echo $_POST['lastName'] ?? '' ?>"
                     >
                     <span class="icon is-small is-left">
                         <i class="fas fa-user-circle"></i>
                     </span>
-                    <?php
-                    if (!empty($errors['lastName'])) {
-                        echo '<p class="help is-danger">' . $errors['lastName'] . '</p>';
-                    }
-                    ?>
                 </div>
+                <span class="help is-danger">
+                    <?php echo $errorMessages['lastName'] ?? ''; ?>
+                </span>
             </div>
-
 
             <div class="field">
                 <label class="label" for="email">Email</label>
@@ -51,17 +47,15 @@
                         type="email"
                         id="email"
                         name="email"
-                        value="<?php echo isset($_POST['email']) ? $_POST['email'] : '' ?>"
+                        value="<?php echo $_POST['email'] ?? '' ?>"
                     >
                     <span class="icon is-small is-left">
                         <i class="fas fa-envelope"></i>
                     </span>
-                    <?php
-                    if (!empty($errors['email'])) {
-                        echo '<p class="help is-danger">' . $errors['email'] . '</p>';
-                    }
-                    ?>
                 </div>
+                <span class="help is-danger">
+                    <?php echo $errorMessages['email'] ?? ''; ?>
+                </span>
             </div>
 
             <div class="field">
@@ -71,11 +65,6 @@
                     <span class="icon is-small is-left">
                         <i class="fas fa-key"></i>
                     </span>
-                    <?php
-                    if (!empty($errors['password'])) {
-                        echo '<p class="help is-danger">' . $errors['password'] . '</p>';
-                    }
-                    ?>
                 </div>
             </div>
 
@@ -87,6 +76,9 @@
                         <i class="fas fa-key"></i>
                     </span>
                 </div>
+                <span class="help is-danger">
+                    <?php echo $errorMessages['password'] ?? ''; ?>
+                </span>
             </div>
 
             <div class="field is-grouped is-grouped-centered">
