@@ -9,7 +9,7 @@
                             type="text"
                             id="email"
                             name="email"
-                            value="<?php echo $_POST['email'] ?? '' ?>"
+                            value="<?php echo htmlspecialchars($_POST['email']) ?? '' ?>"
                             >
                     <span class="icon is-small is-left">
                     <i class="fas fa-envelope"></i>

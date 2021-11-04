@@ -9,7 +9,7 @@
                         type="text"
                         id="firstName"
                         name="firstName"
-                        value="<?php echo $_POST['firstName'] ?? '' ?>"
+                        value="<?php echo htmlspecialchars($_POST['firstName']) ?? '' ?>"
                     >
                     <span class="icon is-small is-left">
                         <i class="fas fa-user-circle"></i>
@@ -28,7 +28,7 @@
                         type="text"
                         id="lastName"
                         name="lastName"
-                        value="<?php echo $_POST['lastName'] ?? '' ?>"
+                        value="<?php echo htmlspecialchars($_POST['lastName']) ?? '' ?>"
                     >
                     <span class="icon is-small is-left">
                         <i class="fas fa-user-circle"></i>
@@ -47,7 +47,7 @@
                         type="email"
                         id="email"
                         name="email"
-                        value="<?php echo $_POST['email'] ?? '' ?>"
+                        value="<?php echo htmlspecialchars($_POST['email']) ?? '' ?>"
                     >
                     <span class="icon is-small is-left">
                         <i class="fas fa-envelope"></i>
