@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Models\CompanyModel;
-use App\Models\JobModel;
-use App\Models\UserModel;
+use App\Models\CompanyModel as Company;
+use App\Models\JobModel as Job;
+use App\Models\UserModel as User;
 
 class JobController extends AbstractController
 {
@@ -15,77 +15,27 @@ class JobController extends AbstractController
 
     public function createJob()
     {
-        if (!isset($_SESSION['USER'])) {
+
+        // This  page should not be accessible to user NOT logged in.
+        if (!isset($_SESSION['user'])) {
             $this->redirect('/');
         }
 
-        $job = new JobModel();
-        $user = new UserModel();
-        $company = new CompanyModel();
+        $job = new Job();
+        $user = new User();
+        $company = new Company();
 
-        $errors = [];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Data validation
-
-            // Job
-            if (empty($_POST['designation'])) {
-                $errors['designation'] = 'Job designation must be set.';
-            } else {
-                $job->setDesignation($_POST['designation']);
-            }
-
-            if (empty($_POST['rate'])) {
-                $errors['rate'] = 'Rate must be set.';
-            } else {
-                $job->setRate($_POST['rate']);
-            }
-
-            if (empty($_POST['startDate'])) {
-                $errors['startDate'] = 'Start date must be set.';
-            } else {
-                $date = date_create_from_format('Y-m-d',$_POST['startDate']);
-                $job->setStartDate($date);
-            }
-
-            if (empty($_POST['endDate'])) {
-                $errors['endDate'] = '';
-            } else {
-                $date = date_create_from_format('Y-m-d',$_POST['endDate']);
-                $job->setEndDate($date);
-            }
-
-            if (empty($_POST['periodOfWork'])) {
-                $errors['periodOfWork'] = '';
-            } else {
-                $job->setPeriodOfWork($_POST['periodOfWork']);
-            }
-
-            if (empty($_POST['firstDayOfTheWeek'])) {
-                $errors['firstDayOfTheWeek'] = '';
-            } else {
-                $job->setFirstDayOfTheWeek($_POST['firstDayOfTheWeek']);
-            }
-
-            // Company
-            if (empty($_POST['companyName'])) {
-                $errors['companyName'] = '';
-            } else {
-                $company->setName($_POST['companyName']);
-            }
-            if (empty($_POST['companyCity'])) {
-                $errors['companyCity'] = '';
-            } else {
-                $company->setCity($_POST['companyCity']);
-            }
+            $validor = new JobCreationFormValidation;
+            $errorMessages = $validator->validate($_POST);
 
             // user
-            $userData = $user->findUserByEmail($_SESSION['USER']['email']);
+            $userData = $user->findUserByEmail($_SESSION['user']['email']);
             $job->setUserId($userData['id']);
 
-            var_dump($errors);
-            $error = [];
-            if (!$this->checkError($error)) {
+            if (empty($errorMessages)) {
                 $companyId = $company->createCompany();
                 if ($companyId != false) {
                     $job->setCompanyId($companyId);
