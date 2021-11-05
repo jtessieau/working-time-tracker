@@ -2,6 +2,7 @@
 namespace App\FormValidation;
 
 use App\FormValidation\ValidationInterface;
+use App\Models\UserModel as User;
 
 class SigninFormValidation extends FormValidation implements ValidationInterface
 {
@@ -54,6 +55,12 @@ class SigninFormValidation extends FormValidation implements ValidationInterface
             $this->addError('email', 'Email field is required.');
         } else if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
             $this->addError('email', 'You must enter a valid email.');
+        } else {
+            $user = new User;
+
+            if($user->findOneByEmail($email) !== false) {
+                $this->addError('email', 'This email is already in use.');
+            }
         }
     }
 
