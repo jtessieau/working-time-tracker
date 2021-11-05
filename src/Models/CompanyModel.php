@@ -73,10 +73,10 @@ class CompanyModel extends AbstractModel
 
     public function checkEmptyCompany()
     {
-        if($this->name != null $$ $this->city != null) {
+        if($this->name != null && $this->city != null) {
             return true;
         } else {
-            return false
+            return false;
         }
     }
 }
