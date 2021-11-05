@@ -16,7 +16,7 @@ class AbstractModel
 
             return $pdo;
         } catch (\Exception $e) {
-            echo "Impossible d'accéder à la base de données SQLite : " . $e->getMessage();
+            echo "Impossible d'accéder à la base de données : " . $e->getMessage();
             die();
         }
     }
