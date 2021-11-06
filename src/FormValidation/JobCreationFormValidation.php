@@ -1,14 +1,17 @@
 <?php
 
+namespace App\FormValidation;
+
 use App\FormValidation\FormValidation;
 use App\FormValidation\ValidationInterface;
 
 class JobCreationFormValidation extends FormValidation implements ValidationInterface
 {
-    protected array $fields = [
+    protected static array $fields = [
         'designation',
         'rate',
         'startDate',
+        // 'endDateKnown',
         'endDate',
         'periodOfWork',
         'firstDayOfTheWeek',
@@ -25,6 +28,8 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
             }
         }
 
+        var_dump($_POST);
+
         $this->validateDesignation();
         $this->validateRate();
         $this->validateStartDate();
@@ -34,6 +39,8 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
         $this->validateCompanyName();
         $this->validateCompanyCity();
 
+        return $this->errors;
+
     }
 
     private function validateDesignation(): void
@@ -42,7 +49,7 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
 
         if (empty($designation)) {
             $this->addError('designation', 'This field can not be empty.');
-        } else if(!preg_match('/^[\p{L}\s]*$/')) {
+        } else if(!preg_match('/^[\p{L}\s]*$/', $designation)) {
             $this->addError('designation', 'Please enter a valid designation (No special chars).');
         }
     }
@@ -54,7 +61,7 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
         if (empty($rate)) {
             $this->addError('rate', 'Please enter a rate.');
         }else if(!is_numeric($rate)){
-            $this->addError('rate', 'Numeric value only.')
+            $this->addError('rate', 'Numeric value only.');
         }
     }
 
@@ -62,36 +69,63 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
     {
         $startDate = $this->data['startDate'];
 
-        if (empty($startDate) {
+        if (empty($startDate)) {
             $this->addError('startDate', 'Please add a start date.');
-        } else if (!data_create_from_format('Y-m-d',$startDate)){
+        } else if (!date_create_from_format('Y-m-d',$startDate)){
             $this->addError('startDate','Invalid date format.');
         }
     }
 
     private function validateEndDate(): void
     {
-        $startDate = $this->data['endDate'];
+        $endDate = $this->data['endDate'];
 
-        if (!data_create_from_format('Y-m-d',$endDate)){
-            $this->addError('endDate','Invalid date format.');
+        if (isset($this->data['endDateKnown'])) {
+            if (!date_create_from_format('Y-m-d',$endDate)){
+                $this->addError('endDate','Invalid date format.');
+            }
         }
     }
 
     private function validatePerdiodOfWork(): void
     {
+        $periodOfWork = $this->data['periodOfWork'];
+        $validAnswer = ['daily', 'weekly', 'monthly'];
 
+        if (!in_array($periodOfWork, $validAnswer)) {
+            $this->addError('periodOfWork', 'Invalid answer ... Please choose from the drop-down list.');
+        }
     }
 
     private function validateFirstDayOfTheWeek(): void
     {
+        $firstDayOfTheWeek = $this->data['firstDayOfTheWeek'];
+        $validAnswer = ['0', '1', '2', '3', '4', '5', '6'];
 
+        if (!in_array($firstDayOfTheWeek, $validAnswer)) {
+            $this->addError('firstDayOfTheWeek', 'Invalid answer ... Please choose from the drop-down list.');
+        }
     }
 
     private function validateCompanyName(): void
     {
+        $companyName = $this->data['companyName'];
 
+        if(empty($companyName)) {
+            $this->addError('companyName', 'This field can not be empty.');
+        } else if (!preg_match('/^[\p{L}\s]*$/', $companyName)) {
+            $this->addError('companyName', 'Please enter a valid name (No special chars).');
+        }
     }
 
     private function validateCompanyCity(): void
+    {
+        $companyCity = $this->data['companyCity'];
+
+        if(empty($companyCity)) {
+            $this->addError('companyCity', 'This field can not be empty.');
+        } else if (!preg_match('/^[\p{L}\s]*$/', $companyCity)) {
+            $this->addError('companyCity', 'Please enter a valid name (No special chars).');
+        }
+    }
 }

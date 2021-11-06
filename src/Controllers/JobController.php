@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\FormValidation\JobCreationFormValidation;
+
 use App\Models\CompanyModel as Company;
 use App\Models\JobModel as Job;
 use App\Models\UserModel as User;
@@ -28,23 +30,27 @@ class JobController extends AbstractController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Data validation
-            $validor = new JobCreationFormValidation;
-            $errorMessages = $validator->validate($_POST);
+            $validator = new JobCreationFormValidation($_POST);
+            $errorMessages = $validator->validate();
 
             // user
-            $userData = $user->findUserByEmail($_SESSION['user']['email']);
+            $userData = $user->findOneByEmail($_SESSION['user']['email']);
             $job->setUserId($userData['id']);
 
             if (empty($errorMessages)) {
                 $companyId = $company->createCompany();
                 if ($companyId != false) {
                     $job->setCompanyId($companyId);
-                    $job->createJob();
+                    echo "OK form send";
+                    //$job->createJob();
+                    die();
                 }
             }
         }
 
-        $this->render('job/createJobForm');
+        $this->render('job/createJobForm', [
+            'errorMessages' => $errorMessages
+        ]);
     }
 
 }
