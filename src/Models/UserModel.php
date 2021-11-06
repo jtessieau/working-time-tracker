@@ -31,7 +31,6 @@ class UserModel extends AbstractModel
 
     public function setFirstName(string $firstName): UserModel
     {
-
         $firstName = trim($_POST['firstName']);
         $firstName = filter_var($firstName, FILTER_SANITIZE_STRING);
         $firstName = ucfirst($firstName);
@@ -98,9 +97,9 @@ class UserModel extends AbstractModel
 
     public function createUser()
     {
-            $pdo = $this->getPDO();
-            $stmt = $pdo->prepare('INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?)');
-            $stmt->execute([
+        $pdo = $this->getPDO();
+        $stmt = $pdo->prepare('INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?)');
+        $stmt->execute([
                 $this->getFirstName(),
                 $this->getLastName(),
                 $this->getEmail(),

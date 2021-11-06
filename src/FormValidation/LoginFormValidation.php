@@ -1,4 +1,5 @@
 <?php
+
 namespace App\FormValidation;
 
 use App\FormValidation\ValidationInterface;
@@ -11,7 +12,7 @@ class LoginFormValidation extends FormValidation implements ValidationInterface
     public function validate(): array
     {
         foreach (self::$fields as $field) {
-            if(!array_key_exists($field, $this->data)){
+            if (!array_key_exists($field, $this->data)) {
                 trigger_error("$field is not present in this form...");
                 return null;
             }
@@ -27,9 +28,9 @@ class LoginFormValidation extends FormValidation implements ValidationInterface
     {
         $email = trim($this->data['email']);
 
-        if(empty($email)) {
+        if (empty($email)) {
             $this->addError('email', 'Email field is required.');
-        } else if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->addError('email', 'You must enter a valid email.');
         }
     }
@@ -38,7 +39,7 @@ class LoginFormValidation extends FormValidation implements ValidationInterface
     {
         $password = $this->data['password'];
 
-        if(empty($password)) {
+        if (empty($password)) {
             $this->addError('password', 'Password cannot be empty.');
         }
     }

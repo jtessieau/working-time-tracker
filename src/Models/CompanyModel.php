@@ -54,7 +54,6 @@ class CompanyModel extends AbstractModel
     public function createCompany()
     {
         if (!$this->checkEmptyCompany()) {
-
             $pdo = $this->getPDO();
             $stmt = $pdo->prepare('INSERT INTO companies (name,city) VALUES (?,?)');
             $return = $stmt->execute([
@@ -63,17 +62,16 @@ class CompanyModel extends AbstractModel
             ]);
 
             if ($return) {
-                 return $pdo->lastInsertId();
+                return $pdo->lastInsertId();
             } else {
                 return false;
             }
         }
-
     }
 
     public function checkEmptyCompany()
     {
-        if($this->name != null && $this->city != null) {
+        if ($this->name != null && $this->city != null) {
             return true;
         } else {
             return false;

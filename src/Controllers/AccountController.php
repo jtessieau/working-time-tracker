@@ -8,7 +8,7 @@ class AccountController extends AbstractController
 {
     public function __construct()
     {
-        $this->userModel = new UserModel;
+        $this->userModel = new UserModel();
     }
 
     public function createAccount()

@@ -3,3 +3,4 @@ databases/
 docker/mysql
 vendor/
 .env
+.php-cs-fixer.cache

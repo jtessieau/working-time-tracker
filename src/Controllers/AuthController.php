@@ -9,7 +9,7 @@ class AuthController extends AbstractController
 {
     public function __construct()
     {
-        $this->userModel = new UserModel;
+        $this->userModel = new UserModel();
     }
 
     public function Login()
@@ -24,7 +24,6 @@ class AuthController extends AbstractController
         */
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $validator = new LoginFormValidation($_POST);
             $errorMessages = $validator->validate();
 
@@ -47,7 +46,7 @@ class AuthController extends AbstractController
             }
         }
 
-        $this->render('user/LoginForm',[
+        $this->render('user/LoginForm', [
             'errorMessages' => $errorMessages
         ]);
     }

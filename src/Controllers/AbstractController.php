@@ -12,7 +12,6 @@ class AbstractController
 
     public function render(string $path, array $vars = [])
     {
-
         if (!empty($vars)) {
             extract($vars);
         }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\FormValidation;
 
 interface ValidationInterface

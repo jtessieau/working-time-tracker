@@ -1,4 +1,5 @@
 <?php
+
 namespace App\FormValidation;
 
 use App\FormValidation\ValidationInterface;
@@ -11,7 +12,7 @@ class SigninFormValidation extends FormValidation implements ValidationInterface
     public function validate(): array
     {
         foreach (self::$fields as $field) {
-            if(!array_key_exists($field, $this->data)){
+            if (!array_key_exists($field, $this->data)) {
                 trigger_error("$field is not present in this form...");
                 return null;
             }
@@ -29,9 +30,9 @@ class SigninFormValidation extends FormValidation implements ValidationInterface
     {
         $firstName = trim($this->data['firstName']);
 
-        if(empty($firstName)) {
+        if (empty($firstName)) {
             $this->addError('firstName', 'This field is required');
-        } else if(!preg_match("/^[A-Za-z]*(([,.] |[ '-])[A-Za-z][a-z]*)*(\.?)( [IVXLCDM]+)?$/",$firstName)){
+        } elseif (!preg_match("/^[A-Za-z]*(([,.] |[ '-])[A-Za-z][a-z]*)*(\.?)( [IVXLCDM]+)?$/", $firstName)) {
             $this->addError('firstName', 'Please provide a valid first name.');
         }
     }
@@ -40,9 +41,9 @@ class SigninFormValidation extends FormValidation implements ValidationInterface
     {
         $lastName = trim($this->data['lastName']);
 
-        if(empty($lastName)) {
+        if (empty($lastName)) {
             $this->addError('lastName', 'This field is required');
-        } else if(!preg_match("/^[A-Za-z]*(([,.] |[ '-])[A-Za-z][a-z]*)*(\.?)( [IVXLCDM]+)?$/",$lastName)){
+        } elseif (!preg_match("/^[A-Za-z]*(([,.] |[ '-])[A-Za-z][a-z]*)*(\.?)( [IVXLCDM]+)?$/", $lastName)) {
             $this->addError('lastName', 'Please provide a valid last name.');
         }
     }
@@ -51,14 +52,14 @@ class SigninFormValidation extends FormValidation implements ValidationInterface
     {
         $email = trim($this->data['email']);
 
-        if(empty($email)) {
+        if (empty($email)) {
             $this->addError('email', 'Email field is required.');
-        } else if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->addError('email', 'You must enter a valid email.');
         } else {
-            $user = new User;
+            $user = new User();
 
-            if($user->findOneByEmail($email) !== false) {
+            if ($user->findOneByEmail($email) !== false) {
                 $this->addError('email', 'This email is already in use.');
             }
         }
@@ -69,9 +70,9 @@ class SigninFormValidation extends FormValidation implements ValidationInterface
         $password = $this->data['password'];
         $password2 = $this->data['password2'];
 
-        if(empty($password)) {
+        if (empty($password)) {
             $this->addError('password', 'Password cannot be empty.');
-        } else if($password !== $password2) {
+        } elseif ($password !== $password2) {
             $this->addError('password', 'Password do not match.');
         }
     }

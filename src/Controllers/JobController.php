@@ -52,5 +52,4 @@ class JobController extends AbstractController
             'errorMessages' => $errorMessages
         ]);
     }
-
 }

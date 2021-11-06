@@ -22,7 +22,7 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
     public function validate(): array
     {
         foreach (self::$fields as $field) {
-            if(!array_key_exists($field, $this->data)){
+            if (!array_key_exists($field, $this->data)) {
                 trigger_error("$field is not present in this form...");
                 return null;
             }
@@ -40,7 +40,6 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
         $this->validateCompanyCity();
 
         return $this->errors;
-
     }
 
     private function validateDesignation(): void
@@ -49,7 +48,7 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
 
         if (empty($designation)) {
             $this->addError('designation', 'This field can not be empty.');
-        } else if(!preg_match('/^[\p{L}\s]*$/', $designation)) {
+        } elseif (!preg_match('/^[\p{L}\s]*$/', $designation)) {
             $this->addError('designation', 'Please enter a valid designation (No special chars).');
         }
     }
@@ -60,7 +59,7 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
 
         if (empty($rate)) {
             $this->addError('rate', 'Please enter a rate.');
-        }else if(!is_numeric($rate)){
+        } elseif (!is_numeric($rate)) {
             $this->addError('rate', 'Numeric value only.');
         }
     }
@@ -71,8 +70,8 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
 
         if (empty($startDate)) {
             $this->addError('startDate', 'Please add a start date.');
-        } else if (!date_create_from_format('Y-m-d',$startDate)){
-            $this->addError('startDate','Invalid date format.');
+        } elseif (!date_create_from_format('Y-m-d', $startDate)) {
+            $this->addError('startDate', 'Invalid date format.');
         }
     }
 
@@ -81,8 +80,8 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
         $endDate = $this->data['endDate'];
 
         if (isset($this->data['endDateKnown'])) {
-            if (!date_create_from_format('Y-m-d',$endDate)){
-                $this->addError('endDate','Invalid date format.');
+            if (!date_create_from_format('Y-m-d', $endDate)) {
+                $this->addError('endDate', 'Invalid date format.');
             }
         }
     }
@@ -111,9 +110,9 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
     {
         $companyName = $this->data['companyName'];
 
-        if(empty($companyName)) {
+        if (empty($companyName)) {
             $this->addError('companyName', 'This field can not be empty.');
-        } else if (!preg_match('/^[\p{L}\s]*$/', $companyName)) {
+        } elseif (!preg_match('/^[\p{L}\s]*$/', $companyName)) {
             $this->addError('companyName', 'Please enter a valid name (No special chars).');
         }
     }
@@ -122,9 +121,9 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
     {
         $companyCity = $this->data['companyCity'];
 
-        if(empty($companyCity)) {
+        if (empty($companyCity)) {
             $this->addError('companyCity', 'This field can not be empty.');
-        } else if (!preg_match('/^[\p{L}\s]*$/', $companyCity)) {
+        } elseif (!preg_match('/^[\p{L}\s]*$/', $companyCity)) {
             $this->addError('companyCity', 'Please enter a valid name (No special chars).');
         }
     }
