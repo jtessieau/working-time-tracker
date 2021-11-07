@@ -6,7 +6,6 @@ class CompanyModel extends AbstractModel
 {
     private int $id;
     private string $name = '';
-    private string $city = '';
 
 
     public function getId(): int
@@ -36,29 +35,15 @@ class CompanyModel extends AbstractModel
         return $this;
     }
 
-    public function getCity(): string
-    {
-        return $this->city;
-    }
-
-    public function setCity(string $city): CompanyModel
-    {
-        $city = filter_var($city, FILTER_SANITIZE_STRING);
-        $city = strtolower($city);
-        str_replace(' ', '-', $city);
-
-        $this->city = $city;
-        return $this;
-    }
-
     public function createCompany()
     {
-        if (!$this->checkEmptyCompany()) {
+        $existingCompany = $this->findOneByName($this->name);
+
+        if ($existingCompany === false) {
             $pdo = $this->getPDO();
-            $stmt = $pdo->prepare('INSERT INTO companies (name,city) VALUES (?,?)');
+            $stmt = $pdo->prepare('INSERT INTO companies (name) VALUES (?)');
             $return = $stmt->execute([
                 $this->getName(),
-                $this->getCity()
             ]);
 
             if ($return) {
@@ -66,15 +51,18 @@ class CompanyModel extends AbstractModel
             } else {
                 return false;
             }
+        } else {
+            return $existingCompany['id'];
         }
     }
 
-    public function checkEmptyCompany()
+    public function findOneByName($name)
     {
-        if ($this->name != null && $this->city != null) {
-            return true;
-        } else {
-            return false;
-        }
+        $pdo = $this->getPDO();
+        $stmt = $pdo->prepare("SELECT * FROM companies WHERE name=?");
+        $stmt->execute([$name]);
+        $company = $stmt->fetch();
+
+        return $company;
     }
 }

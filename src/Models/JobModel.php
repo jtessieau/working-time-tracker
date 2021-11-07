@@ -194,16 +194,14 @@ class JobModel extends AbstractModel
         $pdo = $this->getPDO();
         $stmt = $pdo->prepare($sql);
 
-        var_dump($pdo->lastInsertId());
-
-//         $stmt->execute([
-//            $this->getDesignation(),
-//            $this->getRate(),
-//            $this->getStartDate()->format('Y-m-d'),
-//            $this->getPeriodOfWork(),
-//            $this->getFirstDayOfTheWeek(),
-//            $pdo->lastInsertId(),
-//            $this->getUserId()
-//        ]);
+        $stmt->execute([
+           $this->getDesignation(),
+           $this->getRate(),
+           $this->getStartDate()->format('Y-m-d'),
+           $this->getPeriodOfWork(),
+           $this->getFirstDayOfTheWeek(),
+           $this->getCompanyId(),
+           $this->getUserId()
+       ]);
     }
 }
