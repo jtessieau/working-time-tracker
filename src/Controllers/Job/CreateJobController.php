@@ -53,7 +53,7 @@ class CreateJobController extends AbstractController
                 if ($companyId != false) {
                     $job->setCompanyId($companyId);
                     $job->createJob();
-                    die();
+                    $this->redirect('/job/list-job')
                 }
             }
         }

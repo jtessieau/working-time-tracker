@@ -10,3 +10,4 @@ $r->addRoute(['GET', 'POST'], '/logout', 'App\\Controllers\\AuthController@logou
 // Job
 $r->addRoute('GET', '/job/my-jobs', 'App\\Controllers\\Job\\JobController@index');
 $r->addRoute(['GET', 'POST'], '/job/start-job', 'App\\Controllers\\Job\\CreateJobController@createJob');
+$r->addRoute(['GET'], '/job/list-job', 'App\\Controllers\\Job\\ListJobController@list');

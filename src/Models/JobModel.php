@@ -204,4 +204,13 @@ class JobModel extends AbstractModel
            $this->getUserId()
        ]);
     }
+
+    public function findAllByUserId($id)
+    {
+        $pdo = $this->getPDO();
+        $stmt = $pdo->prepare("SELECT * FROM jobs JOIN companies ON company_id=companies.id WHERE user_id=?");
+        $stmt->execute([$id]);
+
+        return $stmt->fetchAll();
+    }
 }
