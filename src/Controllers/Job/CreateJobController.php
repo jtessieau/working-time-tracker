@@ -16,7 +16,6 @@ class CreateJobController extends AbstractController
 {
     public function createJob()
     {
-
         // This  page should not be accessible to user NOT logged in.
         if (!isset($_SESSION['user'])) {
             $this->redirect('/');
@@ -25,7 +24,6 @@ class CreateJobController extends AbstractController
         $job = new Job();
         $user = new User();
         $company = new Company();
-
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Data validation
@@ -37,7 +35,10 @@ class CreateJobController extends AbstractController
                 $job->setDesignation($_POST['designation']);
                 $job->setRate($_POST['rate']);
                 $job->setStartDate(new DateTime($_POST['startDate']));
-                if(isset($_POST['endDateKnown']) && $_POST['endDateKnown'] === true){
+                if (
+                    isset($_POST['endDateKnown']) &&
+                    $_POST['endDateKnown'] === true
+                ) {
                     $job->setEndDate();
                 }
 
@@ -53,13 +54,13 @@ class CreateJobController extends AbstractController
                 if ($companyId != false) {
                     $job->setCompanyId($companyId);
                     $job->createJob();
-                    $this->redirect('/job/list-job')
+                    $this->redirect('/job/list-job');
                 }
             }
         }
 
         $this->render('job/createJobForm', [
-            'errorMessages' => $errorMessages
+            'errorMessages' => $errorMessages,
         ]);
     }
 }
