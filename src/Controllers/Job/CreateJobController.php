@@ -39,7 +39,7 @@ class CreateJobController extends AbstractController
                     isset($_POST['endDateKnown']) &&
                     $_POST['endDateKnown'] === true
                 ) {
-                    $job->setEndDate();
+                    $job->setEndDate(null);
                 }
 
                 $job->setPeriodOfWork($_POST['periodOfWork']);

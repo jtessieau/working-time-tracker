@@ -1,14 +1,15 @@
 <?php
 
 namespace App\Models;
+use DateTime;
 
 class JobModel extends AbstractModel
 {
     private int $id;
     private string $designation;
     private int $rate;
-    private \DateTime $startDate;
-    private \DateTime $endDate;
+    private DateTime $startDate;
+    private DateTime $endDate;
 
     private string $periodOfWork;
     private int $firstDayOfTheWeek = 0;
@@ -82,7 +83,7 @@ class JobModel extends AbstractModel
      * @param \DateTime $startDate
      * @return JobModel
      */
-    public function setStartDate(\DateTime $startDate): JobModel
+    public function setStartDate(DateTime $startDate): JobModel
     {
         $this->startDate = $startDate;
         return $this;
@@ -91,7 +92,7 @@ class JobModel extends AbstractModel
     /**
      * @return \DateTime
      */
-    public function getEndDate(): \DateTime
+    public function getEndDate(): DateTime
     {
         return $this->endDate;
     }
@@ -100,7 +101,7 @@ class JobModel extends AbstractModel
      * @param \DateTime $endDate
      * @return JobModel
      */
-    public function setEndDate(\DateTime $endDate): JobModel
+    public function setEndDate(?DateTime $endDate = null): JobModel
     {
         $this->endDate = $endDate;
         return $this;
@@ -195,20 +196,22 @@ class JobModel extends AbstractModel
         $stmt = $pdo->prepare($sql);
 
         $stmt->execute([
-           $this->getDesignation(),
-           $this->getRate(),
-           $this->getStartDate()->format('Y-m-d'),
-           $this->getPeriodOfWork(),
-           $this->getFirstDayOfTheWeek(),
-           $this->getCompanyId(),
-           $this->getUserId()
-       ]);
+            $this->getDesignation(),
+            $this->getRate(),
+            $this->getStartDate()->format('Y-m-d'),
+            $this->getPeriodOfWork(),
+            $this->getFirstDayOfTheWeek(),
+            $this->getCompanyId(),
+            $this->getUserId(),
+        ]);
     }
 
     public function findAllByUserId($id)
     {
         $pdo = $this->getPDO();
-        $stmt = $pdo->prepare("SELECT * FROM jobs JOIN companies ON company_id=companies.id WHERE user_id=?");
+        $stmt = $pdo->prepare(
+            'SELECT * FROM jobs JOIN companies ON company_id=companies.id WHERE user_id=?'
+        );
         $stmt->execute([$id]);
 
         return $stmt->fetchAll();

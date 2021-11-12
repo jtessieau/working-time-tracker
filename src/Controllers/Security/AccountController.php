@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Security;
 
 use App\Models\UserModel;
 use App\FormValidation\SigninFormValidation;
+use App\Controllers\AbstractController;
 
 class AccountController extends AbstractController
 {
@@ -14,22 +15,21 @@ class AccountController extends AbstractController
 
     public function createAccount()
     {
-
         // This  page should not be accessible to user alreay logged in.
         if (isset($_SESSION['user'])) {
             $this->redirect('/');
         }
 
         /**
-        * Signin method need to receive 5 informations from POST :
-        *   - firstName
-        *   - lastName
-        *   - email
-        *   - password
-        *   - password2
-        * Abort creation if an user already exist in database with the given email.
-        * Else create the user after a successful validation.
-        */
+         * Signin method need to receive 5 informations from POST :
+         *   - firstName
+         *   - lastName
+         *   - email
+         *   - password
+         *   - password2
+         * Abort creation if an user already exist in database with the given email.
+         * Else create the user after a successful validation.
+         */
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $validator = new SigninFormValidation($_POST);
@@ -49,7 +49,7 @@ class AccountController extends AbstractController
         }
 
         $this->render('user/signinForm', [
-            'errorMessages' => $errorMessages
+            'errorMessages' => $errorMessages,
         ]);
     }
 }

@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Security;
 
 use App\FormValidation\LoginFormValidation;
 use App\Models\UserModel;
+use App\Controllers\AbstractController;
 
 class AuthController extends AbstractController
 {
@@ -14,14 +15,13 @@ class AuthController extends AbstractController
 
     public function Login()
     {
-
         /**
-        * Login method need to receive 2 informations from POST :
-        *   - email
-        *   - password
-        * Then find if an user exist in database with the given email.
-        * If an user is found, compare password form POST with database result.
-        */
+         * Login method need to receive 2 informations from POST :
+         *   - email
+         *   - password
+         * Then find if an user exist in database with the given email.
+         * If an user is found, compare password form POST with database result.
+         */
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $validator = new LoginFormValidation($_POST);
@@ -32,22 +32,26 @@ class AuthController extends AbstractController
                 $user = $this->userModel->findOneByEmail($_POST['email']);
 
                 // If user is found & passwords match
-                if ($user !== false && password_verify($_POST['password'], $user['password'])) {
+                if (
+                    $user !== false &&
+                    password_verify($_POST['password'], $user['password'])
+                ) {
                     // Then set session with personnal informations & redirect to homepage;
                     $_SESSION['user'] = [
                         'firstName' => ucfirst($user['first_name']),
                         'lastName' => strtoupper($user['last_name']),
-                        'email' => strtolower($user['email'])
+                        'email' => strtolower($user['email']),
                     ];
                     $this->redirect('/');
                 } else {
-                    $errorMessages['connection'] = 'E-mail or password incorrect.';
+                    $errorMessages['connection'] =
+                        'E-mail or password incorrect.';
                 }
             }
         }
 
         $this->render('user/LoginForm', [
-            'errorMessages' => $errorMessages
+            'errorMessages' => $errorMessages,
         ]);
     }
 
