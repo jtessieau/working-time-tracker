@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use DateTime;
 
 class JobModel extends AbstractModel
