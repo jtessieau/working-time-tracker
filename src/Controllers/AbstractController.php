@@ -6,8 +6,8 @@ class AbstractController
 {
     public function redirect(string $path): void
     {
-        header("Location: " . $path);
-        exit;
+        header('Location: ' . $path);
+        exit();
     }
 
     public function render(string $path, array $vars = [])
@@ -24,16 +24,5 @@ class AbstractController
         require_once __DIR__ . '/../Views/Layouts/defaultLayout.php';
 
         echo ob_get_clean();
-    }
-
-    public function checkError(array $errors): bool
-    {
-        foreach ($errors as $error) {
-            if (!empty($error)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
