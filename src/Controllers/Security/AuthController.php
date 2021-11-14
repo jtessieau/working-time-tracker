@@ -3,14 +3,22 @@
 namespace App\Controllers\Security;
 
 use App\FormValidation\LoginFormValidation;
-use App\Models\UserModel;
+use App\Models\UserModel as User;
 use App\Controllers\AbstractController;
+use App\Http\Request;
+use App\Http\Response;
 
 class AuthController extends AbstractController
 {
+    protected User $user;
+    protected Response $reponse;
+    protected Request $request;
+
     public function __construct()
     {
-        $this->userModel = new UserModel();
+        $this->user = new User();
+        $this->response = new Response();
+        $this->request = new Request($_POST ?? []);
     }
 
     public function Login()
@@ -29,12 +37,17 @@ class AuthController extends AbstractController
 
             if (empty($errorMessages)) {
                 // Look for existing user in database
-                $user = $this->userModel->findOneByEmail($_POST['email']);
+                $user = $this->user->findOneByEmail(
+                    $this->request->get('email')
+                );
 
                 // If user is found & passwords match
                 if (
                     $user !== false &&
-                    password_verify($_POST['password'], $user['password'])
+                    password_verify(
+                        $this->request->get('password'),
+                        $user['password']
+                    )
                 ) {
                     // Then set session with personnal informations & redirect to homepage;
                     $_SESSION['user'] = [
@@ -42,7 +55,7 @@ class AuthController extends AbstractController
                         'lastName' => strtoupper($user['last_name']),
                         'email' => strtolower($user['email']),
                     ];
-                    $this->redirect('/');
+                    $this->reponse->redirect('/');
                 } else {
                     $errorMessages['connection'] =
                         'E-mail or password incorrect.';
@@ -60,6 +73,6 @@ class AuthController extends AbstractController
         session_unset();
         session_destroy();
 
-        $this->redirect('/');
+        $this->response->redirect('/');
     }
 }

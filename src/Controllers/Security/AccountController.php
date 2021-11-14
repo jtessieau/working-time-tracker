@@ -2,22 +2,29 @@
 
 namespace App\Controllers\Security;
 
-use App\Models\UserModel;
+use App\Models\UserModel as User;
 use App\FormValidation\SigninFormValidation;
 use App\Controllers\AbstractController;
+use App\Http\Response;
 
 class AccountController extends AbstractController
 {
+    protected User $user;
+    protected Response $response;
+
     public function __construct()
     {
-        $this->userModel = new UserModel();
+        $this->user = new User();
+        $this->response = new Response();
     }
 
     public function createAccount()
     {
         // This  page should not be accessible to user alreay logged in.
         if (isset($_SESSION['user'])) {
-            $this->redirect('/');
+            $res = new Response();
+
+            $res->redirect('/');
         }
 
         /**
@@ -38,13 +45,13 @@ class AccountController extends AbstractController
             // If no error, then populate new user object with data.
             // Object methods will handle normalisation.
             if (empty($errorMessages)) {
-                $this->userModel->setFirstName($_POST['firstName']);
-                $this->userModel->setLastName($_POST['lastName']);
-                $this->userModel->setEmail($_POST['email']);
-                $this->userModel->setPassword($_POST['password']);
+                $this->user->setFirstName($_POST['firstName']);
+                $this->user->setLastName($_POST['lastName']);
+                $this->user->setEmail($_POST['email']);
+                $this->user->setPassword($_POST['password']);
 
-                $this->userModel->createUser();
-                $this->redirect('/');
+                $this->user->createUser();
+                $this->response->redirect('/');
             }
         }
 
