@@ -14,4 +14,9 @@ class Request
     {
         return $this->data[$key];
     }
+
+    public function getAll(): array
+    {
+        return $this->data;
+    }
 }

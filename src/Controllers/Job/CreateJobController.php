@@ -9,16 +9,23 @@ use App\Controllers\AbstractController;
 use App\Models\CompanyModel as Company;
 use App\Models\JobModel as Job;
 use App\Models\UserModel as User;
+use App\Http\Response;
 
 use DateTime;
 
 class CreateJobController extends AbstractController
 {
+    protected Response $response;
+
+    public function __construct()
+    {
+        $this->response = new Response();
+    }
     public function createJob()
     {
         // This  page should not be accessible to user NOT logged in.
         if (!isset($_SESSION['user'])) {
-            $this->redirect('/');
+            $this->response->redirect('/');
         }
 
         $job = new Job();
@@ -54,7 +61,7 @@ class CreateJobController extends AbstractController
                 if ($companyId != false) {
                     $job->setCompanyId($companyId);
                     $job->createJob();
-                    $this->redirect('/job/list-job');
+                    $this->response->redirect('/job/list-job');
                 }
             }
         }

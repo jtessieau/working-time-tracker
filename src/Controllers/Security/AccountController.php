@@ -6,16 +6,19 @@ use App\Models\UserModel as User;
 use App\FormValidation\SigninFormValidation;
 use App\Controllers\AbstractController;
 use App\Http\Response;
+use App\Http\Request;
 
 class AccountController extends AbstractController
 {
     protected User $user;
     protected Response $response;
+    protected Request $request;
 
     public function __construct()
     {
         $this->user = new User();
         $this->response = new Response();
+        $this->request = new Request($_POST);
     }
 
     public function createAccount()
@@ -39,16 +42,16 @@ class AccountController extends AbstractController
          */
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $validator = new SigninFormValidation($_POST);
+            $validator = new SigninFormValidation($this->request->getAll());
             $errorMessages = $validator->validate();
 
             // If no error, then populate new user object with data.
             // Object methods will handle normalisation.
             if (empty($errorMessages)) {
-                $this->user->setFirstName($_POST['firstName']);
-                $this->user->setLastName($_POST['lastName']);
-                $this->user->setEmail($_POST['email']);
-                $this->user->setPassword($_POST['password']);
+                $this->user->setFirstName($this->request->get('firstName'));
+                $this->user->setLastName($this->request->get('lastName'));
+                $this->user->setEmail($this->request->get('email'));
+                $this->user->setPassword($this->request->get('password'));
 
                 $this->user->createUser();
                 $this->response->redirect('/');
