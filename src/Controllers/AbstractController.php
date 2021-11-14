@@ -2,14 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Http\Response;
+
 class AbstractController
 {
-    public function redirect(string $path): void
-    {
-        header('Location: ' . $path);
-        exit();
-    }
-
     public function render(string $path, array $vars = [])
     {
         if (!empty($vars)) {
@@ -23,6 +19,9 @@ class AbstractController
         ob_start();
         require_once __DIR__ . '/../Views/Layouts/defaultLayout.php';
 
-        echo ob_get_clean();
+        $response = new Response();
+        $response->setContent(ob_get_clean());
+
+        $response->send();
     }
 }

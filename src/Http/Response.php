@@ -61,4 +61,13 @@ class Response
 
         echo $this->content;
     }
+
+    public function redirect(string $path)
+    {
+        $this->setHeaders(['Location' => $path]);
+        $this->setStatus(301);
+        $this->setContent('redirection ...');
+
+        $this->send();
+    }
 }
