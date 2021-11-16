@@ -55,7 +55,7 @@ class AuthController extends AbstractController
                         'lastName' => strtoupper($user['last_name']),
                         'email' => strtolower($user['email']),
                     ];
-                    $this->reponse->redirect('/');
+                    $this->response->redirect('/');
                 } else {
                     $errorMessages['connection'] =
                         'E-mail or password incorrect.';
