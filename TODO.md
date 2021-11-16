@@ -4,7 +4,7 @@ A todo guide map to follow, may be incomplete...
 
 ## Authentication
 
-- [x] Create an account
+- [ ] Create an account
 - [x] Login to an account
 - [x] Logout from an account
 - [ ] Delete an account
@@ -12,16 +12,16 @@ A todo guide map to follow, may be incomplete...
 
 ## Job Manager
 
-- [x] Create a job
-- [x] Link it to company & user.
-- [x] List user jobs
+- [ ] Create a job
+- [ ] Link it to company & user.
+- [ ] List user jobs
 - [ ] Edit a job
 - [ ] Delete a job
 
 ## Company Manager
 
 - [ ] Create a company
-  - [x] Can be created from job manager
+  - [ ] Can be created from job manager
 - [ ] Edit a company
 - [ ] Remove a company
 
@@ -38,3 +38,7 @@ A todo guide map to follow, may be incomplete...
 - [ ] Export check-ins
 - [ ] Import and save payslips
 - [ ] Link payslip to job or check-in ?
+
+## Misc
+
+- [ ] Use more env variable to avoid change in code.
