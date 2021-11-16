@@ -2,23 +2,19 @@
 
 namespace App\Controllers\Security;
 
-use App\FormValidation\LoginFormValidation;
 use App\Models\UserModel as User;
-use App\Controllers\AbstractController;
-use App\Http\Request;
-use App\Http\Response;
+use App\FormValidation\LoginFormValidation;
+use App\Controllers\Utils\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class AuthController extends AbstractController
 {
     protected User $user;
-    protected Response $reponse;
-    protected Request $request;
 
     public function __construct()
     {
         $this->user = new User();
-        $this->response = new Response();
-        $this->request = new Request($_POST ?? []);
     }
 
     public function Login()
@@ -32,20 +28,21 @@ class AuthController extends AbstractController
          */
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $req = Request::createFromGlobals();
             $validator = new LoginFormValidation($_POST);
             $errorMessages = $validator->validate();
 
             if (empty($errorMessages)) {
                 // Look for existing user in database
                 $user = $this->user->findOneByEmail(
-                    $this->request->get('email')
+                    $req->request->get('email')
                 );
 
                 // If user is found & passwords match
                 if (
                     $user !== false &&
                     password_verify(
-                        $this->request->get('password'),
+                        $req->request->get('password'),
                         $user['password']
                     )
                 ) {
@@ -55,7 +52,8 @@ class AuthController extends AbstractController
                         'lastName' => strtoupper($user['last_name']),
                         'email' => strtolower($user['email']),
                     ];
-                    $this->response->redirect('/');
+                    $response = new RedirectResponse('/');
+                    $response->send();
                 } else {
                     $errorMessages['connection'] =
                         'E-mail or password incorrect.';
@@ -73,6 +71,7 @@ class AuthController extends AbstractController
         session_unset();
         session_destroy();
 
-        $this->response->redirect('/');
+        $response = new RedirectResponse('/');
+        $response->send();
     }
 }
