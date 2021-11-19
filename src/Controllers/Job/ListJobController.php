@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Job;
 
-use App\Controllers\AbstractController;
+use App\Controllers\Utils\AbstractController;
 use App\Models\JobModel as Job;
 use App\Models\UserModel as User;
 

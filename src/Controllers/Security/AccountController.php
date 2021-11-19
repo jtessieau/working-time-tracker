@@ -4,30 +4,24 @@ namespace App\Controllers\Security;
 
 use App\Models\UserModel as User;
 use App\FormValidation\SigninFormValidation;
-use App\Controllers\AbstractController;
-use App\Http\Response;
-use App\Http\Request;
+use App\Controllers\Utils\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AccountController extends AbstractController
 {
     protected User $user;
-    protected Response $response;
-    protected Request $request;
 
     public function __construct()
     {
         $this->user = new User();
-        $this->response = new Response();
-        $this->request = new Request($_POST);
     }
 
     public function createAccount()
     {
         // This  page should not be accessible to user alreay logged in.
         if (isset($_SESSION['user'])) {
-            $res = new Response();
-
-            $res->redirect('/');
+            $res = new RedirectResponse('/');
+            $res->send();
         }
 
         /**

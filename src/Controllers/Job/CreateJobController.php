@@ -2,30 +2,24 @@
 
 namespace App\Controllers\Job;
 
-use App\FormValidation\JobCreationFormValidation;
+use DateTime;
+use App\Controllers\Utils\AbstractController;
 
-use App\Controllers\AbstractController;
-
-use App\Models\CompanyModel as Company;
 use App\Models\JobModel as Job;
 use App\Models\UserModel as User;
-use App\Http\Response;
+use App\Models\CompanyModel as Company;
 
-use DateTime;
+use App\FormValidation\JobCreationFormValidation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class CreateJobController extends AbstractController
 {
-    protected Response $response;
-
-    public function __construct()
-    {
-        $this->response = new Response();
-    }
     public function createJob()
     {
         // This  page should not be accessible to user NOT logged in.
         if (!isset($_SESSION['user'])) {
-            $this->response->redirect('/');
+            //redirect
+            return new RedirectResponse('/');
         }
 
         $job = new Job();

@@ -2,8 +2,8 @@
 
 namespace App\Controllers\Checkin;
 
-use App\Controllers\AbstractController;
-use App\Http\Request;
+use App\Controllers\Utils\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 class CreateCheckinController extends AbstractController
 {
@@ -15,7 +15,7 @@ class CreateCheckinController extends AbstractController
         }
 
         if ($_SERVER['REQUEST_METHOD' === 'POST']) {
-            $req = new Request($_POST);
+            $req = Request::createFromGlobals();
         }
     }
 }

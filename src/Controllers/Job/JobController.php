@@ -2,11 +2,11 @@
 
 namespace App\Controllers\Job;
 
-use App\Controllers\AbstractController;
+use App\Controllers\Utils\AbstractController;
 
 class JobController extends AbstractController
 {
-    public function index(): void
+    public function home(): void
     {
         $this->render('job/home');
     }
