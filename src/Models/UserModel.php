@@ -4,12 +4,11 @@ namespace App\Models;
 
 class UserModel extends AbstractModel
 {
-    private int $id;
-    private string $firstName;
-    private string $lastName;
-    private string $email;
-    private string $password;
-    private int $currentJob_id;
+    private int $id = 0;
+    private string $firstName = '';
+    private string $lastName = '';
+    private string $email = '';
+    private string $password = '';
 
 
     // Getters and Setters
@@ -20,7 +19,12 @@ class UserModel extends AbstractModel
 
     public function setId(int $id): UserModel
     {
-        $this->id = $id;
+        if ($id > 0) {
+            $this->id = $id;
+        } else {
+            $this->id = 0;
+        }
+
         return $this;
     }
 
@@ -31,11 +35,17 @@ class UserModel extends AbstractModel
 
     public function setFirstName(string $firstName): UserModel
     {
-        $firstName = trim($_POST['firstName']);
-        $firstName = filter_var($firstName, FILTER_SANITIZE_STRING);
-        $firstName = ucfirst($firstName);
 
-        $this->firstName = $firstName;
+        $firstName = trim($firstName);
+        $firstName = filter_var($firstName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+        $firstName = ucwords(strtolower($firstName), " -'");
+
+        if (preg_match("/^[A-Za-z]*(([ '-])?[A-Za-z]+)*$/", $firstName)) {
+            $this->firstName = $firstName;
+        } else {
+            $this->firstName = '';
+        }
+
         return $this;
     }
 
@@ -46,11 +56,15 @@ class UserModel extends AbstractModel
 
     public function setLastName(string $lastName): UserModel
     {
-        $lastName = trim($_POST['lastName']);
-        $lastName = filter_var($lastName, FILTER_SANITIZE_STRING);
+        $lastName = trim($lastName);
+        $lastName = filter_var($lastName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
         $lastName = strtoupper($lastName);
 
-        $this->lastName = $lastName;
+        if (preg_match("/^[A-Za-z]*(([ '-])?[A-Za-z]+)*$/", $lastName)) {
+            $this->lastName = $lastName;
+        } else {
+            $this->lastName = '';
+        }
         return $this;
     }
 
@@ -61,8 +75,11 @@ class UserModel extends AbstractModel
 
     public function setEmail(string $email): UserModel
     {
-        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-        $email = strtolower($email);
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $email = strtolower($email);
+        } else {
+            $email = '';
+        }
 
         $this->email = $email;
         return $this;
@@ -81,18 +98,6 @@ class UserModel extends AbstractModel
         return $this;
     }
 
-    public function getCurrentJobId(): int
-    {
-        return $this->currentJob_id;
-    }
-
-
-    public function setCurrentJobId(int $currentJob_id): UserModel
-    {
-        $this->currentJob_id = $currentJob_id;
-        return $this;
-    }
-
     // Database interaction
 
     public function createUser()
@@ -100,11 +105,11 @@ class UserModel extends AbstractModel
         $pdo = $this->getPDO();
         $stmt = $pdo->prepare('INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?)');
         $stmt->execute([
-                $this->getFirstName(),
-                $this->getLastName(),
-                $this->getEmail(),
-                $this->getPassword()
-            ]);
+            $this->getFirstName(),
+            $this->getLastName(),
+            $this->getEmail(),
+            $this->getPassword()
+        ]);
     }
 
     public function findOneByEmail($email)
