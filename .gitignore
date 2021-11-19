@@ -4,3 +4,6 @@ docker/mysql
 vendor/
 .env
 .php-cs-fixer.cache
+.phpunit.cache
+reports/
+.DS_Store
