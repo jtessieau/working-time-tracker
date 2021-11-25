@@ -7,3 +7,4 @@ vendor/
 .phpunit.cache
 reports/
 .DS_Store
+node_modules
