@@ -35,7 +35,6 @@ class UserModel extends AbstractModel
 
     public function setFirstName(string $firstName): UserModel
     {
-
         $firstName = trim($firstName);
         $firstName = filter_var($firstName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
         $firstName = ucwords(strtolower($firstName), " -'");

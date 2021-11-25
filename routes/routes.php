@@ -27,26 +27,26 @@ $r->addRoute(
 );
 $r->addRoute(
     ['GET'],
-    '/job/list-job',
+    '/job/list',
     'App\\Controllers\\Job\\ListJobController@list'
 );
 $r->addRoute(
     ['GET', 'POST'],
-    '/job/start-job',
-    'App\\Controllers\\Job\\StartJobController@startJob'
+    '/job/start',
+    'App\\Controllers\\Job\\JobController@create'
 );
 $r->addRoute(
     ['GET', 'POST'],
-    '/job/end-job',
+    '/job/end',
     'App\\Controllers\\Job\\EndController@endJob'
 );
 $r->addRoute(
     ['GET', 'POST'],
-    '/job/edit-job',
+    '/job/edit',
     'App\\Controllers\\Job\\EditJobController@editJob'
 );
 $r->addRoute(
     ['GET', 'POST'],
-    '/job/delete-job',
+    '/job/delete',
     'App\\Controllers\\Job\\DeleteJobController@deleteJob'
 );

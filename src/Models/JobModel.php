@@ -196,7 +196,7 @@ class JobModel extends AbstractModel
         $pdo = $this->getPDO();
         $stmt = $pdo->prepare($sql);
 
-        $stmt->execute([
+        $return = $stmt->execute([
             $this->getDesignation(),
             $this->getRate(),
             $this->getStartDate()->format('Y-m-d'),
@@ -205,13 +205,18 @@ class JobModel extends AbstractModel
             $this->getCompanyId(),
             $this->getUserId(),
         ]);
+        if ($return) {
+            return $pdo->lastInsertId();
+        } else {
+            return false;
+        }
     }
 
     public function findAllByUserId($id)
     {
         $pdo = $this->getPDO();
         $stmt = $pdo->prepare(
-            'SELECT * FROM jobs JOIN companies ON company_id=companies.id WHERE user_id=?'
+            'SELECT jobs.*, companies.name FROM jobs JOIN companies ON jobs.company_id=companies.id WHERE user_id=?'
         );
         $stmt->execute([$id]);
 

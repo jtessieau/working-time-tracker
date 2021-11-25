@@ -3,8 +3,9 @@
 namespace App\Controllers\Job;
 
 use App\Controllers\Utils\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use App\FormValidation\JobCreationFormValidation;
+use App\Services\Job\CreateJobService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class JobController extends AbstractController
@@ -13,7 +14,8 @@ class JobController extends AbstractController
     {
         // This section should not be accessible to user NOT logged in.
         if (!isset($_SESSION['user'])) {
-            return new RedirectResponse('/');
+            $response = new RedirectResponse('/');
+            $response->send();
         }
     }
 
@@ -22,17 +24,27 @@ class JobController extends AbstractController
         $this->render('job/home');
     }
 
-    public function createJob()
+    public function create()
     {
         // TODO
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $req = Request::createFromglobals();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $req->request->get('submit') === 'submit') {
             // Data validation
-            $req = Request::createFromglobals();
             $validator = new JobCreationFormValidation($req->request->all());
             $errorMessages = $validator->validate();
+
+            if (empty($errorMessages)) {
+                $jobCreation = CreateJobService::create($req);
+                if (!$jobCreation) {
+                    $errorMessages['jobCreation'] = 'An error occured, please contact a sysadmin.';
+                } else {
+                    $response = new RedirectResponse('/job/list');
+                    $response->send();
+                }
+            }
         }
 
-        $this->render('job/create', [
+        $this->render('job/createJob', [
             'errorMessages' => $errorMessages ?? []
         ]);
     }

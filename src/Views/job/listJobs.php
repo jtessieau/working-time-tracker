@@ -10,26 +10,26 @@
         </thead>
         <tbody>
 
-        <?php foreach ($jobs as $job):
-            $startDate = new DateTime($job['start_date']);
+            <?php foreach ($jobs as $job) :
+                $startDate = new DateTime($job['start_date']);
 
-            if ($job['end_date'] == null) {
-                $active = true;
-            } else {
-                $active = false;
-            }
-        ?>
+                if ($job['end_date'] == null) {
+                    $active = true;
+                } else {
+                    $active = false;
+                }
+            ?>
 
-            <tr>
-                <td><?= ucfirst($job['name']) ?></td>
-                <td><?= $job['designation'] ?></td>
-                <td> £<?= $job['rate'] ?></td>
-                <td><?= $startDate->format('d/m/Y'); ?></td>
-                <td><?= $active ? "vert" : "rouge"; ?></td>
-                <td>edit</td>
-            </tr>
+                <tr>
+                    <td><?= ucfirst($job['name']) ?></td>
+                    <td><?= $job['designation'] ?></td>
+                    <td> £<?= $job['rate'] ?></td>
+                    <td><?= $startDate->format('d/m/Y'); ?></td>
+                    <td><?= $active ? "vert" : "rouge"; ?></td>
+                    <td>edit</td>
+                </tr>
 
-        <?php endforeach ?>
+            <?php endforeach ?>
 
         </tbody>
     </table>
