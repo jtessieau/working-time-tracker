@@ -36,7 +36,6 @@ services:
   mysql:
     image: mariadb
     container_name: mysql-wtt
-    restart: on-failure
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: wtt
@@ -56,7 +55,6 @@ services:
     container_name: phpmyadmin-wtt
     depends_on:
       - mysql
-    restart: always
     ports:
       - 8080:80
     environment:

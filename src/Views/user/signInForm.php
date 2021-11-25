@@ -4,13 +4,7 @@
             <div class="field">
                 <label class="label" for="firstName">First Name</label>
                 <div class="control has-icons-left">
-                    <input
-                        class="input"
-                        type="text"
-                        id="firstName"
-                        name="firstName"
-                        value="<?php echo htmlspecialchars($_POST['firstName']) ?? '' ?>"
-                    >
+                    <input class="input" type="text" id="firstName" name="firstName" value="<?php echo $_POST['firstName'] ?? '' ?>">
                     <span class="icon is-small is-left">
                         <i class="fas fa-user-circle"></i>
                     </span>
@@ -23,13 +17,7 @@
             <div class="field">
                 <label class="label" for="lastName">Last Name</label>
                 <div class="control has-icons-left">
-                    <input
-                        class="input"
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        value="<?php echo htmlspecialchars($_POST['lastName']) ?? '' ?>"
-                    >
+                    <input class="input" type="text" id="lastName" name="lastName" value="<?php echo $_POST['lastName'] ?? '' ?>">
                     <span class="icon is-small is-left">
                         <i class="fas fa-user-circle"></i>
                     </span>
@@ -42,13 +30,7 @@
             <div class="field">
                 <label class="label" for="email">Email</label>
                 <div class="control has-icons-left">
-                    <input
-                        class="input"
-                        type="email"
-                        id="email"
-                        name="email"
-                        value="<?php echo htmlspecialchars($_POST['email']) ?? '' ?>"
-                    >
+                    <input class="input" type="email" id="email" name="email" value="<?php echo $_POST['email'] ?? '' ?>">
                     <span class="icon is-small is-left">
                         <i class="fas fa-envelope"></i>
                     </span>

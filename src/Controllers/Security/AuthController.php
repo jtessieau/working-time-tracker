@@ -29,7 +29,7 @@ class AuthController extends AbstractController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $req = Request::createFromGlobals();
-            $validator = new LoginFormValidation($_POST);
+            $validator = new LoginFormValidation($req->request->all());
             $errorMessages = $validator->validate();
 
             if (empty($errorMessages)) {
@@ -62,7 +62,7 @@ class AuthController extends AbstractController
         }
 
         $this->render('user/LoginForm', [
-            'errorMessages' => $errorMessages,
+            'errorMessages' => $errorMessages ?? [],
         ]);
     }
 

@@ -53,7 +53,7 @@ class AccountController extends AbstractController
         }
 
         $this->render('user/signinForm', [
-            'errorMessages' => $errorMessages,
+            'errorMessages' => $errorMessages ?? [],
         ]);
     }
 }

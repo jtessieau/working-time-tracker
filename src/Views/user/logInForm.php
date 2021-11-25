@@ -4,16 +4,10 @@
             <div class="field">
                 <label class="label" for="email">Email</label>
                 <div class="control has-icons-left">
-                    <input
-                            class="input"
-                            type="text"
-                            id="email"
-                            name="email"
-                            value="<?php echo htmlspecialchars($_POST['email']) ?? '' ?>"
-                            >
+                    <input class="input" type="text" id="email" name="email" value="<?php echo $_POST['email'] ?? '' ?>">
                     <span class="icon is-small is-left">
-                    <i class="fas fa-envelope"></i>
-                </span>
+                        <i class="fas fa-envelope"></i>
+                    </span>
                 </div>
                 <span class="help is-danger"><?php echo $errorMessages['email'] ?? '' ?></span>
             </div>
