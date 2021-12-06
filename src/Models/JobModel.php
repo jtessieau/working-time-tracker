@@ -6,7 +6,9 @@ class JobModel extends AbstractModel
 {
     private int $id;
     private string $designation;
+
     private float $rate;
+
     private string $startDate;
     private ?string $endDate;
 

@@ -188,12 +188,13 @@ if ($process) {
             job_designation,
             job_rate,
             job_start_date,
+            job_end_date,
             job_pay_period,
             job_first_day_of_the_week,
             company_id,
             user_id
         )
-        VALUES (?,?,?,?,?,?,?)';
+        VALUES (?,?,?,?,?,?,?,?)';
 
             $stmt = $pdo->prepare($sql);
 

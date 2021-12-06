@@ -33,6 +33,8 @@ composer install
 2- If you want to use docker, launch the server:
 
 ```bash
+composer install
+php database\init_db.php
 docker-compose up -d
 ```
 
