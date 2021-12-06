@@ -57,7 +57,7 @@ if ($process) {
             last_name VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
-            date_of_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            date_of_creation DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY(user_id)
         )';
     try {
@@ -110,40 +110,80 @@ if ($process) {
         die();
     }
 
-
-    // echo "Creating 'check_ins' table..." . PHP_EOL;
-
     echo PHP_EOL;
 
-    echo "Adding test user...." . PHP_EOL;
-    try {
-        $stmt = $pdo->prepare('INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?)');
-        $stmt->execute([
-            "John",
-            "DOE",
-            "email@test.com",
-            password_hash('test', PASSWORD_BCRYPT)
-        ]);
-    } catch (PDOException $e) {
-        print "Error: " . $e->getMessage() . PHP_EOL;
-        die();
-    }
+    echo "Database and Tables are set." . PHP_EOL;
 
-    echo "Adding test company...." . PHP_EOL;
-    try {
-        $stmt = $pdo->prepare('INSERT INTO companies (company_name) VALUES (?)');
-        $stmt->execute([
-            "Testing Purpose Inc."
-        ]);
-    } catch (PDOException $e) {
-        print "Error: " . $e->getMessage() . PHP_EOL;
-        die();
-    }
+    // Insert dummy datas ?
+    $dummies = readline('Do you want to add dummy datas ?');
 
-    echo "Adding test job...." . PHP_EOL;
-    try {
-        $sql =
-            'INSERT INTO jobs
+
+    if ($dummies[0] === "y" || $dummies === "Y") {
+        echo "Adding test user...." . PHP_EOL;
+
+        try {
+            $stmt = $pdo->prepare('INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?)');
+            $stmt->execute([
+                "John",
+                "DOE",
+                "email@test.com",
+                password_hash('test', PASSWORD_BCRYPT)
+            ]);
+        } catch (PDOException $e) {
+            print "Error: " . $e->getMessage() . PHP_EOL;
+            die();
+        }
+
+        echo "Adding test company...." . PHP_EOL;
+        try {
+            $stmt = $pdo->prepare('INSERT INTO companies (company_name) VALUES (?)');
+            $stmt->execute([
+                "Testing Purpose Inc."
+            ]);
+        } catch (PDOException $e) {
+            print "Error: " . $e->getMessage() . PHP_EOL;
+            die();
+        }
+
+        echo "Adding 1st test job...." . PHP_EOL;
+        try {
+            $sql =
+                'INSERT INTO jobs
+        (
+            job_designation,
+            job_rate,
+            job_start_date,
+            job_end_date,
+            job_pay_period,
+            job_first_day_of_the_week,
+            company_id,
+            user_id
+        )
+        VALUES (?,?,?,?,?,?,?,?)';
+
+            $stmt = $pdo->prepare($sql);
+
+            $stmt->execute(
+                [
+                    "My first Job",
+                    12.14,
+                    "2019-07-01", // AAA-MM-JJ
+                    "2020-08-10", // AAAA-MM-JJ
+                    'weekly',
+                    0,
+                    1,
+                    1
+                ]
+            );
+        } catch (PDOException $e) {
+            print "Error: " . $e->getMessage() . PHP_EOL;
+            die();
+        }
+
+        echo "Adding 2nd test job...." . PHP_EOL;
+        try {
+            $sql =
+                'INSERT INTO jobs
         (
             job_designation,
             job_rate,
@@ -155,33 +195,32 @@ if ($process) {
         )
         VALUES (?,?,?,?,?,?,?)';
 
-        $stmt = $pdo->prepare($sql);
+            $stmt = $pdo->prepare($sql);
 
-        $stmt->execute(
-            [
-                "My first Job",
-                12.14,
-                "2020-08-10", // AAAA-MM-JJ
-                'weekly',
-                0,
-                1,
-                1
-            ]
-        );
-    } catch (PDOException $e) {
-        print "Error: " . $e->getMessage() . PHP_EOL;
-        die();
+            $stmt->execute(
+                [
+                    "My second Job",
+                    12.14,
+                    "2020-08-10", // AAAA-MM-JJ
+                    'weekly',
+                    0,
+                    1,
+                    1
+                ]
+            );
+        } catch (PDOException $e) {
+            print "Error: " . $e->getMessage() . PHP_EOL;
+            die();
+        }
+
+        echo PHP_EOL;
+        echo "==============================";
+        echo "Test user credentials:" . PHP_EOL;
+        echo "email -> \"email@test.com\"" . PHP_EOL;
+        echo "password -> \"test\"" . PHP_EOL;
+        echo "==============================";
     }
-
     echo PHP_EOL;
 
-    echo "ALL DONE!" . PHP_EOL;
-
-    echo PHP_EOL;
-
-    echo "Test user credentials:" . PHP_EOL;
-    echo "email -> \"email@test.com\"" . PHP_EOL;
-    echo "password -> \"test\"" . PHP_EOL;
-
-    echo PHP_EOL;
+    echo "All done" . PHP_EOL;
 }

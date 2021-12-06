@@ -6,13 +6,10 @@ use DateTime;
 use App\Models\JobModel;
 use App\Models\UserModel;
 use App\Models\CompanyModel;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 final class CreateJobService
 {
-    public static function create(Request $req): bool
+    public static function create(array $formData): bool
     {
         // Instantiate needed objects
         $user = new UserModel();
@@ -20,22 +17,24 @@ final class CreateJobService
         $company = new CompanyModel();
 
         // Set value
-        $job->setDesignation($req->request->get('designation'));
-        $job->setRate($req->request->get('rate'));
-        $job->setStartDate(new DateTime($req->request->get('startDate')));
+        $job->setDesignation($formData['designation']);
+        $job->setRate($formData['rate']);
+        $job->setStartDate($formData['startDate']);
 
-        if ($req->request->get('endDateKnown') === true) {
-            $job->setEndDate(null);
+        if (isset($formData['endDateKnown']) && $formData['endDateKnown'] === true) {
+            $job->setEndDate($formData['endDate']);
+        } else {
+            $job->setEndDate(NULL);
         }
 
-        $job->setPeriodOfWork($req->request->get('periodOfWork'));
-        $job->setFirstDayOfTheWeek($req->request->get('firstDayOfTheWeek'));
+        $job->setPeriodOfWork($formData['periodOfWork']);
+        $job->setFirstDayOfTheWeek($formData['firstDayOfTheWeek']);
 
-        // Retrieve user id form database TODO: store id in session.
+        // Retrieve user id form database
         $userData = $user->findOneByEmail($_SESSION['user']['email']);
-        $job->setUserId($userData['id']);
+        $job->setUserId($userData['user_id']);
 
-        $company->setName($req->request->get('companyName'));
+        $company->setName($formData['companyName']);
         $companyId = $company->createCompany();
 
         if ($companyId !== false) {

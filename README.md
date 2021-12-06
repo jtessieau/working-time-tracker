@@ -14,11 +14,34 @@ Or
 
 - Docker >= 18.0
 
+## Composer Libraries
+
+- "symfony/dotenv": "^5.3"
+- "nikic/fast-route": "^1.3"
+- "symfony/http-foundation": "^5.3"
+- "friendsofphp/php-cs-fixer": "^3.2"
+- "phpunit/phpunit": "^9.5"
+
 ## Installation
+
+1- Install depencies with Composer:
+
+```bash
+composer install
+```
+
+2- If you want to use docker, launch the server:
 
 ```bash
 docker-compose up -d
 ```
 
+3- Edit the .env and the init_db.php files if needed and launch the script to setup the db.
+
+```bash
+php database\init_db.php
+```
+
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)

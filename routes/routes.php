@@ -42,8 +42,8 @@ $r->addRoute(
 );
 $r->addRoute(
     ['GET', 'POST'],
-    '/job/edit',
-    'App\\Controllers\\Job\\EditJobController@editJob'
+    '/job/update/{id}',
+    'App\\Controllers\\Job\\JobController@update'
 );
 $r->addRoute(
     ['GET', 'POST'],

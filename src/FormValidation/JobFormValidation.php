@@ -5,7 +5,7 @@ namespace App\FormValidation;
 use App\FormValidation\FormValidation;
 use App\FormValidation\ValidationInterface;
 
-class JobCreationFormValidation extends FormValidation implements ValidationInterface
+class JobFormValidation extends FormValidation implements ValidationInterface
 {
     protected static array $fields = [
         'designation',
@@ -15,8 +15,7 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
         'endDate',
         'periodOfWork',
         'firstDayOfTheWeek',
-        'companyName',
-        'companyCity'
+        'companyName'
     ];
 
     public function validate(): array
@@ -37,7 +36,6 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
         $this->validatePerdiodOfWork();
         $this->validateFirstDayOfTheWeek();
         $this->validateCompanyName();
-        $this->validateCompanyCity();
 
         return $this->errors;
     }
@@ -114,17 +112,6 @@ class JobCreationFormValidation extends FormValidation implements ValidationInte
             $this->addError('companyName', 'This field can not be empty.');
         } elseif (!preg_match('/^[\p{L}\s]*$/', $companyName)) {
             $this->addError('companyName', 'Please enter a valid name (No special chars).');
-        }
-    }
-
-    private function validateCompanyCity(): void
-    {
-        $companyCity = $this->data['companyCity'];
-
-        if (empty($companyCity)) {
-            $this->addError('companyCity', 'This field can not be empty.');
-        } elseif (!preg_match('/^[\p{L}\s]*$/', $companyCity)) {
-            $this->addError('companyCity', 'Please enter a valid name (No special chars).');
         }
     }
 }
