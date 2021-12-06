@@ -48,5 +48,10 @@ $r->addRoute(
 $r->addRoute(
     ['GET', 'POST'],
     '/job/delete',
-    'App\\Controllers\\Job\\DeleteJobController@deleteJob'
+    'App\\Controllers\\Job\\JobController@deleteJob'
+);
+$r->addRoute(
+    ['GET', 'POST'],
+    '/job/checkin',
+    'App\\Controllers\\Job\\CheckinController@create'
 );
