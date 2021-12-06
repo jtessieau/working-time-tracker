@@ -57,7 +57,7 @@ if ($process) {
             last_name VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
-            date_of_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            date_of_creation DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY(user_id)
         )';
     try {
@@ -116,6 +116,7 @@ if ($process) {
     echo PHP_EOL;
 
     echo "Adding test user...." . PHP_EOL;
+
     try {
         $stmt = $pdo->prepare('INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?)');
         $stmt->execute([
@@ -140,7 +141,42 @@ if ($process) {
         die();
     }
 
-    echo "Adding test job...." . PHP_EOL;
+    echo "Adding 1st test job...." . PHP_EOL;
+    try {
+        $sql =
+            'INSERT INTO jobs
+        (
+            job_designation,
+            job_rate,
+            job_start_date,
+            job_end_date,
+            job_pay_period,
+            job_first_day_of_the_week,
+            company_id,
+            user_id
+        )
+        VALUES (?,?,?,?,?,?,?,?)';
+
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->execute(
+            [
+                "My first Job",
+                12.14,
+                "2019-07-01", // AAA-MM-JJ
+                "2020-08-10", // AAAA-MM-JJ
+                'weekly',
+                0,
+                1,
+                1
+            ]
+        );
+    } catch (PDOException $e) {
+        print "Error: " . $e->getMessage() . PHP_EOL;
+        die();
+    }
+
+    echo "Adding 2nd test job...." . PHP_EOL;
     try {
         $sql =
             'INSERT INTO jobs
@@ -159,7 +195,7 @@ if ($process) {
 
         $stmt->execute(
             [
-                "My first Job",
+                "My second Job",
                 12.14,
                 "2020-08-10", // AAAA-MM-JJ
                 'weekly',

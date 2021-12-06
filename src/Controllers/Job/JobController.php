@@ -2,9 +2,12 @@
 
 namespace App\Controllers\Job;
 
-use App\Controllers\Utils\AbstractController;
-use App\FormValidation\JobCreationFormValidation;
+use App\Models\JobModel;
+use App\Models\CompanyModel;
 use App\Services\Job\CreateJobService;
+use App\FormValidation\JobFormValidation;
+use App\Controllers\Utils\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -26,15 +29,26 @@ class JobController extends AbstractController
 
     public function create()
     {
-        // TODO
         $req = Request::createFromglobals();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && $req->request->get('submit') === 'submit') {
+            //bind $jobData to $formData
+            $formData = [
+                'designation' => $req->request->get('designation'),
+                'rate' => $req->request->get('rate'),
+                'companyName' => $req->request->get('companyName'),
+                'startDate' => $req->request->get('startDate'),
+                'endDate' => $req->request->get('endDate'),
+                'endDateKnown' => $req->request->get('endDateKnown'),
+                'periodOfWork' => $req->request->get('periodOfWork'),
+                'firstDayOfTheWeek' => $req->request->get('firstDayOfTheWeek')
+            ];
             // Data validation
-            $validator = new JobCreationFormValidation($req->request->all());
+            $validator = new JobFormValidation($formData);
             $errorMessages = $validator->validate();
 
             if (empty($errorMessages)) {
-                $jobCreation = CreateJobService::create($req);
+                $jobCreation = CreateJobService::create($formData);
                 if (!$jobCreation) {
                     $errorMessages['jobCreation'] = 'An error occured, please contact a sysadmin.';
                 } else {
@@ -44,15 +58,65 @@ class JobController extends AbstractController
             }
         }
 
-        $this->render('job/createJob', [
-            'errorMessages' => $errorMessages ?? []
+        $this->render('job/jobForm', [
+            'errorMessages' => $errorMessages ?? [],
+            'formData' => $formData ?? []
         ]);
     }
 
-    public function updateJob()
+    public function update(int $id)
     {
-        // TODO
-        $this->render('job/update');
+
+        $req = Request::createFromGlobals();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $job = new JobModel();
+            $jobData = $job->findOne($id);
+
+            $company = new CompanyModel();
+            $companyData = $company->findOne($jobData['company_id']);
+
+            //bind $jobData to $formData
+            $formData = [
+                'designation' => $jobData['designation'],
+                'rate' => $jobData['rate'],
+                'companyName' => $companyData['name'],
+                'startDate' => $jobData['start_date'],
+                'endDate' => $jobData['end_date'],
+                'endDateKnown' => is_null($jobData['end_date']) ? false : true,
+                'periodOfWork' => $jobData['period_of_work'],
+                'firstDayOfTheWeek' => $jobData['first_day_of_the_week']
+            ];
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $req->request->get('submit') === 'submit') {
+            //bind $jobData to $formData
+            $formData = [
+                'designation' => $req->request->get('designation'),
+                'rate' => $req->request->get('rate'),
+                'companyName' => $req->request->get('companyName'),
+                'startDate' => $req->request->get('startDate'),
+                'endDate' => $req->request->get('endDate'),
+                'endDateKnown' => $req->request->get('endDateKnown'),
+                'periodOfWork' => $req->request->get('periodOfWork'),
+                'firstDayOfTheWeek' => $req->request->get('firstDayOfTheWeek')
+            ];
+
+            var_dump($formData);
+
+            $validator = new JobFormValidation($formData);
+            $errorMessages = $validator->validate();
+
+            if (empty($errorMessages)) {
+                // update database
+
+            }
+        }
+
+        $this->render('job/jobForm', [
+            'errorMessages' => $errorMessages ?? [],
+            'formData' => $formData ?? []
+        ]);
     }
 
     public function getJob()

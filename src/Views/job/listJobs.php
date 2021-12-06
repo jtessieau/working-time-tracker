@@ -11,9 +11,9 @@
         <tbody>
 
             <?php foreach ($jobs as $job) :
-                $startDate = new DateTime($job['start_date']);
+                $startDate = new DateTime($job['job_start_date']);
 
-                if ($job['end_date'] == null) {
+                if ($job['job_end_date'] == null) {
                     $active = true;
                 } else {
                     $active = false;
@@ -21,12 +21,12 @@
             ?>
 
                 <tr>
-                    <td><?= ucfirst($job['name']) ?></td>
-                    <td><?= $job['designation'] ?></td>
-                    <td> £<?= $job['rate'] ?></td>
+                    <td><?= ucfirst($job['company_name']) ?></td>
+                    <td><?= $job['job_designation'] ?></td>
+                    <td> £<?= $job['job_rate'] ?></td>
                     <td><?= $startDate->format('d/m/Y'); ?></td>
                     <td><?= $active ? "vert" : "rouge"; ?></td>
-                    <td>edit</td>
+                    <td><a href="/job/update/<?= $job['job_id'] ?>"><i class="far fa-edit"></i></a></td>
                 </tr>
 
             <?php endforeach ?>

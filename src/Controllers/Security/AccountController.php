@@ -6,6 +6,7 @@ use App\Models\UserModel as User;
 use App\FormValidation\SigninFormValidation;
 use App\Controllers\Utils\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class AccountController extends AbstractController
 {
@@ -36,19 +37,21 @@ class AccountController extends AbstractController
          */
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $validator = new SigninFormValidation($this->request->getAll());
+            $req = Request::createFromGlobals();
+            $validator = new SigninFormValidation($req->request->all());
             $errorMessages = $validator->validate();
 
             // If no error, then populate new user object with data.
             // Object methods will handle normalisation.
             if (empty($errorMessages)) {
-                $this->user->setFirstName($this->request->get('firstName'));
-                $this->user->setLastName($this->request->get('lastName'));
-                $this->user->setEmail($this->request->get('email'));
-                $this->user->setPassword($this->request->get('password'));
+                $this->user->setFirstName($req->request->get('firstName'));
+                $this->user->setLastName($req->request->get('lastName'));
+                $this->user->setEmail($req->request->get('email'));
+                $this->user->setPassword($req->request->get('password'));
 
                 $this->user->createUser();
-                $this->response->redirect('/');
+                $res = new RedirectResponse('/');
+                $res->send();
             }
         }
 

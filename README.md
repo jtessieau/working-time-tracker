@@ -14,11 +14,22 @@ Or
 
 - Docker >= 18.0
 
+## Composer Libraries
+
+- "symfony/dotenv": "^5.3"
+- "nikic/fast-route": "^1.3"
+- "symfony/http-foundation": "^5.3"
+- "friendsofphp/php-cs-fixer": "^3.2"
+- "phpunit/phpunit": "^9.5"
+
 ## Installation
 
 ```bash
+composer install
+php database\init_db.php
 docker-compose up -d
 ```
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)

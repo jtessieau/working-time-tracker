@@ -41,9 +41,9 @@ class CompanyModel extends AbstractModel
 
         if ($existingCompany === false) {
             $pdo = $this->getPDO();
-            $stmt = $pdo->prepare('INSERT INTO companies (name) VALUES (?)');
+            $stmt = $pdo->prepare('INSERT INTO companies (company_name) VALUES (?)');
             $return = $stmt->execute([
-                $this->getName(),
+                $this->getName()
             ]);
 
             if ($return) {
@@ -52,17 +52,26 @@ class CompanyModel extends AbstractModel
                 return false;
             }
         } else {
-            return $existingCompany['id'];
+            return $existingCompany['company_id'];
         }
     }
 
     public function findOneByName($name)
     {
         $pdo = $this->getPDO();
-        $stmt = $pdo->prepare("SELECT * FROM companies WHERE name=?");
+        $stmt = $pdo->prepare("SELECT * FROM companies WHERE company_name=?");
         $stmt->execute([$name]);
         $company = $stmt->fetch();
 
         return $company;
+    }
+
+    public function findOne(int $id): array
+    {
+        $pdo = $this->getPDO();
+        $stmt = $pdo->prepare('SELECT * FROM companies WHERE company_id=?');
+        $stmt->execute([$id]);
+
+        return $stmt->fetch();
     }
 }

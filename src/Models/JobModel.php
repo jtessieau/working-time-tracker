@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use DateTime;
-
 class JobModel extends AbstractModel
 {
     private int $id;
     private string $designation;
     private int $rate;
-    private DateTime $startDate;
-    private DateTime $endDate;
+    private string $startDate;
+    private ?string $endDate;
 
     private string $periodOfWork;
     private int $firstDayOfTheWeek = 0;
@@ -72,37 +70,31 @@ class JobModel extends AbstractModel
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getStartDate(): \DateTime
+
+    public function getStartDate(): string
     {
         return $this->startDate;
     }
 
     /**
-     * @param \DateTime $startDate
+     * @param $startDate
      * @return JobModel
      */
-    public function setStartDate(DateTime $startDate): JobModel
+    public function setStartDate($startDate): JobModel
     {
         $this->startDate = $startDate;
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getEndDate(): DateTime
+    public function getEndDate(): ?string
     {
         return $this->endDate;
     }
 
     /**
-     * @param \DateTime $endDate
      * @return JobModel
      */
-    public function setEndDate(?DateTime $endDate = null): JobModel
+    public function setEndDate($endDate = null): JobModel
     {
         $this->endDate = $endDate;
         return $this;
@@ -182,16 +174,18 @@ class JobModel extends AbstractModel
 
     public function createJob()
     {
-        $sql = 'INSERT INTO jobs (
-                        designation,
-                        rate,
-                        start_date,
-                        period_of_work,
-                        first_day_of_the_week,
-                        company_id,
-                        user_id
-                    )
-                        VALUES (?,?,?,?,?,?,?)';
+        $sql =
+            'INSERT INTO jobs (
+                job_designation,
+                job_rate,
+                job_start_date,
+                job_end_date,
+                job_pay_period,
+                job_first_day_of_the_week,
+                company_id,
+                user_id
+            )
+            VALUES (?,?,?,?,?,?,?,?)';
 
         $pdo = $this->getPDO();
         $stmt = $pdo->prepare($sql);
@@ -199,7 +193,8 @@ class JobModel extends AbstractModel
         $return = $stmt->execute([
             $this->getDesignation(),
             $this->getRate(),
-            $this->getStartDate()->format('Y-m-d'),
+            $this->getStartDate(),
+            $this->getEndDate(),
             $this->getPeriodOfWork(),
             $this->getFirstDayOfTheWeek(),
             $this->getCompanyId(),
@@ -216,10 +211,22 @@ class JobModel extends AbstractModel
     {
         $pdo = $this->getPDO();
         $stmt = $pdo->prepare(
-            'SELECT jobs.*, companies.name FROM jobs JOIN companies ON jobs.company_id=companies.id WHERE user_id=?'
+            'SELECT jobs.*, companies.company_name
+            FROM jobs
+            JOIN companies ON jobs.company_id=companies.company_id
+            WHERE user_id=?'
         );
         $stmt->execute([$id]);
 
         return $stmt->fetchAll();
+    }
+
+    public function findOne(int $id): array
+    {
+        $pdo = $this->getPDO();
+        $stmt = $pdo->prepare('SELECT * FROM jobs WHERE job_id=?');
+        $stmt->execute([$id]);
+
+        return $stmt->fetch();
     }
 }
