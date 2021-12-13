@@ -231,4 +231,38 @@ class JobModel extends AbstractModel
 
         return $stmt->fetch();
     }
+
+    public function updateJob(array $formData)
+    {
+        $sql =
+            'UPDATE jobs
+            SET
+                job_designation=?,
+                job_rate=?,
+                job_start_date=?,
+                job_end_date=?,
+                job_pay_period=?,
+                job_first_day_of_the_week=?,
+                company_id=?
+            WHERE job_id=?';
+
+        $pdo = $this->getPDO();
+        $stmt = $pdo->prepare($sql);
+
+        $return = $stmt->execute([
+            $formData['designation'],
+            $formData['rate'],
+            $formData['startDate'],
+            $formData['endDate'],
+            $formData['periodOfWork'],
+            $formData['firstDayOfTheWeek'],
+            $formData['companyId'],
+            $formData['id']
+        ]);
+        if ($return) {
+            return $pdo->lastInsertId();
+        } else {
+            return false;
+        }
+    }
 }

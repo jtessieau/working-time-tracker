@@ -17,7 +17,7 @@ class JobController extends AbstractController
     {
         // This section should not be accessible to user NOT logged in.
         if (!isset($_SESSION['user'])) {
-            $response = new RedirectResponse('/');
+            $response = new RedirectResponse('/login');
             $response->send();
         }
     }
@@ -78,20 +78,21 @@ class JobController extends AbstractController
 
             //bind $jobData to $formData
             $formData = [
-                'designation' => $jobData['designation'],
-                'rate' => $jobData['rate'],
-                'companyName' => $companyData['name'],
-                'startDate' => $jobData['start_date'],
-                'endDate' => $jobData['end_date'],
-                'endDateKnown' => is_null($jobData['end_date']) ? false : true,
-                'periodOfWork' => $jobData['period_of_work'],
-                'firstDayOfTheWeek' => $jobData['first_day_of_the_week']
+                'designation' => $jobData['job_designation'],
+                'rate' => $jobData['job_rate'],
+                'companyName' => $companyData['company_name'],
+                'startDate' => $jobData['job_start_date'],
+                'endDate' => $jobData['job_end_date'],
+                'endDateKnown' => is_null($jobData['job_end_date']) ? false : true,
+                'periodOfWork' => $jobData['job_pay_period'],
+                'firstDayOfTheWeek' => $jobData['job_first_day_of_the_week']
             ];
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && $req->request->get('submit') === 'submit') {
             //bind $jobData to $formData
             $formData = [
+                'id' => $id,
                 'designation' => $req->request->get('designation'),
                 'rate' => $req->request->get('rate'),
                 'companyName' => $req->request->get('companyName'),
@@ -102,14 +103,33 @@ class JobController extends AbstractController
                 'firstDayOfTheWeek' => $req->request->get('firstDayOfTheWeek')
             ];
 
-            var_dump($formData);
+            if (is_null($formData['endDateKnown'])) {
+                $formData['endDate'] = NULL;
+            }
 
             $validator = new JobFormValidation($formData);
             $errorMessages = $validator->validate();
 
             if (empty($errorMessages)) {
-                // update database
+                $company = new CompanyModel();
+                $company->setName($formData['companyName']);
+                $companyId = $company->createCompany();
 
+                if ($companyId !== false) {
+                    $formData['companyId'] = $companyId;
+                } else {
+                    $errorMessages['jobCreation'] = 'An error occured, please contact a sysadmin.';
+                }
+
+                $job = new JobModel();
+                $jobCreation = $job->updateJob($formData);
+
+                if ($jobCreation === false) {
+                    $errorMessages['jobCreation'] = 'An error occured, please contact a sysadmin.';
+                } else {
+                    $response = new RedirectResponse('/job/list');
+                    $response->send();
+                }
             }
         }
 

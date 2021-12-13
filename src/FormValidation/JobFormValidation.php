@@ -27,8 +27,6 @@ class JobFormValidation extends FormValidation implements ValidationInterface
             }
         }
 
-        var_dump($_POST);
-
         $this->validateDesignation();
         $this->validateRate();
         $this->validateStartDate();

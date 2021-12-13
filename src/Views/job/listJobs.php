@@ -1,8 +1,8 @@
 <div class="container">
     <table class="table">
         <thead>
-            <td>Company</td>
             <td>Designation</td>
+            <td>Company</td>
             <td>Rate</td>
             <td>Start date</td>
             <td>Status</td>
@@ -21,11 +21,18 @@
             ?>
 
                 <tr>
+                    <td><a href="/job/checkin/list/<?= $job['job_id'] ?>"><?= ucwords($job['job_designation']) ?></a></td>
                     <td><?= ucfirst($job['company_name']) ?></td>
-                    <td><a href="/job/checkin/list/<?= $job['job_id'] ?>"><?= $job['job_designation'] ?></a></td>
                     <td> £<?= $job['job_rate'] ?></td>
                     <td><?= $startDate->format('d/m/Y'); ?></td>
-                    <td><?= $active ? "vert" : "rouge"; ?></td>
+                    <td>
+                        <?=
+                        $active ?
+                            '<i class="fas fa-circle has-text-success"></i>'
+                            :
+                            '<i class="fas fa-circle has-text-danger"></i>';
+                        ?>
+                    </td>
                     <td><a href="/job/update/<?= $job['job_id'] ?>"><i class="far fa-edit"></i></a></td>
                 </tr>
 
