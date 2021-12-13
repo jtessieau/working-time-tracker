@@ -55,3 +55,9 @@ $r->addRoute(
     '/job/checkin',
     'App\\Controllers\\Job\\CheckinController@create'
 );
+
+$r->addRoute(
+    ['GET', 'POST'],
+    '/job/checkin/list/{id}',
+    'App\\Controllers\\Job\\CheckinController@list'
+);

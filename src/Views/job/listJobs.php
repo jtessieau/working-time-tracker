@@ -22,7 +22,7 @@
 
                 <tr>
                     <td><?= ucfirst($job['company_name']) ?></td>
-                    <td><?= $job['job_designation'] ?></td>
+                    <td><a href="/job/checkin/list/<?= $job['job_id'] ?>"><?= $job['job_designation'] ?></a></td>
                     <td> £<?= $job['job_rate'] ?></td>
                     <td><?= $startDate->format('d/m/Y'); ?></td>
                     <td><?= $active ? "vert" : "rouge"; ?></td>

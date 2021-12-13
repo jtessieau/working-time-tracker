@@ -12,6 +12,7 @@
 
 <form id="checkinForm" method="post">
     <!-- Select job from list -->
+    <label for="jobId">Job:</label>
     <select name="jobId" id="jobId">
         <?php foreach ($jobList as $job) : ?>
             <option value="<?= $job['job_id'] ?>"><?= ucwords($job['job_designation']) ?></option>

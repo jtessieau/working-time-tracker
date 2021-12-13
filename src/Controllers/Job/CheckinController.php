@@ -56,10 +56,21 @@ class CheckinController extends AbstractController
             }
         }
 
-        $this->render('job/checkin', [
+        $this->render('job/checkinForm', [
             'jobList' => $jobList ?? [],
             'formData' => $formData ?? [],
             'errorMessages' => $errorMessages ?? []
+        ]);
+    }
+
+    public function list($jobId)
+    {
+        $checkin = new CheckinModel();
+
+        $checkins = $checkin->findByJobID($jobId);
+
+        $this->render('job/checkinList', [
+            'checkins' => $checkins ?? []
         ]);
     }
 }

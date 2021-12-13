@@ -55,6 +55,7 @@ class CheckinModel extends AbstractModel
         $this->breakTime = $breakTime;
         return $this;
     }
+
     public function create(): ?int
     {
         $pdo = $this->getPDO();
@@ -68,5 +69,17 @@ class CheckinModel extends AbstractModel
         ]);
 
         return $return ? $pdo->lastInsertId() : null;
+    }
+
+    public function findByJobId($jobId): ?array
+    {
+        $pdo = $this->getPDO();
+        $sql = 'SELECT * FROM checkins WHERE job_id=?';
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$jobId]);
+        $return = $stmt->fetchAll();
+
+        return $return !== false ? $return : null;
     }
 }
