@@ -7,6 +7,11 @@ class CompanyModel extends AbstractModel
     private int $id;
     private string $name = '';
 
+    public function __construct()
+    {
+        $this->table = "companies";
+    }
+
 
     public function getId(): int
     {
@@ -35,43 +40,37 @@ class CompanyModel extends AbstractModel
         return $this;
     }
 
-    public function createCompany()
+    public function create(): ?int
     {
         $existingCompany = $this->findOneByName($this->name);
 
         if ($existingCompany === false) {
             $pdo = $this->getPDO();
-            $stmt = $pdo->prepare('INSERT INTO companies (company_name) VALUES (?)');
+
+            $sql = "INSERT INTO $this->table (company_name) VALUES (?)";
+
+            $stmt = $pdo->prepare($sql);
             $return = $stmt->execute([
                 $this->getName()
             ]);
 
-            if ($return) {
-                return $pdo->lastInsertId();
-            } else {
-                return false;
-            }
+            return $return ? $pdo->lastInsertId() : false;
         } else {
             return $existingCompany['company_id'];
         }
     }
 
-    public function findOneByName($name)
+    public function findOneByName(string $name): ?array
     {
         $pdo = $this->getPDO();
-        $stmt = $pdo->prepare("SELECT * FROM companies WHERE company_name=?");
+
+        $sql = "SELECT * FROM $this->table WHERE company_name=?";
+
+        $stmt = $pdo->prepare($sql);
         $stmt->execute([$name]);
-        $company = $stmt->fetch();
 
-        return $company;
-    }
+        $return = $stmt->fetch();
 
-    public function findOne(int $id): array
-    {
-        $pdo = $this->getPDO();
-        $stmt = $pdo->prepare('SELECT * FROM companies WHERE company_id=?');
-        $stmt->execute([$id]);
-
-        return $stmt->fetch();
+        return $return !== false ? $return : null;
     }
 }
