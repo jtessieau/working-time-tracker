@@ -10,6 +10,11 @@ class UserModel extends AbstractModel
     private string $email = '';
     private string $password = '';
 
+    public function __construct()
+    {
+        $this->table = "users";
+    }
+
 
     // Getters and Setters
     public function getId(): int
@@ -99,25 +104,34 @@ class UserModel extends AbstractModel
 
     // Database interaction
 
-    public function createUser()
+    public function createUser(): ?int
     {
         $pdo = $this->getPDO();
-        $stmt = $pdo->prepare('INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?)');
-        $stmt->execute([
+
+        $sql = "INSERT INTO $this->table (first_name, last_name, email, password) VALUES (?,?,?,?)";
+
+        $stmt = $pdo->prepare($sql);
+        $return = $stmt->execute([
             $this->getFirstName(),
             $this->getLastName(),
             $this->getEmail(),
             $this->getPassword()
         ]);
+
+        return $return ? $pdo->lastInsertId() : NULL;
     }
 
-    public function findOneByEmail($email)
+    public function findOneByEmail($email): ?array
     {
         $pdo = $this->getPDO();
-        $stmt = $pdo->prepare('SELECT * FROM users WHERE email=?');
+
+        $sql = "SELECT * FROM $this->table WHERE email=?";
+
+        $stmt = $pdo->prepare($sql);
         $stmt->execute([$email]);
+
         $user = $stmt->fetch();
 
-        return $user;
+        return $user !== false ? $user : NULL;
     }
 }
