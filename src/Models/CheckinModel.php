@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
-use DateTime;
-
 class CheckinModel extends AbstractModel
 {
     private int $id;
     private int $jobId;
-    private DateTime $startDate;
-    private DateTime $endDate;
+    private string $startDatetime;
+    private string $endDatetime;
     private int $breakTime;
+
+    public function __construct()
+    {
+        $this->table = "checkins";
+    }
 
     public function getJobID(): int
     {
@@ -23,25 +26,25 @@ class CheckinModel extends AbstractModel
         return $this;
     }
 
-    public function getStartDate(): DateTime
+    public function getStartDate(): string
     {
-        return $this->startDate;
+        return $this->startDatetime;
     }
 
-    public function setStartDate(string $startDate): CheckinModel
+    public function setStartDate(string $startDatetime): CheckinModel
     {
-        $this->startDate = DateTime::createFromFormat('Y-m-d H:i', $startDate);
+        $this->startDatetime = $startDatetime;
         return $this;
     }
 
-    public function getEndDate(): DateTime
+    public function getEndDate(): string
     {
-        return $this->endDate;
+        return $this->endDatetime;
     }
 
-    public function setEndDate(string $endDate): CheckinModel
+    public function setEndDate(string $endDatetime): CheckinModel
     {
-        $this->endDate = DateTime::createFromFormat('Y-m-d H:i', $endDate);
+        $this->endDatetime = $endDatetime;
         return $this;
     }
 
@@ -56,15 +59,27 @@ class CheckinModel extends AbstractModel
         return $this;
     }
 
+    // Database interaction
     public function create(): ?int
     {
         $pdo = $this->getPDO();
-        $sql = 'INSERT INTO checkins (job_id, start_date, end_date, break_time) VALUES (?,?,?,?)';
+
+        $sql =
+            "INSERT INTO $this->table
+                (
+                    job_id,
+                    checkin_start_datetime,
+                    checkin_end_datetime,
+                    checkin_break_time
+                )
+            VALUE (?,?,?,?)";
+
         $stmt = $pdo->prepare($sql);
+
         $return = $stmt->execute([
             $this->getJobId(),
-            $this->getStartDate()->format('Y-m-d H:i:s'),
-            $this->getEndDate()->format('Y-m-d H:i:s'),
+            $this->getStartDate(),
+            $this->getEndDate(),
             $this->getBreakTime()
         ]);
 
@@ -74,10 +89,11 @@ class CheckinModel extends AbstractModel
     public function findByJobId($jobId): ?array
     {
         $pdo = $this->getPDO();
-        $sql = 'SELECT * FROM checkins WHERE job_id=?';
+        $sql = "SELECT * FROM $this->table WHERE job_id=?";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$jobId]);
+
         $return = $stmt->fetchAll();
 
         return $return !== false ? $return : null;

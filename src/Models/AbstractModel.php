@@ -6,6 +6,8 @@ use PDO;
 
 class AbstractModel
 {
+    private string $table;
+
     public function getPDO(): PDO
     {
         try {
@@ -19,5 +21,27 @@ class AbstractModel
             echo "Impossible d'accéder à la base de données : " . $e->getMessage();
             die();
         }
+    }
+
+    public function findAll(): array
+    {
+        $pdo = $this->getPDO();
+        $sql = "SELECT * FROM $this->table";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    public function findOne(int $id): array
+    {
+        $pdo = $this->getPDO();
+        $sql = "SELECT * FROM $this->table WHERE id=?";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+
+        return $stmt->fetch();
     }
 }
