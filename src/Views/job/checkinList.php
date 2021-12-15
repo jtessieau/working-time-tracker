@@ -10,17 +10,17 @@
 
             <?php
             foreach ($checkins as $checkin) :
-                $startDate = strtotime($checkin['start_date']);
-                $endDate = strtotime($checkin['end_date']);
+                $startDate = strtotime($checkin['checkin_start_datetime']);
+                $endDate = strtotime($checkin['checkin_end_datetime']);
 
-                $jobTimeInSeconds = $endDate - $startDate - ($checkin['break_time'] * 60);
+                $jobTimeInSeconds = $endDate - $startDate - ($checkin['checkin_break_time'] * 60);
                 $jobTimeInHours = $jobTimeInSeconds / 60 / 60;
             ?>
 
                 <tr>
-                    <td><?= $checkin['start_date'] ?></td>
-                    <td><?= $checkin['end_date'] ?></td>
-                    <td><?= $checkin['break_time'] ?></td>
+                    <td><?= $checkin['checkin_start_datetime'] ?></td>
+                    <td><?= $checkin['checkin_end_datetime'] ?></td>
+                    <td><?= $checkin['checkin_break_time'] ?></td>
                     <td><?= $jobTimeInHours ?></td>
                 </tr>
 
