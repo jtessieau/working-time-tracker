@@ -6,7 +6,7 @@ use PDO;
 
 class AbstractModel
 {
-    private string $table;
+    protected string $table = '';
 
     public function getPDO(): PDO
     {

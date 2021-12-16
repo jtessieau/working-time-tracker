@@ -8,7 +8,7 @@ class Jobs
 
         $stmt =
             'CREATE TABLE jobs(
-            job_id INT AUTO_INCREMENT,
+            id INT AUTO_INCREMENT,
             job_designation VARCHAR(255) NOT NULL,
             job_rate DECIMAL(10,2),
             job_start_date DATE NULL,
@@ -17,14 +17,14 @@ class Jobs
             job_first_day_of_the_week TINYINT,
             user_id INT NOT NULL,
             company_id INT NOT NULL,
-            PRIMARY KEY(job_id),
+            PRIMARY KEY(id),
             CONSTRAINT fk_user
                 FOREIGN KEY(user_id)
-                REFERENCES users (user_id)
+                REFERENCES users (id)
                 ON DELETE CASCADE,
             CONSTRAINT fk_company
                 FOREIGN KEY(company_id)
-                REFERENCES companies(company_id)
+                REFERENCES companies(id)
                 ON DELETE CASCADE
         )';
 

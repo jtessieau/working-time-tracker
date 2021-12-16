@@ -8,9 +8,9 @@ class Companies
 
         $stmt =
             'CREATE TABLE companies(
-            company_id INT AUTO_INCREMENT,
+            id INT AUTO_INCREMENT,
             company_name VARCHAR(255) NOT NULL,
-            PRIMARY KEY(company_id)
+            PRIMARY KEY(id)
         )';
 
         try {

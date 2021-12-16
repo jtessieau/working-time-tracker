@@ -8,13 +8,13 @@ class Users
 
         $stmt =
             'CREATE TABLE users(
-                user_id INT AUTO_INCREMENT,
+                id INT AUTO_INCREMENT,
                 first_name VARCHAR(255) NOT NULL,
                 last_name VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL UNIQUE,
                 password VARCHAR(255) NOT NULL,
                 date_of_creation DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY(user_id)
+                PRIMARY KEY(id)
             )';
 
         try {

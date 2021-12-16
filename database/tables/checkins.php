@@ -8,15 +8,15 @@ class Checkins
 
         $stmt =
             'CREATE TABLE checkins(
-                checkin_id INT AUTO_INCREMENT,
+                id INT AUTO_INCREMENT,
                 job_id INT NOT NULL,
                 checkin_start_datetime DATETIME NOT NULL,
                 checkin_end_datetime DATETIME NOT NULL,
                 checkin_break_time INT NOT NULL,
-                PRIMARY KEY(checkin_id),
+                PRIMARY KEY(id),
             CONSTRAINT fk_job
                 FOREIGN KEY(job_id)
-                REFERENCES jobs (job_id)
+                REFERENCES jobs (id)
                 ON DELETE CASCADE
             )';
 
