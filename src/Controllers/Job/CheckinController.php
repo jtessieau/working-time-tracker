@@ -55,7 +55,14 @@ class CheckinController extends AbstractController
                 $checkin->setEndDate($endDate);
                 $checkin->setBreakTime($formData['breakTime']);
 
-                $checkin->create();
+                $return = $checkin->create();
+
+                if (!is_null($return)) {
+                    $res = new RedirectResponse("/job/checkin/list/{$formData['jobId']}");
+                    $res->send();
+                } else {
+                    $errorMessages['checkinCreation'] = 'An error occured, please contact a sysadmin.';
+                }
             }
         }
 

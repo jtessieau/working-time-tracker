@@ -39,6 +39,8 @@
         <input type="number" name="breakTime" id="breakTime" value="0">
     </fieldset>
 
+    <span class="help is-danger"><?php echo $errorMessages['checkinCreation'] ?? '' ?></span>
+
     <button type="submit" class="button is-link" form="checkinForm" name="submit" value="submit">
         Submit
     </button>
