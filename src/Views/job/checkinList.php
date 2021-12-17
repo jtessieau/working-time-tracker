@@ -1,10 +1,12 @@
 <div class="container">
     <table class="table">
         <thead>
-            <td>Start date</td>
-            <td>End date</td>
-            <td>Break time</td>
-            <td>Job time</td>
+            <td class="has-text-centered">Start date</td>
+            <td class="has-text-centered">End date</td>
+            <td class="has-text-centered">Break time</td>
+            <td class="has-text-centered">Job time</td>
+            <td class="has-text-centered">Edit</td>
+            <td class="has-text-centered">Delete</td>
         </thead>
         <tbody>
 
@@ -18,10 +20,20 @@
             ?>
 
                 <tr>
-                    <td><?= $checkin['checkin_start_datetime'] ?></td>
-                    <td><?= $checkin['checkin_end_datetime'] ?></td>
-                    <td><?= $checkin['checkin_break_time'] ?></td>
-                    <td><?= $jobTimeInHours ?></td>
+                    <td class="has-text-centered"><?= $checkin['checkin_start_datetime'] ?></td>
+                    <td class="has-text-centered"><?= $checkin['checkin_end_datetime'] ?></td>
+                    <td class="has-text-centered"><?= $checkin['checkin_break_time'] ?></td>
+                    <td class="has-text-centered"><?= $jobTimeInHours ?></td>
+                    <td class="has-text-centered">
+                        <a href="/job/checkin/edit/<?= $checkin['id'] ?>">
+                            <i class="far fa-edit has-text-info"></i>
+                        </a>
+                    </td>
+                    <td class="has-text-centered">
+                        <a href="/job/checkin/delete/<?= $checkin['id'] ?>">
+                            <i class="far fa-trash-alt has-text-danger"></i>
+                        </a>
+                    </td>
                 </tr>
 
             <?php endforeach ?>

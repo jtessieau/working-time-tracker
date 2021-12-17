@@ -83,4 +83,23 @@ class CheckinController extends AbstractController
             'checkins' => $checkins ?? []
         ]);
     }
+
+    public function delete(int $id)
+    {
+        // Check the owner
+        $user = new UserModel();
+        $currentUser = $user->findOneByEmail($_SESSION['user']['email']);
+
+        $checkin = new CheckinModel();
+        $currentCheckin = $checkin->findOne($id);
+
+        $job = new JobModel();
+        $currentJob = $job->findOne($currentCheckin['job_id']);
+
+        if ($currentUser['id'] === $currentJob['user_id']) {
+            $checkin->delete($id);
+            $res = new RedirectResponse("/job/checkin/list/{$currentCheckin['job_id']}");
+            $res->send();
+        }
+    }
 }
