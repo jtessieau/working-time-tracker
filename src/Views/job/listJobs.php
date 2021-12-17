@@ -21,7 +21,7 @@
             ?>
 
                 <tr>
-                    <td><a href="/job/checkin/list/<?= $job['job_id'] ?>"><?= ucwords($job['job_designation']) ?></a></td>
+                    <td><a href="/job/checkin/list/<?= $job['id'] ?>"><?= ucwords($job['job_designation']) ?></a></td>
                     <td><?= ucfirst($job['company_name']) ?></td>
                     <td> £<?= $job['job_rate'] ?></td>
                     <td><?= $startDate->format('d/m/Y'); ?></td>
@@ -33,7 +33,7 @@
                             '<i class="fas fa-circle has-text-danger"></i>';
                         ?>
                     </td>
-                    <td><a href="/job/update/<?= $job['job_id'] ?>"><i class="far fa-edit"></i></a></td>
+                    <td><a href="/job/update/<?= $job['id'] ?>"><i class="far fa-edit"></i></a></td>
                 </tr>
 
             <?php endforeach ?>

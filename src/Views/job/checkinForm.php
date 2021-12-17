@@ -15,7 +15,7 @@
     <label for="jobId">Job:</label>
     <select name="jobId" id="jobId">
         <?php foreach ($jobList as $job) : ?>
-            <option value="<?= $job['job_id'] ?>"><?= ucwords($job['job_designation']) ?></option>
+            <option value="<?= $job['id'] ?>"><?= ucwords($job['job_designation']) ?></option>
         <?php endforeach ?>
     </select>
 
