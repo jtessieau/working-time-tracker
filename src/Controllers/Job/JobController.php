@@ -113,7 +113,7 @@ class JobController extends AbstractController
             if (empty($errorMessages)) {
                 $company = new CompanyModel();
                 $company->setName($formData['companyName']);
-                $companyId = $company->createCompany();
+                $companyId = $company->create();
 
                 if ($companyId !== false) {
                     $formData['companyId'] = $companyId;
@@ -122,7 +122,7 @@ class JobController extends AbstractController
                 }
 
                 $job = new JobModel();
-                $jobCreation = $job->updateJob($formData);
+                $jobCreation = $job->update($formData);
 
                 if ($jobCreation === false) {
                     $errorMessages['jobCreation'] = 'An error occured, please contact a sysadmin.';

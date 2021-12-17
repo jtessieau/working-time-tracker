@@ -12,18 +12,21 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class CheckinController extends AbstractController
 {
+    public function __construct()
+    {
+        // This section should not be accessible to user NOT logged in.
+        if (!isset($_SESSION['user'])) {
+            $response = new RedirectResponse('/login');
+            $response->send();
+        }
+    }
+
     public function create()
     {
-        // This  page should not be accessible to user NOT logged in.
-        if (!isset($_SESSION['user'])) {
-            $res = new RedirectResponse('/');
-            $res->send();
-        }
-
         $users = new UserModel();
         $currentUser = $users->findOneByEmail($_SESSION['user']['email']);
         $jobs = new JobModel();
-        $jobList = $jobs->findAllByUserId($currentUser['user_id']);
+        $jobList = $jobs->findAllByUserId($currentUser['id']);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $req = Request::createFromGlobals();

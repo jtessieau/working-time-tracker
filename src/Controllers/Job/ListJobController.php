@@ -21,7 +21,7 @@ class ListJobController extends AbstractController
         $job = new Job();
 
         $currentUser = $user->findOneByEmail($_SESSION['user']['email']);
-        $currentUserJobs = $job->findAllByUserId($currentUser['user_id']);
+        $currentUserJobs = $job->findAllByUserId($currentUser['id']);
 
         $this->render('job/listJobs', [
             'jobs' => $currentUserJobs

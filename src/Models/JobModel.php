@@ -166,7 +166,7 @@ class JobModel extends AbstractModel
         $sql =
             "SELECT jobs.*, companies.company_name
             FROM $this->table AS jobs
-            JOIN companies ON jobs.company_id=companies.company_id
+            JOIN companies ON jobs.company_id=companies.id
             WHERE user_id=?";
 
         $stmt = $pdo->prepare($sql);
