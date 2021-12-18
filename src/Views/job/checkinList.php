@@ -25,7 +25,7 @@
                     <td class="has-text-centered"><?= $checkin['checkin_break_time'] ?></td>
                     <td class="has-text-centered"><?= $jobTimeInHours ?></td>
                     <td class="has-text-centered">
-                        <a href="/job/checkin/edit/<?= $checkin['id'] ?>">
+                        <a href="/job/checkin/update/<?= $checkin['id'] ?>">
                             <i class="far fa-edit has-text-info"></i>
                         </a>
                     </td>
