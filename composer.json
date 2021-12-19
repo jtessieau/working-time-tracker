@@ -1,5 +1,7 @@
 {
   "name": "acronyme/working-time-tracker",
+  "description": "A simple app to store working time",
+  "license": "MIT",
   "autoload": {
     "psr-4": {
       "App\\": "src/"
