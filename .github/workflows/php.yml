@@ -29,8 +29,5 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
       
-    - name: OSKAR-PHP-CS-Fixer
-      uses: OskarStark/php-cs-fixer-ga@3.4.0.1
-      
-    - name: OSKAR-phpstan
-      uses: OskarStark/phpstan-ga@1.0.1
+    - name: PHP-CS-Fixer
+      run: ./vendor/bin/php-cs-fixer fix src/
