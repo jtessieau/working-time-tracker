@@ -104,6 +104,7 @@ class CheckinController extends AbstractController
             $endDatetime = date_create_from_format($format, $currentCheckin['checkin_end_datetime']);
 
             $formData = [
+                'id' => $id,
                 'jobId' => $currentCheckin['job_id'],
                 'startDate' => $startDatetime->format('Y-m-d'),
                 'startTime' => $startDatetime->format('H:i:s'),
@@ -114,9 +115,9 @@ class CheckinController extends AbstractController
         }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $req = Request::createFromGlobals();
-            var_dump($req->request->all());
 
             $formData = [
+                'id' => $id,
                 'jobId' => $req->request->get('jobId'),
                 'startDate' => $req->request->get('startDate'),
                 'startTime' => $req->request->get('startTime'),
@@ -129,18 +130,13 @@ class CheckinController extends AbstractController
             $errorMessages = $validator->validate();
 
             if (empty($errorMessages)) {
-                $startDate = $formData['startDate'] . " " . $formData['startTime']; // YYYY/MM/DD hh:mm || Y-m-d H:i
-                $endDate = $formData['endDate'] . " " . $formData['endTime']; // YYYY/MM/DD hh:mm || Y-m-d H:i
+                $formData['startDatetime'] = $formData['startDate'] . " " . $formData['startTime']; // YYYY/MM/DD hh:mm || Y-m-d H:i
+                $formData['endDatetime'] = $formData['endDate'] . " " . $formData['endTime']; // YYYY/MM/DD hh:mm || Y-m-d H:i
 
                 $checkin = new CheckinModel();
 
-                $checkin->setJobId($formData['jobId']);
-                $checkin->setStartDate($startDate);
-                $checkin->setEndDate($endDate);
-                $checkin->setBreakTime($formData['breakTime']);
-
                 // TODO: Update method
-                // $return = $checkin->update();
+                $return = $checkin->update($formData);
 
                 if (!is_null($return)) {
                     $res = new RedirectResponse("/job/checkin/list/{$formData['jobId']}");
