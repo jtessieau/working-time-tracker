@@ -86,6 +86,29 @@ class CheckinModel extends AbstractModel
         return $return ? $pdo->lastInsertId() : null;
     }
 
+    public function update(array $formData): ?int
+    {
+        $pdo = $this->getPDO();
+        $sql =
+            "UPDATE $this->table
+            SET
+                job_id=?,
+                checkin_start_datetime=?,
+                checkin_end_datetime=?,
+                checkin_break_time=?
+            WHERE id=?";
+        $stmt = $pdo->prepare($sql);
+
+        $return = $stmt->execute([
+            $formData['jobId'],
+            $formData['startDatetime'],
+            $formData['endDatetime'],
+            $formData['breakTime'],
+            $formData['id']
+        ]);
+        return $return ? $pdo->lastInsertId() : NULL;
+    }
+
     public function findByJobId($jobId): ?array
     {
         $pdo = $this->getPDO();
