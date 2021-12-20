@@ -125,7 +125,7 @@ class JobModel extends AbstractModel
         return $this;
     }
 
-    // Database interactio 
+    // Database interactio
 
     public function create(): ?int
     {
@@ -156,7 +156,7 @@ class JobModel extends AbstractModel
             $this->getUserId(),
         ]);
 
-        return $return ? $pdo->lastInsertId() : NULL;
+        return $return ? $pdo->lastInsertId() : null;
     }
 
     public function findAllByUserId($id): ?array
@@ -174,7 +174,7 @@ class JobModel extends AbstractModel
 
         $return = $stmt->fetchAll();
 
-        return $return !== false ? $return : NULL;
+        return $return !== false ? $return : null;
     }
 
     public function update(array $formData)
@@ -204,6 +204,6 @@ class JobModel extends AbstractModel
             $formData['companyId'],
             $formData['id']
         ]);
-        return $return ? $pdo->lastInsertId() : NULL;
+        return $return ? $pdo->lastInsertId() : null;
     }
 }

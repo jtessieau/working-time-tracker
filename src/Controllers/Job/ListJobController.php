@@ -11,7 +11,6 @@ class ListJobController extends AbstractController
 {
     public function list()
     {
-
         if (empty($_SESSION['user'])) {
             $res = new RedirectResponse("/login");
             $res->send();

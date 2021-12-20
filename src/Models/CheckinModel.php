@@ -106,7 +106,7 @@ class CheckinModel extends AbstractModel
             $formData['breakTime'],
             $formData['id']
         ]);
-        return $return ? $pdo->lastInsertId() : NULL;
+        return $return ? $pdo->lastInsertId() : null;
     }
 
     public function findByJobId($jobId): ?array

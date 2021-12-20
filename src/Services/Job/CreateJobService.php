@@ -24,7 +24,7 @@ final class CreateJobService
         if (isset($formData['endDateKnown']) && $formData['endDateKnown'] === true) {
             $job->setEndDate($formData['endDate']);
         } else {
-            $job->setEndDate(NULL);
+            $job->setEndDate(null);
         }
 
         $job->setPeriodOfWork($formData['periodOfWork']);

@@ -66,7 +66,6 @@ class JobController extends AbstractController
 
     public function update(int $id)
     {
-
         $req = Request::createFromGlobals();
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -104,7 +103,7 @@ class JobController extends AbstractController
             ];
 
             if (is_null($formData['endDateKnown'])) {
-                $formData['endDate'] = NULL;
+                $formData['endDate'] = null;
             }
 
             $validator = new JobFormValidation($formData);
