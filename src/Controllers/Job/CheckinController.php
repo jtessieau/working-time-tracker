@@ -107,9 +107,9 @@ class CheckinController extends AbstractController
                 'id' => $id,
                 'jobId' => $currentCheckin['job_id'],
                 'startDate' => $startDatetime->format('Y-m-d'),
-                'startTime' => $startDatetime->format('H:i:s'),
+                'startTime' => $startDatetime->format('H:i'),
                 'endDate' => $endDatetime->format('Y-m-d'),
-                'endTime' => $endDatetime->format('H:m:s'),
+                'endTime' => $endDatetime->format('H:i'),
                 'breakTime' => $currentCheckin['checkin_break_time']
             ];
         }
