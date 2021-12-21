@@ -177,6 +177,24 @@ class JobModel extends AbstractModel
         return $return !== false ? $return : null;
     }
 
+    public function findOne($id): ?array
+    {
+        $pdo = $this->getPDO();
+
+        $sql =
+            "SELECT jobs.*, companies.company_name
+            FROM $this->table AS jobs
+            JOIN companies ON jobs.company_id=companies.id
+            WHERE jobs.id=?";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+
+        $return = $stmt->fetch();
+
+        return $return !== false ? $return : null;
+    }
+
     public function update(array $formData)
     {
         $sql =

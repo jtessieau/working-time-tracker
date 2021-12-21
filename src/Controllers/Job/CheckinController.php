@@ -76,11 +76,14 @@ class CheckinController extends AbstractController
     public function list($jobId)
     {
         $checkin = new CheckinModel();
-
         $checkins = $checkin->findByJobID($jobId);
 
+        $jobModel = new JobModel();
+        $job = $jobModel->findOne($jobId);
+
         $this->render('job/checkinList', [
-            'checkins' => $checkins ?? []
+            'checkins' => $checkins ?? [],
+            'job' => $job ?? []
         ]);
     }
 
