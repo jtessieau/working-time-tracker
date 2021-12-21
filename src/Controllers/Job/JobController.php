@@ -72,6 +72,12 @@ class JobController extends AbstractController
             $job = new JobModel();
             $jobData = $job->findOne($id);
 
+            if (!$this->checkOwner($jobData['id'])) {
+                $res = new RedirectResponse("/job/list");
+                $res->send();
+                die();
+            }
+
             $company = new CompanyModel();
             $companyData = $company->findOne($jobData['company_id']);
 
@@ -101,6 +107,13 @@ class JobController extends AbstractController
                 'periodOfWork' => $req->request->get('periodOfWork'),
                 'firstDayOfTheWeek' => $req->request->get('firstDayOfTheWeek')
             ];
+
+
+            if (!$this->checkOwner($jobData['id'])) {
+                $res = new RedirectResponse("/job/list");
+                $res->send();
+                die();
+            }
 
             if (is_null($formData['endDateKnown'])) {
                 $formData['endDate'] = null;
