@@ -41,7 +41,7 @@
     <!-- Break time in minutes -->
     <fieldset>
         <label for="breakTime">Unpaid break time:</label>
-        <input type="number" name="breakTime" id="breakTime" value="<?php echo $formData['breakTime'] ?>">
+        <input type="number" name="breakTime" id="breakTime" value="<?php echo $formData['breakTime'] ?? "0" ?>">
     </fieldset>
 
     <span class="help is-danger"><?php echo $errorMessages['checkinCreation'] ?? '' ?></span>
