@@ -44,7 +44,7 @@ class CompanyModel extends AbstractModel
     {
         $existingCompany = $this->findOneByName($this->name);
 
-        if ($existingCompany === NULL) {
+        if ($existingCompany === null) {
             $pdo = $this->getPDO();
 
             $sql = "INSERT INTO $this->table (company_name) VALUES (?)";
