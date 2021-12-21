@@ -17,7 +17,7 @@ class AbstractController
         $pageContent = ob_get_clean();
 
         ob_start();
-        require_once __DIR__ . '/../../Views/Layouts/defaultLayout.php';
+        require_once __DIR__ . '/../../Views/layouts/defaultLayout.php';
 
         $response = new Response();
         $response->setContent(ob_get_clean());
