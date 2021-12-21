@@ -189,7 +189,7 @@ class JobModel extends AbstractModel
                 job_pay_period=?,
                 job_first_day_of_the_week=?,
                 company_id=?
-            WHERE job_id=?";
+            WHERE id=?";
 
         $pdo = $this->getPDO();
         $stmt = $pdo->prepare($sql);

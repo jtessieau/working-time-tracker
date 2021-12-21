@@ -47,7 +47,7 @@ $r->addRoute(
 );
 $r->addRoute(
     ['GET', 'POST'],
-    '/job/delete',
+    '/job/delete/{id}',
     'App\\Controllers\\Job\\JobController@deleteJob'
 );
 

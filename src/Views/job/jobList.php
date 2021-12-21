@@ -7,6 +7,7 @@
             <td>Start date</td>
             <td>Status</td>
             <td>Edit</td>
+            <td>Delete</td>
         </thead>
         <tbody>
 
@@ -33,13 +34,23 @@
                             '<i class="fas fa-circle has-text-danger"></i>';
                         ?>
                     </td>
-                    <td><a href="/job/update/<?= $job['id'] ?>"><i class="far fa-edit"></i></a></td>
+                    <td class="has-text-centered">
+                        <a href="/job/update/<?= $job['id'] ?>">
+                            <i class="far fa-edit has-text-info"></i>
+                        </a>
+                    </td>
+                    <td class="has-text-centered">
+                        <a href="/job/delete/<?= $job['id'] ?>">
+                            <i class="far fa-trash-alt has-text-danger"></i>
+                        </a>
+                    </td>
                 </tr>
 
             <?php endforeach ?>
 
         </tbody>
     </table>
+    <a class="button is-primary" href="/job/start">Start a job</a>
 </div>
 
 <hr style="margin-top:100px">

@@ -7,7 +7,7 @@ use App\Models\CompanyModel;
 use App\Services\Job\CreateJobService;
 use App\FormValidation\JobFormValidation;
 use App\Controllers\Utils\AbstractController;
-
+use App\Models\UserModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -143,8 +143,29 @@ class JobController extends AbstractController
         // TODO
     }
 
-    public function deleteJob()
+    public function deleteJob(int $id)
     {
-        // TODO
+        if ($this->checkOwner($id)) {
+            $jobModel = new JobModel();
+            $jobModel->delete($id);
+        }
+
+        $res = new RedirectResponse("/job/list");
+        $res->send();
+    }
+
+    public function checkOwner(int $jobId): bool
+    {
+        $userModel = new UserModel();
+        $user = $userModel->findOneByEmail($_SESSION['user']['email']);
+
+        $jobModel = new JobModel();
+        $job = $jobModel->findOne($jobId);
+
+        if ($job === false) {
+            return false;
+        }
+
+        return $user['id'] === $job['user_id'] ? true : false;
     }
 }
