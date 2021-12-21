@@ -19,6 +19,7 @@ A todo guide map to follow, may be incomplete...
   - [x] Verify owner before editing
 - [x] Delete a job
   - [x] Verify owner before editing
+- [ ] Verify date of last checkin before adding end date
 
 ## Company Manager
 
@@ -35,6 +36,7 @@ A todo guide map to follow, may be incomplete...
   - [x] Verify owner before editing
 - [x] Delete check-in
   - [x] Verify owner before editing
+- [ ] Verify end date of job before adding checkin
 
 ## Toolbox
 

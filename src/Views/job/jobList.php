@@ -1,13 +1,13 @@
 <div class="container">
     <table class="table">
         <thead>
-            <td>Designation</td>
-            <td>Company</td>
-            <td>Rate</td>
-            <td>Start date</td>
-            <td>Status</td>
-            <td>Edit</td>
-            <td>Delete</td>
+            <td class="has-text-centered">Designation</td>
+            <td class="has-text-centered">Company</td>
+            <td class="has-text-centered">Rate</td>
+            <td class="has-text-centered">Start date</td>
+            <td class="has-text-centered">Status</td>
+            <td class="has-text-centered">Edit</td>
+            <td class="has-text-centered">Delete</td>
         </thead>
         <tbody>
 
@@ -24,9 +24,9 @@
                 <tr>
                     <td><a href="/job/checkin/list/<?= $job['id'] ?>"><?= ucwords($job['job_designation']) ?></a></td>
                     <td><?= ucfirst($job['company_name']) ?></td>
-                    <td> £<?= $job['job_rate'] ?></td>
-                    <td><?= $startDate->format('d/m/Y'); ?></td>
-                    <td>
+                    <td class="has-text-centered"> £<?= $job['job_rate'] ?></td>
+                    <td class="has-text-centered"><?= $startDate->format('d/m/Y'); ?></td>
+                    <td class="has-text-centered">
                         <?=
                         $active ?
                             '<i class="fas fa-circle has-text-success"></i>'

@@ -31,7 +31,7 @@
                 </a>
 
                 <a href="/job/list" class="navbar-item">
-                    All my jobs
+                    Manage my jobs
                 </a>
 
                 <a href="/job/checkin" class="navbar-item">
