@@ -109,7 +109,7 @@ class JobController extends AbstractController
             ];
 
 
-            if (!$this->checkOwner($jobData['id'])) {
+            if (!$this->checkOwner($formData['id'])) {
                 $res = new RedirectResponse("/job/list");
                 $res->send();
                 die();
