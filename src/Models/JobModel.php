@@ -125,7 +125,7 @@ class JobModel extends AbstractModel
         return $this;
     }
 
-    // Database interactio 
+    // Database interactio
 
     public function create(): ?int
     {
@@ -156,7 +156,7 @@ class JobModel extends AbstractModel
             $this->getUserId(),
         ]);
 
-        return $return ? $pdo->lastInsertId() : NULL;
+        return $return ? $pdo->lastInsertId() : null;
     }
 
     public function findAllByUserId($id): ?array
@@ -174,7 +174,25 @@ class JobModel extends AbstractModel
 
         $return = $stmt->fetchAll();
 
-        return $return !== false ? $return : NULL;
+        return $return !== false ? $return : null;
+    }
+
+    public function findOne($id): ?array
+    {
+        $pdo = $this->getPDO();
+
+        $sql =
+            "SELECT jobs.*, companies.company_name
+            FROM $this->table AS jobs
+            JOIN companies ON jobs.company_id=companies.id
+            WHERE jobs.id=?";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+
+        $return = $stmt->fetch();
+
+        return $return !== false ? $return : null;
     }
 
     public function update(array $formData)
@@ -189,7 +207,7 @@ class JobModel extends AbstractModel
                 job_pay_period=?,
                 job_first_day_of_the_week=?,
                 company_id=?
-            WHERE job_id=?";
+            WHERE id=?";
 
         $pdo = $this->getPDO();
         $stmt = $pdo->prepare($sql);
@@ -204,6 +222,6 @@ class JobModel extends AbstractModel
             $formData['companyId'],
             $formData['id']
         ]);
-        return $return ? $pdo->lastInsertId() : NULL;
+        return $return ? $pdo->lastInsertId() : null;
     }
 }

@@ -54,6 +54,9 @@ class CheckinFormValidation extends FormValidation implements ValidationInterfac
     }
     private function validateBreakTime(): void
     {
+        if (!is_numeric($this->data['breakTime'])) {
+            $this->addError('breakTime', 'Break time must be set as an integer (minutes).');
+        }
         if ($this->data['breakTime'] === '') {
             $this->addError('breakTime', 'BreakTime must be set.');
         }

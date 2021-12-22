@@ -24,7 +24,7 @@ final class CreateJobService
         if (isset($formData['endDateKnown']) && $formData['endDateKnown'] === true) {
             $job->setEndDate($formData['endDate']);
         } else {
-            $job->setEndDate(NULL);
+            $job->setEndDate(null);
         }
 
         $job->setPeriodOfWork($formData['periodOfWork']);
@@ -32,14 +32,14 @@ final class CreateJobService
 
         // Retrieve user id form database
         $userData = $user->findOneByEmail($_SESSION['user']['email']);
-        $job->setUserId($userData['user_id']);
+        $job->setUserId($userData['id']);
 
         $company->setName($formData['companyName']);
-        $companyId = $company->createCompany();
+        $companyId = $company->create();
 
         if ($companyId !== false) {
             $job->setCompanyId($companyId);
-            $jobId = $job->createJob();
+            $jobId = $job->create();
         }
 
         if ($jobId !== false) {

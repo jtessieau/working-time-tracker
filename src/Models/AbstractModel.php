@@ -34,7 +34,7 @@ class AbstractModel
         return $stmt->fetchAll();
     }
 
-    public function findOne(int $id): array
+    public function findOne(int $id): ?array
     {
         $pdo = $this->getPDO();
         $sql = "SELECT * FROM $this->table WHERE id=?";
@@ -42,7 +42,18 @@ class AbstractModel
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
 
-        return $stmt->fetch();
+        $return = $stmt->fetch();
+
+        return $return !== false ? $return : null;
+    }
+
+    public function delete(int $id): bool
+    {
+        $pdo = $this->getPDO();
+        $sql = "DELETE FROM $this->table WHERE id=?";
+
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute([$id]);
     }
 
     public function delete(int $id): bool

@@ -11,7 +11,6 @@ class ListJobController extends AbstractController
 {
     public function list()
     {
-
         if (empty($_SESSION['user'])) {
             $res = new RedirectResponse("/login");
             $res->send();
@@ -23,7 +22,7 @@ class ListJobController extends AbstractController
         $currentUser = $user->findOneByEmail($_SESSION['user']['email']);
         $currentUserJobs = $job->findAllByUserId($currentUser['id']);
 
-        $this->render('job/listJobs', [
+        $this->render('job/jobList', [
             'jobs' => $currentUserJobs
         ]);
     }

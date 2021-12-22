@@ -118,7 +118,7 @@ class UserModel extends AbstractModel
             $this->getPassword()
         ]);
 
-        return $return ? $pdo->lastInsertId() : NULL;
+        return $return ? $pdo->lastInsertId() : null;
     }
 
     public function findOneByEmail($email): ?array
@@ -132,6 +132,6 @@ class UserModel extends AbstractModel
 
         $user = $stmt->fetch();
 
-        return $user !== false ? $user : NULL;
+        return $user !== false ? $user : null;
     }
 }

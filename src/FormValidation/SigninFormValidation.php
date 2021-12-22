@@ -5,6 +5,8 @@ namespace App\FormValidation;
 use App\FormValidation\ValidationInterface;
 use App\Models\UserModel as User;
 
+use function PHPUnit\Framework\isNull;
+
 class SigninFormValidation extends FormValidation implements ValidationInterface
 {
     protected static array $fields = ['firstName', 'lastName', 'email', 'password', 'password2'];
@@ -59,7 +61,7 @@ class SigninFormValidation extends FormValidation implements ValidationInterface
         } else {
             $user = new User();
 
-            if ($user->findOneByEmail($email) !== false) {
+            if (!is_null($user->findOneByEmail($email))) {
                 $this->addError('email', 'This email is already in use.');
             }
         }

@@ -62,22 +62,26 @@ class JobFormValidation extends FormValidation implements ValidationInterface
 
     private function validateStartDate(): void
     {
-        $startDate = $this->data['startDate'];
+        $startDate = date_create_from_format('Y-m-d', $this->data['startDate']);
 
         if (empty($startDate)) {
             $this->addError('startDate', 'Please add a start date.');
-        } elseif (!date_create_from_format('Y-m-d', $startDate)) {
+        } elseif (!$startDate) {
             $this->addError('startDate', 'Invalid date format.');
         }
     }
 
     private function validateEndDate(): void
     {
-        $endDate = $this->data['endDate'];
+        $endDate = date_create_from_format('Y-m-d', $this->data['endDate']);
+        $startDate = date_create_from_format('Y-m-d', $this->data['startDate']);
 
         if (isset($this->data['endDateKnown'])) {
-            if (!date_create_from_format('Y-m-d', $endDate)) {
+            if (!$endDate) {
                 $this->addError('endDate', 'Invalid date format.');
+            }
+            if ($endDate < $startDate) {
+                $this->addError('endDate', "End date can't be anterior to starting date.");
             }
         }
     }
