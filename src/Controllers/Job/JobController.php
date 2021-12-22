@@ -8,6 +8,7 @@ use App\Services\Job\CreateJobService;
 use App\FormValidation\JobFormValidation;
 use App\Controllers\Utils\AbstractController;
 use App\Models\UserModel;
+use App\Services\Job\JobFormDataService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -33,16 +34,8 @@ class JobController extends AbstractController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && $req->request->get('submit') === 'submit') {
             //bind $jobData to $formData
-            $formData = [
-                'designation' => $req->request->get('designation'),
-                'rate' => $req->request->get('rate'),
-                'companyName' => $req->request->get('companyName'),
-                'startDate' => $req->request->get('startDate'),
-                'endDate' => $req->request->get('endDate'),
-                'endDateKnown' => $req->request->get('endDateKnown'),
-                'periodOfWork' => $req->request->get('periodOfWork'),
-                'firstDayOfTheWeek' => $req->request->get('firstDayOfTheWeek')
-            ];
+            $formData = JobFormDataService::createFormRequest($req);
+
             // Data validation
             $validator = new JobFormValidation($formData);
             $errorMessages = $validator->validate();
@@ -82,32 +75,13 @@ class JobController extends AbstractController
             $companyData = $company->findOne($jobData['company_id']);
 
             //bind $jobData to $formData
-            $formData = [
-                'designation' => $jobData['job_designation'],
-                'rate' => $jobData['job_rate'],
-                'companyName' => $companyData['company_name'],
-                'startDate' => $jobData['job_start_date'],
-                'endDate' => $jobData['job_end_date'],
-                'endDateKnown' => is_null($jobData['job_end_date']) ? false : true,
-                'periodOfWork' => $jobData['job_pay_period'],
-                'firstDayOfTheWeek' => $jobData['job_first_day_of_the_week']
-            ];
+            $formData = JobFormDataService::createFromDatabase($jobData);
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && $req->request->get('submit') === 'submit') {
             //bind $jobData to $formData
-            $formData = [
-                'id' => $id,
-                'designation' => $req->request->get('designation'),
-                'rate' => $req->request->get('rate'),
-                'companyName' => $req->request->get('companyName'),
-                'startDate' => $req->request->get('startDate'),
-                'endDate' => $req->request->get('endDate'),
-                'endDateKnown' => $req->request->get('endDateKnown'),
-                'periodOfWork' => $req->request->get('periodOfWork'),
-                'firstDayOfTheWeek' => $req->request->get('firstDayOfTheWeek')
-            ];
-
+            $formData = JobFormDataService::createFormRequest($req);
+            $formData["id"] = $id;
 
             if (!$this->checkOwner($formData['id'])) {
                 $res = new RedirectResponse("/job/list");
