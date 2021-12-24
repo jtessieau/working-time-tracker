@@ -7,6 +7,8 @@ use App\Models\CheckinModel;
 use App\Controllers\Utils\AbstractController;
 use App\Models\JobModel;
 use App\Models\UserModel;
+use App\Services\Checkin\CheckinFormDataService;
+use App\Services\Checkin\CreateCheckinService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -30,34 +32,15 @@ class CheckinController extends AbstractController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $req = Request::createFromGlobals();
-            var_dump($req->request->all());
 
-            $formData = [
-                'jobId' => $req->request->get('jobId'),
-                'startDate' => $req->request->get('startDate'),
-                'startTime' => $req->request->get('startTime'),
-                'endDate' => $req->request->get('endDate'),
-                'endTime' => $req->request->get('endTime'),
-                'breakTime' => $req->request->get('breakTime')
-            ];
+            $formData = CheckinFormDataService::createFromRequest($req);
 
             $validator = new CheckinFormValidation($formData);
             $errorMessages = $validator->validate();
 
             if (empty($errorMessages)) {
-                $startDate = $formData['startDate'] . " " . $formData['startTime']; // YYYY/MM/DD hh:mm || Y-m-d H:i
-                $endDate = $formData['endDate'] . " " . $formData['endTime']; // YYYY/MM/DD hh:mm || Y-m-d H:i
-
-                $checkin = new CheckinModel();
-
-                $checkin->setJobId($formData['jobId']);
-                $checkin->setStartDate($startDate);
-                $checkin->setEndDate($endDate);
-                $checkin->setBreakTime($formData['breakTime']);
-
-                $return = $checkin->create();
-
-                if (!is_null($return)) {
+                $checkinCreation = CreateCheckinService::create($formData);
+                if ($checkinCreation) {
                     $res = new RedirectResponse("/job/checkin/list/{$formData['jobId']}");
                     $res->send();
                 } else {
@@ -98,48 +81,23 @@ class CheckinController extends AbstractController
         if (!$this->checkOwner($currentCheckin)) {
             $res = new RedirectResponse('/job/list');
             $res->send();
-            die();
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $format = "Y-m-d H:i:s";
-            $startDatetime = date_create_from_format($format, $currentCheckin['checkin_start_datetime']);
-            $endDatetime = date_create_from_format($format, $currentCheckin['checkin_end_datetime']);
-
-            $formData = [
-                'id' => $id,
-                'jobId' => $currentCheckin['job_id'],
-                'startDate' => $startDatetime->format('Y-m-d'),
-                'startTime' => $startDatetime->format('H:i'),
-                'endDate' => $endDatetime->format('Y-m-d'),
-                'endTime' => $endDatetime->format('H:i'),
-                'breakTime' => $currentCheckin['checkin_break_time']
-            ];
+            $formData = CheckinFormDataService::createFromDatabase($currentCheckin);
         }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $req = Request::createFromGlobals();
 
-            $formData = [
-                'id' => $id,
-                'jobId' => $req->request->get('jobId'),
-                'startDate' => $req->request->get('startDate'),
-                'startTime' => $req->request->get('startTime'),
-                'endDate' => $req->request->get('endDate'),
-                'endTime' => $req->request->get('endTime'),
-                'breakTime' => $req->request->get('breakTime')
-            ];
+            $formData = CheckinFormDataService::createFromRequest($req, $id);
 
             $validator = new CheckinFormValidation($formData);
             $errorMessages = $validator->validate();
 
             if (empty($errorMessages)) {
-                $formData['startDatetime'] = $formData['startDate'] . " " . $formData['startTime']; // YYYY/MM/DD hh:mm || Y-m-d H:i
-                $formData['endDatetime'] = $formData['endDate'] . " " . $formData['endTime']; // YYYY/MM/DD hh:mm || Y-m-d H:i
-
                 $checkin = new CheckinModel();
-
-                // TODO: Update method
-                $return = $checkin->update($formData);
+                $return = $checkin->update($id, $formData);
 
                 if (!is_null($return)) {
                     $res = new RedirectResponse("/job/checkin/list/{$formData['jobId']}");

@@ -68,7 +68,7 @@ class CheckinFormValidation extends FormValidation implements ValidationInterfac
         $endDate = DateTime::createFromFormat($format, $this->endDatetime);
 
         if ($endDate <= $startDate) {
-            $this->addError('date', 'End date can\'t be before start date.');
+            $this->addError('endDate', 'End date can\'t be before start date.');
         }
     }
 }

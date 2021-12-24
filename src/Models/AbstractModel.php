@@ -55,13 +55,4 @@ class AbstractModel
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([$id]);
     }
-
-    public function delete(int $id): bool
-    {
-        $pdo = $this->getPDO();
-        $sql = "DELETE FROM $this->table WHERE id=?";
-
-        $stmt = $pdo->prepare($sql);
-        return $stmt->execute([$id]);
-    }
 }

@@ -86,7 +86,7 @@ class CheckinModel extends AbstractModel
         return $return ? $pdo->lastInsertId() : null;
     }
 
-    public function update(array $formData): ?int
+    public function update(int $id, array $formData): ?int
     {
         $pdo = $this->getPDO();
         $sql =
@@ -104,7 +104,7 @@ class CheckinModel extends AbstractModel
             $formData['startDatetime'],
             $formData['endDatetime'],
             $formData['breakTime'],
-            $formData['id']
+            $id
         ]);
         return $return ? $pdo->lastInsertId() : null;
     }

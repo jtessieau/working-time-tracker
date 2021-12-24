@@ -68,11 +68,7 @@ class JobController extends AbstractController
             if (!$this->checkOwner($jobData['id'])) {
                 $res = new RedirectResponse("/job/list");
                 $res->send();
-                die();
             }
-
-            $company = new CompanyModel();
-            $companyData = $company->findOne($jobData['company_id']);
 
             //bind $jobData to $formData
             $formData = JobFormDataService::createFromDatabase($jobData);
@@ -81,9 +77,8 @@ class JobController extends AbstractController
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && $req->request->get('submit') === 'submit') {
             //bind $jobData to $formData
             $formData = JobFormDataService::createFormRequest($req);
-            $formData["id"] = $id;
 
-            if (!$this->checkOwner($formData['id'])) {
+            if (!$this->checkOwner($id)) {
                 $res = new RedirectResponse("/job/list");
                 $res->send();
                 die();
