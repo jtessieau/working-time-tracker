@@ -103,7 +103,7 @@ class JobController extends AbstractController
                 }
 
                 $job = new JobModel();
-                $jobCreation = $job->update($formData);
+                $jobCreation = $job->update($id, $formData);
 
                 if ($jobCreation === false) {
                     $errorMessages['jobCreation'] = 'An error occured, please contact a sysadmin.';

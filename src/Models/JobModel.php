@@ -195,7 +195,7 @@ class JobModel extends AbstractModel
         return $return !== false ? $return : null;
     }
 
-    public function update(array $formData)
+    public function update(int $id, array $formData)
     {
         $sql =
             "UPDATE $this->table
@@ -220,7 +220,7 @@ class JobModel extends AbstractModel
             $formData['periodOfWork'],
             $formData['firstDayOfTheWeek'],
             $formData['companyId'],
-            $formData['id']
+            $id
         ]);
         return $return ? $pdo->lastInsertId() : null;
     }
