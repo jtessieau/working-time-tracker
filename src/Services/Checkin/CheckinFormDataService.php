@@ -5,7 +5,6 @@ namespace App\Services\Checkin;
 use Symfony\Component\HttpFoundation\Request;
 
 class CheckinFormDataService
-
 {
     public static function createFromRequest(Request $req): array
     {
