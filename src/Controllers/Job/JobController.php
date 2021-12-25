@@ -120,9 +120,17 @@ class JobController extends AbstractController
         ]);
     }
 
-    public function getJob()
+    public function list()
     {
-        // TODO
+        $user = new UserModel();
+        $job = new JobModel();
+
+        $currentUser = $user->findOneByEmail($_SESSION['user']['email']);
+        $currentUserJobs = $job->findAllByUserId($currentUser['id']);
+
+        $this->render('job/jobList', [
+            'jobs' => $currentUserJobs
+        ]);
     }
 
     public function deleteJob(int $id)

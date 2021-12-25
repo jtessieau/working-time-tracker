@@ -28,7 +28,7 @@ $r->addRoute(
 $r->addRoute(
     ['GET'],
     '/job/list',
-    'App\\Controllers\\Job\\ListJobController@list'
+    'App\\Controllers\\Job\\JobController@list'
 );
 $r->addRoute(
     ['GET', 'POST'],
