@@ -82,6 +82,54 @@ class AccountController extends AbstractController
         $user = new User();
         $userData = $user->findOneByEmail($_SESSION['user']['email']);
 
-        var_dump($userData);
+        $this->render('user/userManager', [
+            'userData' => $userData
+        ]);
+    }
+
+    public function modifyEmail()
+    {
+        $user = new User();
+        $userData = $user->findOneByEmail($_SESSION['user']['email']);
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $email = $userData['email'];
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $req = Request::createFromGlobals();
+            $email = strtolower($req->request->get('email'));
+            $emailConfirmation = strtolower($req->request->get('emailConfirmation'));
+
+            if (empty($email)) {
+                $errorMessages['email'] = 'Please enter an email';
+            } else if ($email !== $emailConfirmation) {
+                $errorMessages['email'] = 'Email address must match.';
+            } else if ($email === $_SESSION['user']['email']) {
+                $errorMessages['email'] = 'Email address must be different than current address.';
+            } else if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+                $errorMessages['email'] = 'Please enter a valide email address.';
+            } else if (!is_null($user->findOneByEmail($email))) {
+                $errorMessages['email'] = 'You can not use this email address.';
+            }
+
+            if (empty($errorMessages)) {
+                $user->setEmail($email);
+                $user->setId($userData['id']);
+                if ($user->getEmail() !== '') {
+                    $user->persistEmail();
+                    $_SESSION['user']['email'] = $user->getEmail();
+                    $res = new RedirectResponse('/user/manage');
+                    $res->send();
+                } else {
+                    $errorMessages['email'] = "Invalid email address.";
+                }
+            }
+        }
+
+        $this->render('/user/emailForm', [
+            'email' => $email,
+            'errorMessages' => $errorMessages ?? []
+        ]);
     }
 }

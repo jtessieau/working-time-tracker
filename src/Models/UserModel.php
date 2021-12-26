@@ -134,4 +134,19 @@ class UserModel extends AbstractModel
 
         return $user !== false ? $user : null;
     }
+
+    public function persistEmail(): bool
+    {
+        $pdo = $this->getPDO();
+
+        $sql = "UPDATE $this->table SET email=? WHERE id=?";
+
+        $stmt = $pdo->prepare($sql);
+        $return = $stmt->execute([
+            $this->getEmail(),
+            $this->getId()
+        ]);
+
+        return $return !== false ? true : false;
+    }
 }

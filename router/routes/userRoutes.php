@@ -26,3 +26,8 @@ $r->addRoute(
     '/user/manage',
     'App\\Controllers\\Security\\AccountController@manage'
 );
+$r->addRoute(
+    ['GET', 'POST'],
+    '/user/email',
+    'App\\Controllers\\Security\\AccountController@modifyEmail'
+);

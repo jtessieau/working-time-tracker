@@ -40,7 +40,7 @@ class AuthController extends AbstractController
 
                 // If user is found & passwords match
                 if (
-                    $user !== false &&
+                    $user !== null &&
                     password_verify(
                         $req->request->get('password'),
                         $user['password']
