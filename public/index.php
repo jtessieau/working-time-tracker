@@ -11,4 +11,4 @@ $dotenv = new Dotenv();
 $dotenv->load(__DIR__ . '/../.env');
 
 // Load router
-require_once __DIR__ . '/../routes/router.php';
+require_once __DIR__ . '/../router/router.php';
