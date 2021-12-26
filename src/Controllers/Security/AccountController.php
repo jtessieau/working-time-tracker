@@ -5,8 +5,9 @@ namespace App\Controllers\Security;
 use App\Models\UserModel as User;
 use App\FormValidation\SigninFormValidation;
 use App\Controllers\Utils\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AccountController extends AbstractController
 {
@@ -17,9 +18,9 @@ class AccountController extends AbstractController
         $this->user = new User();
     }
 
-    public function createAccount()
+    public function create()
     {
-        // This  page should not be accessible to user alreay logged in.
+        // This  page should not be accessible to user already logged in.
         if (isset($_SESSION['user'])) {
             $res = new RedirectResponse('/');
             $res->send();
@@ -58,5 +59,29 @@ class AccountController extends AbstractController
         $this->render('user/signinForm', [
             'errorMessages' => $errorMessages ?? [],
         ]);
+    }
+
+    public function delete()
+    {
+        $userModel = new User();
+        $userData = $userModel->findOneByEmail($_SESSION['user']['email']);
+        $delete = $userModel->delete($userData['id']);
+        if ($delete) {
+            $res = new RedirectResponse("/");
+        } else {
+            $res = new Response();
+            $res->setStatusCode(500);
+        }
+
+        $res->send();
+    }
+
+
+    public function manage()
+    {
+        $user = new User();
+        $userData = $user->findOneByEmail($_SESSION['user']['email']);
+
+        var_dump($userData);
     }
 }
