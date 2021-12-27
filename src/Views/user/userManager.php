@@ -11,3 +11,4 @@
 
 <a href="/user/email">Modify email address</a>
 <a href="/user/password">Modify password</a>
+<a href="/user/delete">Delete your account</a>

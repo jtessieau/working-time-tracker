@@ -65,15 +65,27 @@ class AccountController extends AbstractController
     {
         $userModel = new User();
         $userData = $userModel->findOneByEmail($_SESSION['user']['email']);
-        $delete = $userModel->delete($userData['id']);
-        if ($delete) {
-            $res = new RedirectResponse("/");
-        } else {
-            $res = new Response();
-            $res->setStatusCode(500);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $req = Request::createFromGlobals();
+            $confirmation = $req->request->get('confirmation');
+
+            if ($confirmation === "Delete") {
+                $delete = $userModel->delete($userData['id']);
+                if ($delete) {
+                    session_unset();
+                    session_destroy();
+                    $res = new RedirectResponse("/");
+                } else {
+                    $res = new Response();
+                    $res->setStatusCode(500);
+                }
+            } else {
+                $res = new RedirectResponse('/user/manage');
+            }
+            $res->send();
         }
 
-        $res->send();
+        $this->render('user/deleteForm');
     }
 
 
