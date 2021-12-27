@@ -23,16 +23,16 @@ class JobController extends AbstractController
         }
     }
 
-    public function home(): void
+    public function home()
     {
-        $this->render('job/home');
+        return $this->render('job/home');
     }
 
     public function create()
     {
         $req = Request::createFromglobals();
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $req->request->get('submit') === 'submit') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             //bind $jobData to $formData
             $formData = JobFormDataService::createFormRequest($req);
 
@@ -51,7 +51,7 @@ class JobController extends AbstractController
             }
         }
 
-        $this->render('job/jobForm', [
+        return $this->render('job/jobForm', [
             'errorMessages' => $errorMessages ?? [],
             'formData' => $formData ?? []
         ]);
@@ -74,7 +74,7 @@ class JobController extends AbstractController
             $formData = JobFormDataService::createFromDatabase($jobData);
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $req->request->get('submit') === 'submit') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             //bind $jobData to $formData
             $formData = JobFormDataService::createFormRequest($req);
 
@@ -103,7 +103,7 @@ class JobController extends AbstractController
                 }
 
                 $job = new JobModel();
-                $jobCreation = $job->update($formData);
+                $jobCreation = $job->update($id, $formData);
 
                 if ($jobCreation === false) {
                     $errorMessages['jobCreation'] = 'An error occured, please contact a sysadmin.';
@@ -114,15 +114,23 @@ class JobController extends AbstractController
             }
         }
 
-        $this->render('job/jobForm', [
+        return $this->render('job/jobForm', [
             'errorMessages' => $errorMessages ?? [],
             'formData' => $formData ?? []
         ]);
     }
 
-    public function getJob()
+    public function list()
     {
-        // TODO
+        $user = new UserModel();
+        $job = new JobModel();
+
+        $currentUser = $user->findOneByEmail($_SESSION['user']['email']);
+        $currentUserJobs = $job->findAllByUserId($currentUser['id']);
+
+        return $this->render('job/jobList', [
+            'jobs' => $currentUserJobs
+        ]);
     }
 
     public function deleteJob(int $id)
@@ -148,6 +156,6 @@ class JobController extends AbstractController
             return false;
         }
 
-        return $user['id'] === $job['user_id'] ? true : false;
+        return ($user['id'] === $job['user_id']);
     }
 }

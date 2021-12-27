@@ -56,7 +56,7 @@
                     } else {
                         ?>
                         <div class="buttons">
-                            <a href="#" class="button is-primary">
+                            <a href="/user/manage" class="button is-primary">
                                 <?= $_SESSION['user']['firstName'] . ' ' . $_SESSION['user']['lastName'] ?>
                             </a>
                             <a href="/logout" class="button is-light">

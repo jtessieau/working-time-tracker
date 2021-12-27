@@ -1,7 +1,7 @@
 <?php
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    include_once 'routes.php';
+    include_once 'routes/routes.php';
 });
 
 // Fetch method and URI from somewhere

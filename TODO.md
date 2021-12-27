@@ -7,8 +7,10 @@ A todo guide map to follow, may be incomplete...
 - [x] Create an account
 - [x] Login to an account
 - [x] Logout from an account
-- [ ] Delete an account
+- [x] Delete an account
 - [ ] Manage an account
+  - [x] Modify email
+  - [ ] Modify password
 
 ## Job Manager
 

@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Security;
 
-use App\Models\UserModel as User;
+use App\Models\UserModel;
 use App\FormValidation\LoginFormValidation;
 use App\Controllers\Utils\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -10,11 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AuthController extends AbstractController
 {
-    protected User $user;
-
     public function __construct()
     {
-        $this->user = new User();
+        $this->user = new UserModel();
     }
 
     public function Login()
@@ -40,7 +38,7 @@ class AuthController extends AbstractController
 
                 // If user is found & passwords match
                 if (
-                    $user !== false &&
+                    $user !== null &&
                     password_verify(
                         $req->request->get('password'),
                         $user['password']
@@ -61,7 +59,7 @@ class AuthController extends AbstractController
             }
         }
 
-        $this->render('user/LoginForm', [
+        return $this->render('user/LoginForm', [
             'errorMessages' => $errorMessages ?? [],
         ]);
     }

@@ -12,6 +12,7 @@ class CheckinModel extends AbstractModel
 
     public function __construct()
     {
+        parent::__construct();
         $this->table = "checkins";
     }
 
@@ -59,11 +60,9 @@ class CheckinModel extends AbstractModel
         return $this;
     }
 
-    // Database interaction
+    // === Database interaction ===
     public function create(): ?int
     {
-        $pdo = $this->getPDO();
-
         $sql =
             "INSERT INTO $this->table
                 (
@@ -74,7 +73,7 @@ class CheckinModel extends AbstractModel
                 )
             VALUE (?,?,?,?)";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
         $return = $stmt->execute([
             $this->getJobId(),
@@ -83,12 +82,11 @@ class CheckinModel extends AbstractModel
             $this->getBreakTime()
         ]);
 
-        return $return ? $pdo->lastInsertId() : null;
+        return $return ? $this->pdo->lastInsertId() : null;
     }
 
     public function update(int $id, array $formData): ?int
     {
-        $pdo = $this->getPDO();
         $sql =
             "UPDATE $this->table
             SET
@@ -97,7 +95,7 @@ class CheckinModel extends AbstractModel
                 checkin_end_datetime=?,
                 checkin_break_time=?
             WHERE id=?";
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
         $return = $stmt->execute([
             $formData['jobId'],
@@ -106,15 +104,14 @@ class CheckinModel extends AbstractModel
             $formData['breakTime'],
             $id
         ]);
-        return $return ? $pdo->lastInsertId() : null;
+        return $return ? $this->pdo->lastInsertId() : null;
     }
 
     public function findByJobId($jobId): ?array
     {
-        $pdo = $this->getPDO();
         $sql = "SELECT * FROM $this->table WHERE job_id=?";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$jobId]);
 
         $return = $stmt->fetchAll();

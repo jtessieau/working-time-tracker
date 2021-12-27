@@ -5,8 +5,10 @@ namespace App\Controllers\Security;
 use App\Models\UserModel as User;
 use App\FormValidation\SigninFormValidation;
 use App\Controllers\Utils\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\FormValidation\UserManagerForm\EmailFormValidation;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AccountController extends AbstractController
 {
@@ -17,9 +19,9 @@ class AccountController extends AbstractController
         $this->user = new User();
     }
 
-    public function createAccount()
+    public function create()
     {
-        // This  page should not be accessible to user alreay logged in.
+        // This  page should not be accessible to user already logged in.
         if (isset($_SESSION['user'])) {
             $res = new RedirectResponse('/');
             $res->send();
@@ -55,8 +57,85 @@ class AccountController extends AbstractController
             }
         }
 
-        $this->render('user/signinForm', [
+        return $this->render('user/signinForm', [
             'errorMessages' => $errorMessages ?? [],
+        ]);
+    }
+
+    public function delete()
+    {
+        $userModel = new User();
+        $userData = $userModel->findOneByEmail($_SESSION['user']['email']);
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $req = Request::createFromGlobals();
+            $confirmation = $req->request->get('confirmation');
+
+            if ($confirmation === "Delete") {
+                $delete = $userModel->delete($userData['id']);
+                if ($delete) {
+                    session_unset();
+                    session_destroy();
+                    $res = new RedirectResponse("/");
+                } else {
+                    $res = new Response('Whoops, something went wrong ...', 500);
+                }
+            } else {
+                $res = new RedirectResponse('/user/manage');
+            }
+            $res->send();
+        }
+
+        return $this->render('user/deleteForm');
+    }
+
+
+    public function manage()
+    {
+        $user = new User();
+        $userData = $user->findOneByEmail($_SESSION['user']['email']);
+
+        $this->render('user/userManager', [
+            'userData' => $userData
+        ]);
+    }
+
+    public function modifyEmail()
+    {
+        $user = new User();
+        $userData = $user->findOneByEmail($_SESSION['user']['email']);
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $formData['email'] = $userData['email'];
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $req = Request::createFromGlobals();
+            $formData = [
+                'email' => strtolower($req->request->get('email')),
+                'emailConfirmation' => strtolower($req->request->get('emailConfirmation'))
+            ];
+
+            $validator = new EmailFormValidation($formData);
+            $errorMessages = $validator->validate();
+
+            if (empty($errorMessages)) {
+                $user->setEmail($formData['email']);
+                $user->setId($userData['id']);
+                if ($user->getEmail() !== '') {
+                    $user->persistEmail();
+                    $_SESSION['user']['email'] = $user->getEmail();
+                    $res = new RedirectResponse('/user/manage');
+                    $res->send();
+                } else {
+                    $errorMessages['email'] = "Invalid email address.";
+                }
+            }
+        }
+
+        $this->render('/user/emailForm', [
+            'email' => $formData['email'],
+            'errorMessages' => $errorMessages ?? []
         ]);
     }
 }

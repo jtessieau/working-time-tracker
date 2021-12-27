@@ -57,11 +57,3 @@
         </div>
     </div>
 </div>
-
-<hr style="margin-top:100px">
-
-<pre>
-<?php
-var_dump($jobs);
-?>
-</pre>
