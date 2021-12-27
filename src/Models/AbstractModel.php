@@ -7,6 +7,12 @@ use PDO;
 class AbstractModel
 {
     protected string $table = '';
+    protected PDO $pdo;
+
+    public function __construct()
+    {
+        $this->pdo = $this->getPDO();
+    }
 
     public function getPDO(): PDO
     {
@@ -25,10 +31,9 @@ class AbstractModel
 
     public function findAll(): array
     {
-        $pdo = $this->getPDO();
         $sql = "SELECT * FROM $this->table";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
 
         return $stmt->fetchAll();
@@ -36,10 +41,9 @@ class AbstractModel
 
     public function findOne(int $id): ?array
     {
-        $pdo = $this->getPDO();
         $sql = "SELECT * FROM $this->table WHERE id=?";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$id]);
 
         $return = $stmt->fetch();
@@ -49,10 +53,9 @@ class AbstractModel
 
     public function delete(int $id): bool
     {
-        $pdo = $this->getPDO();
         $sql = "DELETE FROM $this->table WHERE id=?";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$id]);
     }
 }

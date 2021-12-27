@@ -20,6 +20,7 @@ class JobModel extends AbstractModel
 
     public function __construct()
     {
+        parent::__construct();
         $this->table = "jobs";
     }
 
@@ -125,8 +126,7 @@ class JobModel extends AbstractModel
         return $this;
     }
 
-    // Database interactio
-
+    // === Database interaction ===
     public function create(): ?int
     {
         $sql =
@@ -142,8 +142,7 @@ class JobModel extends AbstractModel
             )
             VALUES (?,?,?,?,?,?,?,?)";
 
-        $pdo = $this->getPDO();
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
         $return = $stmt->execute([
             $this->getDesignation(),
@@ -156,20 +155,18 @@ class JobModel extends AbstractModel
             $this->getUserId(),
         ]);
 
-        return $return ? $pdo->lastInsertId() : null;
+        return $return ? $this->pdo->lastInsertId() : null;
     }
 
     public function findAllByUserId($id): ?array
     {
-        $pdo = $this->getPDO();
-
         $sql =
             "SELECT jobs.*, companies.company_name
             FROM $this->table AS jobs
             JOIN companies ON jobs.company_id=companies.id
             WHERE user_id=?";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$id]);
 
         $return = $stmt->fetchAll();
@@ -179,15 +176,13 @@ class JobModel extends AbstractModel
 
     public function findOne($id): ?array
     {
-        $pdo = $this->getPDO();
-
         $sql =
             "SELECT jobs.*, companies.company_name
             FROM $this->table AS jobs
             JOIN companies ON jobs.company_id=companies.id
             WHERE jobs.id=?";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$id]);
 
         $return = $stmt->fetch();
@@ -209,8 +204,7 @@ class JobModel extends AbstractModel
                 company_id=?
             WHERE id=?";
 
-        $pdo = $this->getPDO();
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
         $return = $stmt->execute([
             $formData['designation'],
@@ -222,6 +216,6 @@ class JobModel extends AbstractModel
             $formData['companyId'],
             $id
         ]);
-        return $return ? $pdo->lastInsertId() : null;
+        return $return ? $this->pdo->lastInsertId() : null;
     }
 }

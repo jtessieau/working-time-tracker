@@ -12,6 +12,7 @@ class UserModel extends AbstractModel
 
     public function __construct()
     {
+        parent::__construct();
         $this->table = "users";
     }
 
@@ -102,15 +103,12 @@ class UserModel extends AbstractModel
         return $this;
     }
 
-    // Database interaction
-
+    // === Database interaction ===
     public function createUser(): ?int
     {
-        $pdo = $this->getPDO();
-
         $sql = "INSERT INTO $this->table (first_name, last_name, email, password) VALUES (?,?,?,?)";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $return = $stmt->execute([
             $this->getFirstName(),
             $this->getLastName(),
@@ -118,16 +116,14 @@ class UserModel extends AbstractModel
             $this->getPassword()
         ]);
 
-        return $return ? $pdo->lastInsertId() : null;
+        return $return ? $this->pdo->lastInsertId() : null;
     }
 
     public function findOneByEmail($email): ?array
     {
-        $pdo = $this->getPDO();
-
         $sql = "SELECT * FROM $this->table WHERE email=?";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$email]);
 
         $user = $stmt->fetch();
@@ -137,11 +133,9 @@ class UserModel extends AbstractModel
 
     public function persistEmail(): bool
     {
-        $pdo = $this->getPDO();
-
         $sql = "UPDATE $this->table SET email=? WHERE id=?";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $return = $stmt->execute([
             $this->getEmail(),
             $this->getId()

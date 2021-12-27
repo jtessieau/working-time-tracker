@@ -9,6 +9,7 @@ class CompanyModel extends AbstractModel
 
     public function __construct()
     {
+        parent::__construct();
         $this->table = "companies";
     }
 
@@ -40,21 +41,20 @@ class CompanyModel extends AbstractModel
         return $this;
     }
 
+    // === Database interaction ===
     public function create(): ?int
     {
         $existingCompany = $this->findOneByName($this->name);
 
         if ($existingCompany === null) {
-            $pdo = $this->getPDO();
-
             $sql = "INSERT INTO $this->table (company_name) VALUES (?)";
 
-            $stmt = $pdo->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $return = $stmt->execute([
                 $this->getName()
             ]);
 
-            return $return ? $pdo->lastInsertId() : false;
+            return $return ? $this->pdo->lastInsertId() : false;
         } else {
             return $existingCompany['id'];
         }
@@ -62,11 +62,9 @@ class CompanyModel extends AbstractModel
 
     public function findOneByName(string $name): ?array
     {
-        $pdo = $this->getPDO();
-
         $sql = "SELECT * FROM $this->table WHERE company_name=?";
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$name]);
 
         $return = $stmt->fetch();
