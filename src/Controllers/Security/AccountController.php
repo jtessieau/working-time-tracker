@@ -5,6 +5,7 @@ namespace App\Controllers\Security;
 use App\Models\UserModel as User;
 use App\FormValidation\SigninFormValidation;
 use App\Controllers\Utils\AbstractController;
+use App\FormValidation\UserManagerForm\EmailFormValidation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -56,7 +57,7 @@ class AccountController extends AbstractController
             }
         }
 
-        $this->render('user/signinForm', [
+        return $this->render('user/signinForm', [
             'errorMessages' => $errorMessages ?? [],
         ]);
     }
@@ -65,6 +66,7 @@ class AccountController extends AbstractController
     {
         $userModel = new User();
         $userData = $userModel->findOneByEmail($_SESSION['user']['email']);
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $req = Request::createFromGlobals();
             $confirmation = $req->request->get('confirmation');
@@ -76,8 +78,7 @@ class AccountController extends AbstractController
                     session_destroy();
                     $res = new RedirectResponse("/");
                 } else {
-                    $res = new Response();
-                    $res->setStatusCode(500);
+                    $res = new Response('Whoops, something went wrong ...', 500);
                 }
             } else {
                 $res = new RedirectResponse('/user/manage');
@@ -85,7 +86,7 @@ class AccountController extends AbstractController
             $res->send();
         }
 
-        $this->render('user/deleteForm');
+        return $this->render('user/deleteForm');
     }
 
 
@@ -105,28 +106,21 @@ class AccountController extends AbstractController
         $userData = $user->findOneByEmail($_SESSION['user']['email']);
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $email = $userData['email'];
+            $formData['email'] = $userData['email'];
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $req = Request::createFromGlobals();
-            $email = strtolower($req->request->get('email'));
-            $emailConfirmation = strtolower($req->request->get('emailConfirmation'));
+            $formData = [
+                'email' => strtolower($req->request->get('email')),
+                'emailConfirmation' => strtolower($req->request->get('emailConfirmation'))
+            ];
 
-            if (empty($email)) {
-                $errorMessages['email'] = 'Please enter an email';
-            } elseif ($email !== $emailConfirmation) {
-                $errorMessages['email'] = 'Email address must match.';
-            } elseif ($email === $_SESSION['user']['email']) {
-                $errorMessages['email'] = 'Email address must be different than current address.';
-            } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-                $errorMessages['email'] = 'Please enter a valide email address.';
-            } elseif (!is_null($user->findOneByEmail($email))) {
-                $errorMessages['email'] = 'You can not use this email address.';
-            }
+            $validator = new EmailFormValidation($formData);
+            $errorMessages = $validator->validate();
 
             if (empty($errorMessages)) {
-                $user->setEmail($email);
+                $user->setEmail($formData['email']);
                 $user->setId($userData['id']);
                 if ($user->getEmail() !== '') {
                     $user->persistEmail();
@@ -140,7 +134,7 @@ class AccountController extends AbstractController
         }
 
         $this->render('/user/emailForm', [
-            'email' => $email,
+            'email' => $formData['email'],
             'errorMessages' => $errorMessages ?? []
         ]);
     }
