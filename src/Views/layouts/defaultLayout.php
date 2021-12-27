@@ -43,7 +43,7 @@
                 <div class="navbar-item">
                     <?php
                     if (!isset($_SESSION['user'])) {
-                    ?>
+                        ?>
                         <div class="buttons">
                             <a href="/signin" class="button is-primary">
                                 <strong>Sign in</strong>
@@ -54,7 +54,7 @@
                         </div>
                     <?php
                     } else {
-                    ?>
+                        ?>
                         <div class="buttons">
                             <a href="/user/manage" class="button is-primary">
                                 <?= $_SESSION['user']['firstName'] . ' ' . $_SESSION['user']['lastName'] ?>

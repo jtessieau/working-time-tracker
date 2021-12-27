@@ -115,13 +115,13 @@ class AccountController extends AbstractController
 
             if (empty($email)) {
                 $errorMessages['email'] = 'Please enter an email';
-            } else if ($email !== $emailConfirmation) {
+            } elseif ($email !== $emailConfirmation) {
                 $errorMessages['email'] = 'Email address must match.';
-            } else if ($email === $_SESSION['user']['email']) {
+            } elseif ($email === $_SESSION['user']['email']) {
                 $errorMessages['email'] = 'Email address must be different than current address.';
-            } else if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+            } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
                 $errorMessages['email'] = 'Please enter a valide email address.';
-            } else if (!is_null($user->findOneByEmail($email))) {
+            } elseif (!is_null($user->findOneByEmail($email))) {
                 $errorMessages['email'] = 'You can not use this email address.';
             }
 
