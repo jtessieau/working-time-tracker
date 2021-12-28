@@ -7,6 +7,7 @@ use App\Models\CompanyModel;
 use App\Services\Job\CreateJobService;
 use App\FormValidation\JobFormValidation;
 use App\Controllers\Utils\AbstractController;
+use App\Models\CheckinModel;
 use App\Models\UserModel;
 use App\Services\Job\JobFormDataService;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,6 +91,27 @@ class JobController extends AbstractController
 
             $validator = new JobFormValidation($formData);
             $errorMessages = $validator->validate();
+
+            if ($formData['endDate'] !== null) {
+                $checkinModel = new CheckinModel();
+                $checkins = $checkinModel->findByJobId($id);
+
+                $lastCheckin = null;
+
+                foreach ($checkins as $checkin) {
+                    $format = 'Y-m-d H:i:s';
+                    $checkinEndDate = date_create_from_format($format, $checkin['checkin_end_datetime']);
+                    $jobEndDate = date_create_from_format('Y-m-d', $formData['endDate']);
+                    if ($checkinEndDate > $jobEndDate) {
+                        $lastCheckin = $checkin;
+                    }
+                }
+
+                if ($lastCheckin !== null) {
+                    $errorMessages['jobCreation'] = 'You have check-in set after the end-date. Please review.';
+                }
+            }
+
 
             if (empty($errorMessages)) {
                 $company = new CompanyModel();
