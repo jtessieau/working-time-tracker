@@ -55,6 +55,13 @@
                 </div>
             </div>
 
+            <div class="field is-horizontal" style="margin-top:-0.5rem;">
+                <div class="field-label"></div>
+                <div class="field-body">
+                    <p class="help is-danger"><?= $errorMessages['startDate'] ?? '' ?></p>
+                </div>
+            </div>
+
 
 
             <!-- End date and time -->
@@ -73,8 +80,17 @@
                             <input class="input" type="time" name="endTime" id="endTime" value="<?php echo $formData['endTime'] ?? date("H:i"); ?>">
                         </div>
                     </div>
+
                 </div>
             </div>
+
+            <div class="field is-horizontal" style="margin-top:-0.5rem;">
+                <div class="field-label"></div>
+                <div class="field-body">
+                    <p class="help is-danger"><?= $errorMessages['endDate'] ?? '' ?></p>
+                </div>
+            </div>
+
 
             <!-- Break time in minutes -->
             <div class="field">
@@ -91,6 +107,13 @@
                             <input class="input" type="number" name="breakTime" id="breakTime" value="<?php echo $formData['breakTime'] ?? "0" ?>">
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="field is-horizontal" style="margin-top:-0.5rem;">
+                <div class="field-label"></div>
+                <div class="field-body">
+                    <p class="help is-danger"><?= $errorMessages['breakTime'] ?? '' ?></p>
                 </div>
             </div>
 

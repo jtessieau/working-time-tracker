@@ -3,6 +3,7 @@
 namespace App\FormValidation;
 
 use DateTime;
+use App\Models\JobModel;
 
 class CheckinFormValidation extends FormValidation implements ValidationInterface
 {
@@ -43,6 +44,16 @@ class CheckinFormValidation extends FormValidation implements ValidationInterfac
     {
         if ($this->data['startDate'] === "" || $this->data['startTime'] === "") {
             $this->addError('startDate', 'Start date and time must be set.');
+        } else {
+            $jobModel = new JobModel();
+            $job = $jobModel->findOne($this->data['jobId']);
+
+            $jobEndDate = date_create_from_format('Y-m-d', $job['job_start_date']);
+            $checkinStartDate = DateTime::createFromFormat('Y-m-d H:i', $this->endDatetime);
+
+            if ($checkinStartDate > $jobEndDate) {
+                $this->addError('startDate', 'The check-in can\'t start after the end of job contract\'s.');
+            }
         }
     }
 
@@ -52,6 +63,7 @@ class CheckinFormValidation extends FormValidation implements ValidationInterfac
             $this->addError('endDate', 'End date and time must be set.');
         }
     }
+
     private function validateBreakTime(): void
     {
         if (!is_numeric($this->data['breakTime'])) {
@@ -61,6 +73,7 @@ class CheckinFormValidation extends FormValidation implements ValidationInterfac
             $this->addError('breakTime', 'BreakTime must be set.');
         }
     }
+
     private function endDatePosteriorToStartDate(): void
     {
         $format = 'Y-m-d H:i';
