@@ -7,7 +7,6 @@ use App\FormValidation\ValidationInterface;
 
 use App\Models\UserModel;
 
-
 class SigninFormValidation extends FormValidation implements ValidationInterface
 {
     protected static array $fields = ['firstName', 'lastName', 'email', 'password', 'password2'];
