@@ -1,9 +1,13 @@
 <?php
 
-namespace App\FormValidation;
+namespace App\FormValidation\JobManagerForm;
+
+use App\FormValidation\FormValidation;
+use App\FormValidation\ValidationInterface;
+
+use App\Models\JobModel;
 
 use DateTime;
-use App\Models\JobModel;
 
 class CheckinFormValidation extends FormValidation implements ValidationInterface
 {

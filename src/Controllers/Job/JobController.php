@@ -3,15 +3,15 @@
 namespace App\Controllers\Job;
 
 use App\Models\JobModel;
+use App\Models\UserModel;
+use App\Models\CheckinModel;
 use App\Models\CompanyModel;
 use App\Services\Job\CreateJobService;
-use App\FormValidation\JobFormValidation;
-use App\Controllers\Utils\AbstractController;
-use App\Models\CheckinModel;
-use App\Models\UserModel;
 use App\Services\Job\JobFormDataService;
+use App\Controllers\Utils\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\FormValidation\JobManagerForm\JobFormValidation;
 
 class JobController extends AbstractController
 {

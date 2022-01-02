@@ -2,16 +2,16 @@
 
 namespace App\Controllers\Job;
 
-use App\FormValidation\CheckinFormValidation;
-use App\Models\CheckinModel;
-use App\Controllers\Utils\AbstractController;
 use App\Models\JobModel;
 use App\Models\UserModel;
-use App\Services\Checkin\CheckinFormDataService;
-use App\Services\Checkin\CreateCheckinService;
+use App\Models\CheckinModel;
+use App\Controllers\Utils\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Services\Checkin\CreateCheckinService;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\Checkin\CheckinFormDataService;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\FormValidation\JobManagerForm\CheckinFormValidation;
 
 class CheckinController extends AbstractController
 {

@@ -4,11 +4,31 @@ namespace App\FormValidation\UserManagerForm;
 
 use App\FormValidation\FormValidation;
 use App\FormValidation\ValidationInterface;
+
 use App\Models\UserModel;
 
-class EmailFormValidation extends FormValidation implements ValidationInterface
+class ModifyEmailFormValidation extends FormValidation implements ValidationInterface
 {
+    private static array $fields = [
+        'email',
+        'emailConfirmation'
+    ];
+
     public function validate(): array
+    {
+        foreach (self::$fields as $field) {
+            if (!array_key_exists($field, $this->data)) {
+                trigger_error("$field is not present in this form...");
+                return null;
+            }
+        }
+
+        $this->validateEmail();
+
+        return $this->errors;
+    }
+
+    private function validateEmail(): void
     {
         $email = $this->data['email'];
         $emailConfirmation = $this->data['emailConfirmation'];
@@ -26,7 +46,5 @@ class EmailFormValidation extends FormValidation implements ValidationInterface
         } elseif (!is_null($userModel->findOneByEmail($email))) {
             $this->addError('email', 'You can not use this email address.');
         }
-
-        return $this->errors;
     }
 }

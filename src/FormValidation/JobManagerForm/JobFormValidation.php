@@ -1,6 +1,6 @@
 <?php
 
-namespace App\FormValidation;
+namespace App\FormValidation\JobManagerForm;
 
 use App\FormValidation\FormValidation;
 use App\FormValidation\ValidationInterface;
@@ -11,7 +11,7 @@ class JobFormValidation extends FormValidation implements ValidationInterface
         'designation',
         'rate',
         'startDate',
-        // 'endDateKnown',
+        'endDateKnown',
         'endDate',
         'periodOfWork',
         'firstDayOfTheWeek',
