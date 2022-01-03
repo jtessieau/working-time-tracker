@@ -10,6 +10,7 @@ use App\Services\Job\CreateJobService;
 use App\Services\Job\JobFormDataService;
 use App\Controllers\Utils\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\FormValidation\JobManagerForm\JobFormValidation;
 
@@ -157,13 +158,34 @@ class JobController extends AbstractController
 
     public function deleteJob(int $id)
     {
-        if ($this->checkOwner($id)) {
-            $jobModel = new JobModel();
-            $jobModel->delete($id);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $req = Request::createFromGlobals();
+            $confirmation = $req->request->get('confirmation');
+
+            if ($confirmation === "Delete") {
+
+                if (!$this->checkOwner($id)) {
+                    $res = new RedirectResponse("/");
+                    $res->send();
+                }
+
+                $jobModel = new JobModel();
+                $delete = $jobModel->delete($id);
+
+                if ($delete) {
+                    $res = new RedirectResponse("/job/list");
+                } else {
+                    $res = new Response("Whoops, something went wrong ...", 500);
+                }
+            } else {
+                $res = new RedirectResponse("/job/list");
+            }
+
+            $res->send();
         }
 
-        $res = new RedirectResponse("/job/list");
-        $res->send();
+        return $this->render('job/deleteForm');
     }
 
     public function checkOwner(int $jobId): bool
