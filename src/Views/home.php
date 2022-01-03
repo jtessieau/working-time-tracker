@@ -11,8 +11,25 @@
    </div>
 </section>
 
-<hr />
+<hr>
 
-<pre>
-   <?php var_dump($_SESSION); ?>
-</pre>
+<section>
+   <pre>
+      <h2 class="title is-4 ml-5" style="margin-bottom:-40px;">SESSION</h2>
+      <?php var_dump($_SESSION); ?>
+   </pre>
+</section>
+
+<section>
+   <pre>
+      <h2 class="title is-4 ml-5" style="margin-bottom:-40px;">REQUEST</h2>
+      <?php var_dump($_REQUEST); ?>
+   </pre>
+</section>
+
+<section>
+   <pre>
+      <h2 class="title is-4 ml-5" style="margin-bottom:-40px;">SERVER</h2>
+      <?php var_dump($_SERVER); ?>
+   </pre>
+</section>

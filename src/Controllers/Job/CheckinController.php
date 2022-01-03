@@ -58,7 +58,7 @@ class CheckinController extends AbstractController
             }
         }
 
-        return $this->render('job/checkinForm', [
+        return $this->render('checkin/checkinForm', [
             'jobList' => $jobList,
             'formData' => $formData ?? [],
             'errorMessages' => $errorMessages ?? []
@@ -73,7 +73,7 @@ class CheckinController extends AbstractController
         $jobModel = new JobModel();
         $job = $jobModel->findOne($jobId);
 
-        return $this->render('job/checkinList', [
+        return $this->render('checkin/checkinList', [
             'checkins' => $checkins ?? [],
             'job' => $job
         ]);
@@ -117,7 +117,7 @@ class CheckinController extends AbstractController
             }
         }
 
-        return $this->render('job/checkinForm', [
+        return $this->render('checkin/checkinForm', [
             'jobList' => $jobList ?? [],
             'formData' => $formData ?? [],
             'errorMessages' => $errorMessages ?? []
