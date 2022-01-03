@@ -159,12 +159,10 @@ class JobController extends AbstractController
     public function deleteJob(int $id)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $req = Request::createFromGlobals();
             $confirmation = $req->request->get('confirmation');
 
             if ($confirmation === "Delete") {
-
                 if (!$this->checkOwner($id)) {
                     $res = new RedirectResponse("/");
                     $res->send();
