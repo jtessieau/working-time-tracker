@@ -158,17 +158,19 @@ class JobController extends AbstractController
 
     public function deleteJob(int $id)
     {
+        if (!$this->checkOwner($id)) {
+            $res = new RedirectResponse("/");
+            $res->send();
+        }
+
+        $jobModel = new JobModel();
+        $job = $jobModel->findOne($id);
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $req = Request::createFromGlobals();
             $confirmation = $req->request->get('confirmation');
 
             if ($confirmation === "Delete") {
-                if (!$this->checkOwner($id)) {
-                    $res = new RedirectResponse("/");
-                    $res->send();
-                }
-
-                $jobModel = new JobModel();
                 $delete = $jobModel->delete($id);
 
                 if ($delete) {
@@ -183,7 +185,9 @@ class JobController extends AbstractController
             $res->send();
         }
 
-        return $this->render('job/deleteForm');
+        return $this->render('job/deleteForm', [
+            'job' => $job
+        ]);
     }
 
     public function checkOwner(int $jobId): bool
