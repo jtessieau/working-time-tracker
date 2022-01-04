@@ -109,7 +109,7 @@ class CheckinModel extends AbstractModel
 
     public function findByJobId($jobId): ?array
     {
-        $sql = "SELECT * FROM $this->table WHERE job_id=?";
+        $sql = "SELECT * FROM $this->table WHERE job_id=? ORDER BY checkin_start_datetime";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$jobId]);
