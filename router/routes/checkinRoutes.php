@@ -24,3 +24,9 @@ $r->addRoute(
     '/job/checkin/delete/{id}',
     'App\\Controllers\\Job\\CheckinController@delete'
 );
+
+$r->addRoute(
+    ['GET', 'POST'],
+    '/report/{id}',
+    'App\\Controllers\\Report\\ReportController@report'
+);
