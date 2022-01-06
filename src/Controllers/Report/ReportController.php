@@ -8,7 +8,7 @@ use DateTime;
 
 class ReportController extends AbstractController
 {
-    public function report(int $jobId): array
+    public function report(int $jobId, string $period = "month"): array
     {
         $checkinModel = new CheckinModel();
         $checkins = $checkinModel->findByJobId($jobId);
@@ -23,9 +23,22 @@ class ReportController extends AbstractController
             $startDate = new DateTime($checkin['checkin_start_datetime']);
 
             $year = $startDate->format('Y');
-            $week = $startDate->format('W');
 
-            $sortedCheckins[$year][$week][] = $checkin;
+            switch ($period) {
+                case 'week':
+                    $period = $startDate->format('W');
+                    break;
+
+                case 'month':
+                    $period = $startDate->format('m');
+                    break;
+
+                default:
+                    $period = $startDate->format('m');
+                    break;
+            }
+
+            $sortedCheckins[$year][$period][] = $checkin;
         }
         var_dump($sortedCheckins);
         return $sortedCheckins;
