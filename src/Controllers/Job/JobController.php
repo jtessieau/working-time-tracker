@@ -189,19 +189,4 @@ class JobController extends AbstractController
             'job' => $job
         ]);
     }
-
-    public function checkOwner(int $jobId): bool
-    {
-        $userModel = new UserModel();
-        $user = $userModel->findOneByEmail($_SESSION['user']['email']);
-
-        $jobModel = new JobModel();
-        $job = $jobModel->findOne($jobId);
-
-        if ($job === false) {
-            return false;
-        }
-
-        return ($user['id'] === $job['user_id']);
-    }
 }

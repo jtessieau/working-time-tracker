@@ -87,7 +87,7 @@ class CheckinController extends AbstractController
         $job = new JobModel();
         $jobList = $job->findAll();
 
-        if (!$this->checkOwner($currentCheckin)) {
+        if (!$this->checkOwner($currentCheckin['job_id'])) {
             $res = new RedirectResponse('/job/list');
             $res->send();
         }
@@ -129,21 +129,10 @@ class CheckinController extends AbstractController
         $checkin = new CheckinModel();
         $currentCheckin = $checkin->findOne($id);
 
-        if ($this->checkOwner($currentCheckin)) {
+        if ($this->checkOwner($currentCheckin['job_id'])) {
             $checkin->delete($id);
             $res = new RedirectResponse("/job/checkin/list/{$currentCheckin['job_id']}");
             $res->send();
         }
-    }
-
-    public function checkOwner(array $currentCheckin): bool
-    {
-        $user = new UserModel();
-        $currentUser = $user->findOneByEmail($_SESSION['user']['email']);
-
-        $job = new JobModel();
-        $currentJob = $job->findOne($currentCheckin['job_id']);
-
-        return ($currentUser['id'] === $currentJob['user_id']);
     }
 }
