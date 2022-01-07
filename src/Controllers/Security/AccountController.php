@@ -2,21 +2,21 @@
 
 namespace App\Controllers\Security;
 
-use App\Models\UserModel as User;
-use App\FormValidation\SigninFormValidation;
+use App\Models\UserModel;
 use App\Controllers\Utils\AbstractController;
-use App\FormValidation\UserManagerForm\EmailFormValidation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\FormValidation\UserManagerForm\SigninFormValidation;
+use App\FormValidation\UserManagerForm\ModifyEmailFormValidation;
 
 class AccountController extends AbstractController
 {
-    protected User $user;
+    protected UserModel $userModel;
 
     public function __construct()
     {
-        $this->user = new User();
+        $this->userModel = new UserModel();
     }
 
     public function create()
@@ -46,12 +46,12 @@ class AccountController extends AbstractController
             // If no error, then populate new user object with data.
             // Object methods will handle normalisation.
             if (empty($errorMessages)) {
-                $this->user->setFirstName($req->request->get('firstName'));
-                $this->user->setLastName($req->request->get('lastName'));
-                $this->user->setEmail($req->request->get('email'));
-                $this->user->setPassword($req->request->get('password'));
+                $this->userModel->setFirstName($req->request->get('firstName'));
+                $this->userModel->setLastName($req->request->get('lastName'));
+                $this->userModel->setEmail($req->request->get('email'));
+                $this->userModel->setPassword($req->request->get('password'));
 
-                $this->user->createUser();
+                $this->userModel->createUser();
                 $res = new RedirectResponse('/');
                 $res->send();
             }
@@ -64,15 +64,14 @@ class AccountController extends AbstractController
 
     public function delete()
     {
-        $userModel = new User();
-        $userData = $userModel->findOneByEmail($_SESSION['user']['email']);
+        $userData = $this->userModel->findOneByEmail($_SESSION['user']['email']);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $req = Request::createFromGlobals();
             $confirmation = $req->request->get('confirmation');
 
             if ($confirmation === "Delete") {
-                $delete = $userModel->delete($userData['id']);
+                $delete = $this->userModel->delete($userData['id']);
                 if ($delete) {
                     session_unset();
                     session_destroy();
@@ -92,8 +91,7 @@ class AccountController extends AbstractController
 
     public function manage()
     {
-        $user = new User();
-        $userData = $user->findOneByEmail($_SESSION['user']['email']);
+        $userData = $this->userModel->findOneByEmail($_SESSION['user']['email']);
 
         $this->render('user/userManager', [
             'userData' => $userData
@@ -102,8 +100,7 @@ class AccountController extends AbstractController
 
     public function modifyEmail()
     {
-        $user = new User();
-        $userData = $user->findOneByEmail($_SESSION['user']['email']);
+        $userData = $this->userModel->findOneByEmail($_SESSION['user']['email']);
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $formData['email'] = $userData['email'];
@@ -116,15 +113,15 @@ class AccountController extends AbstractController
                 'emailConfirmation' => strtolower($req->request->get('emailConfirmation'))
             ];
 
-            $validator = new EmailFormValidation($formData);
+            $validator = new ModifyEmailFormValidation($formData);
             $errorMessages = $validator->validate();
 
             if (empty($errorMessages)) {
-                $user->setEmail($formData['email']);
-                $user->setId($userData['id']);
-                if ($user->getEmail() !== '') {
-                    $user->persistEmail();
-                    $_SESSION['user']['email'] = $user->getEmail();
+                $this->userModel->setEmail($formData['email']);
+                $this->userModel->setId($userData['id']);
+                if ($this->userModel->getEmail() !== '') {
+                    $this->userModel->persistEmail();
+                    $_SESSION['user']['email'] = $this->userModel->getEmail();
                     $res = new RedirectResponse('/user/manage');
                     $res->send();
                 } else {

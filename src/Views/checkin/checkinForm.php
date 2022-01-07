@@ -123,9 +123,14 @@
 
             <div class="field is-grouped is-grouped-centered">
                 <p class="control">
-                    <button type="submit" class="button is-link" form="checkinForm" name="submit" value="submit">
+                    <button type="submit" class="button is-primary" form="checkinForm" name="submit" value="submit">
                         Submit
                     </button>
+                </p>
+                <p class="control">
+                    <a class="button is-danger" href="<?= $_SERVER['HTTP_REFERER'] ?? "/" ?>">
+                        Cancel
+                    </a>
                 </p>
             </div>
         </form>

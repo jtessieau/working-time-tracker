@@ -1,11 +1,11 @@
 <?php
 
-namespace App\FormValidation;
+namespace App\FormValidation\UserManagerForm;
 
+use App\FormValidation\FormValidation;
 use App\FormValidation\ValidationInterface;
-use App\Models\UserModel as User;
 
-use function PHPUnit\Framework\isNull;
+use App\Models\UserModel;
 
 class SigninFormValidation extends FormValidation implements ValidationInterface
 {
@@ -59,9 +59,9 @@ class SigninFormValidation extends FormValidation implements ValidationInterface
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->addError('email', 'You must enter a valid email.');
         } else {
-            $user = new User();
+            $userModel = new UserModel();
 
-            if (!is_null($user->findOneByEmail($email))) {
+            if (!is_null($userModel->findOneByEmail($email))) {
                 $this->addError('email', 'This email is already in use.');
             }
         }

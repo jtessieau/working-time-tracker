@@ -1,9 +1,13 @@
 <?php
 
-namespace App\FormValidation;
+namespace App\FormValidation\JobManagerForm;
+
+use App\FormValidation\FormValidation;
+use App\FormValidation\ValidationInterface;
+
+use App\Models\JobModel;
 
 use DateTime;
-use App\Models\JobModel;
 
 class CheckinFormValidation extends FormValidation implements ValidationInterface
 {
@@ -48,11 +52,13 @@ class CheckinFormValidation extends FormValidation implements ValidationInterfac
             $jobModel = new JobModel();
             $job = $jobModel->findOne($this->data['jobId']);
 
-            $jobEndDate = date_create_from_format('Y-m-d', $job['job_start_date']);
-            $checkinStartDate = DateTime::createFromFormat('Y-m-d H:i', $this->endDatetime);
+            if (!is_null($job['job_end_date'])) {
+                $jobEndDate = date_create_from_format('Y-m-d', $job['job_end_date']);
+                $checkinStartDate = DateTime::createFromFormat('Y-m-d H:i', $this->startDatetime);
 
-            if ($checkinStartDate > $jobEndDate) {
-                $this->addError('startDate', 'The check-in can\'t start after the end of job contract\'s.');
+                if ($checkinStartDate > $jobEndDate) {
+                    $this->addError('startDate', 'The check-in can\'t start after the end of job contract\'s.');
+                }
             }
         }
     }

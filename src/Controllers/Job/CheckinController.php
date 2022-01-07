@@ -2,16 +2,16 @@
 
 namespace App\Controllers\Job;
 
-use App\FormValidation\CheckinFormValidation;
-use App\Models\CheckinModel;
-use App\Controllers\Utils\AbstractController;
 use App\Models\JobModel;
 use App\Models\UserModel;
-use App\Services\Checkin\CheckinFormDataService;
-use App\Services\Checkin\CreateCheckinService;
+use App\Models\CheckinModel;
+use App\Controllers\Utils\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Services\Checkin\CreateCheckinService;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\Checkin\CheckinFormDataService;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\FormValidation\JobManagerForm\CheckinFormValidation;
 
 class CheckinController extends AbstractController
 {
@@ -58,7 +58,7 @@ class CheckinController extends AbstractController
             }
         }
 
-        return $this->render('job/checkinForm', [
+        return $this->render('checkin/checkinForm', [
             'jobList' => $jobList,
             'formData' => $formData ?? [],
             'errorMessages' => $errorMessages ?? []
@@ -73,7 +73,7 @@ class CheckinController extends AbstractController
         $jobModel = new JobModel();
         $job = $jobModel->findOne($jobId);
 
-        return $this->render('job/checkinList', [
+        return $this->render('checkin/checkinList', [
             'checkins' => $checkins ?? [],
             'job' => $job
         ]);
@@ -87,7 +87,7 @@ class CheckinController extends AbstractController
         $job = new JobModel();
         $jobList = $job->findAll();
 
-        if (!$this->checkOwner($currentCheckin)) {
+        if (!$this->checkOwner($currentCheckin['job_id'])) {
             $res = new RedirectResponse('/job/list');
             $res->send();
         }
@@ -117,7 +117,7 @@ class CheckinController extends AbstractController
             }
         }
 
-        return $this->render('job/checkinForm', [
+        return $this->render('checkin/checkinForm', [
             'jobList' => $jobList ?? [],
             'formData' => $formData ?? [],
             'errorMessages' => $errorMessages ?? []
@@ -129,21 +129,10 @@ class CheckinController extends AbstractController
         $checkin = new CheckinModel();
         $currentCheckin = $checkin->findOne($id);
 
-        if ($this->checkOwner($currentCheckin)) {
+        if ($this->checkOwner($currentCheckin['job_id'])) {
             $checkin->delete($id);
             $res = new RedirectResponse("/job/checkin/list/{$currentCheckin['job_id']}");
             $res->send();
         }
-    }
-
-    public function checkOwner(array $currentCheckin): bool
-    {
-        $user = new UserModel();
-        $currentUser = $user->findOneByEmail($_SESSION['user']['email']);
-
-        $job = new JobModel();
-        $currentJob = $job->findOne($currentCheckin['job_id']);
-
-        return ($currentUser['id'] === $currentJob['user_id']);
     }
 }

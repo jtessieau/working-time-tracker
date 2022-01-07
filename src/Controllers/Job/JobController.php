@@ -3,15 +3,16 @@
 namespace App\Controllers\Job;
 
 use App\Models\JobModel;
+use App\Models\UserModel;
+use App\Models\CheckinModel;
 use App\Models\CompanyModel;
 use App\Services\Job\CreateJobService;
-use App\FormValidation\JobFormValidation;
-use App\Controllers\Utils\AbstractController;
-use App\Models\CheckinModel;
-use App\Models\UserModel;
 use App\Services\Job\JobFormDataService;
+use App\Controllers\Utils\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\FormValidation\JobManagerForm\JobFormValidation;
 
 class JobController extends AbstractController
 {
@@ -157,27 +158,35 @@ class JobController extends AbstractController
 
     public function deleteJob(int $id)
     {
-        if ($this->checkOwner($id)) {
-            $jobModel = new JobModel();
-            $jobModel->delete($id);
+        if (!$this->checkOwner($id)) {
+            $res = new RedirectResponse("/");
+            $res->send();
         }
-
-        $res = new RedirectResponse("/job/list");
-        $res->send();
-    }
-
-    public function checkOwner(int $jobId): bool
-    {
-        $userModel = new UserModel();
-        $user = $userModel->findOneByEmail($_SESSION['user']['email']);
 
         $jobModel = new JobModel();
-        $job = $jobModel->findOne($jobId);
+        $job = $jobModel->findOne($id);
 
-        if ($job === false) {
-            return false;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $req = Request::createFromGlobals();
+            $confirmation = $req->request->get('confirmation');
+
+            if ($confirmation === "Delete") {
+                $delete = $jobModel->delete($id);
+
+                if ($delete) {
+                    $res = new RedirectResponse("/job/list");
+                } else {
+                    $res = new Response("Whoops, something went wrong ...", 500);
+                }
+            } else {
+                $res = new RedirectResponse("/job/list");
+            }
+
+            $res->send();
         }
 
-        return ($user['id'] === $job['user_id']);
+        return $this->render('job/deleteForm', [
+            'job' => $job
+        ]);
     }
 }

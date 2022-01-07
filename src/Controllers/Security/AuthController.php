@@ -3,16 +3,18 @@
 namespace App\Controllers\Security;
 
 use App\Models\UserModel;
-use App\FormValidation\LoginFormValidation;
 use App\Controllers\Utils\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\FormValidation\UserManagerForm\LoginFormValidation;
 
 class AuthController extends AbstractController
 {
+    private UserModel $userModel;
+
     public function __construct()
     {
-        $this->user = new UserModel();
+        $this->userModel = new UserModel();
     }
 
     public function Login()
@@ -32,7 +34,7 @@ class AuthController extends AbstractController
 
             if (empty($errorMessages)) {
                 // Look for existing user in database
-                $user = $this->user->findOneByEmail(
+                $user = $this->userModel->findOneByEmail(
                     $req->request->get('email')
                 );
 

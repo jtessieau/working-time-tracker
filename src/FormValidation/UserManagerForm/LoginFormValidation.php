@@ -1,6 +1,6 @@
 <?php
 
-namespace App\FormValidation;
+namespace App\FormValidation\UserManagerForm;
 
 use App\FormValidation\ValidationInterface;
 use App\FormValidation\FormValidation;
