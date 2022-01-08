@@ -2,45 +2,53 @@
 
 namespace App\Controllers\Report;
 
-use App\Controllers\Utils\AbstractController;
-use App\Models\CheckinModel;
 use DateTime;
+use App\Models\JobModel;
+use App\Models\CheckinModel;
+use App\Controllers\Utils\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Services\DateManipulation\DateManipulationService;
 
 class ReportController extends AbstractController
 {
-    public function report(int $jobId, string $period = "month"): array
+    public function report(int $jobId): array
     {
+        if (!$this->checkOwner($jobId)) {
+            $res = new RedirectResponse("/");
+            $res->send();
+        }
+
+        $jobModel = new JobModel();
+        $jobData = $jobModel->findOne($jobId);
+
         $checkinModel = new CheckinModel();
+
+        // Get all checkins ordered by start datetime in a array.
         $checkins = $checkinModel->findByJobId($jobId);
 
-        // At this point, I get all checkins ordered by start datetime in a array.
-
-        // first, I want to split it by year
+        // first, I want to split it by year and period
         $sortedCheckins = [];
 
-        // convert start datetime into a Datetime object.
         foreach ($checkins as $checkin) {
-            $startDate = new DateTime($checkin['checkin_start_datetime']);
 
-            $year = $startDate->format('Y');
+            $date = new DateTime($checkin['checkin_start_datetime']);
+            $year = $date->format('o');
 
-            switch ($period) {
-                case 'week':
-                    $period = $startDate->format('W');
-                    break;
+            // ISO number of the week as int
+            $week = (int) $date->format('W');
 
-                case 'month':
-                    $period = $startDate->format('m');
-                    break;
-
-                default:
-                    $period = $startDate->format('m');
-                    break;
+            if ((int) $date->format('w') === 0 && $jobData['job_first_day_of_the_week'] === 0) {
+                $leap = DateManipulationService::isLeapYear($year);
+                if (($week === 52 && !$leap) || ($week === 53 && $leap)) {
+                    $week = 1;
+                } else {
+                    $week++;
+                }
             }
 
-            $sortedCheckins[$year][$period][] = $checkin;
+            $sortedCheckins[$year][$week][] = $checkin;
         }
-        var_dump($sortedCheckins);
+
         return $sortedCheckins;
     }
 }
