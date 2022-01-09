@@ -51,4 +51,32 @@ class ReportController extends AbstractController
 
         return $sortedCheckins;
     }
+    public function monthlyReport(int $jobId): array
+    {
+        if (!$this->checkOwner($jobId)) {
+            $res = new RedirectResponse("/");
+            $res->send();
+        }
+
+        $checkinModel = new CheckinModel();
+
+        // Get all checkins ordered by start datetime in a array.
+        $checkins = $checkinModel->findByJobId($jobId);
+
+        // first, I want to split it by year and period
+        $sortedCheckins = [];
+
+        foreach ($checkins as $checkin) {
+
+            $date = new DateTime($checkin['checkin_start_datetime']);
+            $year = $date->format('o');
+
+            // ISO number of the week as int
+            $month = (int) $date->format('m');
+
+            $sortedCheckins[$year][$month][] = $checkin;
+        }
+
+        return $sortedCheckins;
+    }
 }
