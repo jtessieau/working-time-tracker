@@ -66,7 +66,6 @@ class ReportController extends AbstractController
         $sortedCheckins = [];
 
         foreach ($checkins as $checkin) {
-
             $date = new DateTime($checkin['checkin_start_datetime']);
             $year = $date->format('o');
 
