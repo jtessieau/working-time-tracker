@@ -16,4 +16,9 @@ class DateManipulationService
             return true;
         }
     }
+
+    public static function numberOfWeekInYear($year): int
+    {
+        return idate('W', mktime(0, 0, 0, 12, 28, $year));
+    }
 }
