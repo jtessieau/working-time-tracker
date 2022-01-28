@@ -7,96 +7,117 @@ use App\Models\JobModel;
 use App\Models\CheckinModel;
 use App\Controllers\Utils\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use App\Services\DateManipulation\DateManipulationService;
 
 class ReportController extends AbstractController
 {
-    public function monthlyReport(int $jobId): array
+    public function monthlyReport(int $jobId)
     {
+        // Redirect user if he force id in url.
         if (!$this->checkOwner($jobId)) {
             $res = new RedirectResponse("/");
             $res->send();
         }
 
-        $checkinModel = new CheckinModel();
-
-        // Get all checkins ordered by start datetime in a array.
-        $checkins = $checkinModel->findByJobId($jobId);
-
-        // first, I want to split it by year and period
-        $sortedCheckins = [];
-
-        foreach ($checkins as $checkin) {
-            $date = new DateTime($checkin['checkin_start_datetime']);
-            $year = $date->format('o');
-
-            // ISO number of the week as int
-            $month = (int) $date->format('m');
-
-            $sortedCheckins[$year][$month][] = $checkin;
-        }
-
-        return $sortedCheckins;
-    }
-
-    public function weeklyReport(int $jobId)
-    {
+        // Init the models.
         $jobModel = new JobModel();
         $job = $jobModel->findOne($jobId);
 
         $checkinModel = new CheckinModel();
         $checkins = $checkinModel->findByJobId($jobId);
 
+        // Get the first checkin and the last checkin as boundary for the report.
         $firstCheckin = $checkins[0];
         $lastCheckin = $checkins[count($checkins) - 1];
 
+        $startDate = new DateTime($firstCheckin['checkin_start_datetime']);
+        $endDate = new DateTime($lastCheckin['checkin_start_datetime']);
 
-        $startYear = idate('Y', strtotime($firstCheckin['checkin_start_datetime']));
-        $startWeek = idate('W', strtotime($firstCheckin['checkin_start_datetime']));
-        $endYear = idate('Y', strtotime($lastCheckin['checkin_start_datetime']));
-        $endWeek = idate('W', strtotime($lastCheckin['checkin_start_datetime']));
-
-        $endDate = new DateTime();
-        $endDate->setISODate($endYear, $endWeek);
-
-
-        $currentYear = $startYear;
-        $currentWeek = $startWeek;
-
+        // Setup the "current" date as a temporary value to increment array data.
         $currentDate = new DateTime();
-        $currentDate->setISODate($currentYear, $currentWeek);
+        $currentDate->setISODate($startDate->format('Y'), $startDate->format('W'));
 
-        $report = [];
-
-        while ($currentYear <= $endYear && $currentDate <= $endDate) {
-            $report[$currentYear][$currentWeek] = [];
-            $numberOfWeekInYear = DateManipulationService::numberOfWeekInYear($currentYear);
-
-            if ($numberOfWeekInYear === $currentWeek) {
-                $currentWeek = 1;
-                $currentYear++;
-            } else {
-                $currentWeek++;
-            }
-
-            $currentDate->setISODate($currentYear, $currentWeek);
+        // Create the virgin report array from boundary.
+        while ($currentDate->format('Y') <= $endDate->format('Y') && $currentDate <= $endDate) {
+            $report[$currentDate->format('Y')][$currentDate->format('m')] = [];
+            $currentDate->modify('+1 month');
         }
 
+        // Add data to the report array.
         foreach ($checkins as $checkin) {
-            var_dump($checkin['id']);
+            // Create DateTime object of the checkin date to get Year and Week.
             $date = new DateTime($checkin['checkin_start_datetime']);
             $year = $date->format('Y');
-
-            // ISO number of the week as int
-            $week = (int) $date->format('W');
+            $month = $date->format('m');
 
 
+            // Calcul of the worked time.
             $startDate = strtotime($checkin['checkin_start_datetime']);
             $endDate = strtotime($checkin['checkin_end_datetime']);
 
             $jobTimeInSeconds = $endDate - $startDate - ($checkin['checkin_break_time'] * 60);
             $jobTimeInHours = $jobTimeInSeconds / 60 / 60;
 
+            // Include the data.
+            $report[$year][$month][] = [
+                "Date" => $date->format('Y-m-d'),
+                "Hours" => $jobTimeInHours,
+                "Total" => $jobTimeInHours * $job['job_rate']
+            ];
+        }
+
+        return $this->render("report/report", [
+            'report' => $report
+        ]);
+    }
+
+    public function weeklyReport(int $jobId)
+    {
+        // Redirect user if he force id in url.
+        if (!$this->checkOwner($jobId)) {
+            $res = new RedirectResponse("/");
+            $res->send();
+        }
+
+        // Init the models.
+        $jobModel = new JobModel();
+        $job = $jobModel->findOne($jobId);
+
+        $checkinModel = new CheckinModel();
+        $checkins = $checkinModel->findByJobId($jobId);
+
+        // Get the first checkin and the last checkin as boundary for the report.
+        $firstCheckin = $checkins[0];
+        $lastCheckin = $checkins[count($checkins) - 1];
+
+        $startDate = new DateTime($firstCheckin['checkin_start_datetime']);
+        $endDate = new DateTime($lastCheckin['checkin_start_datetime']);
+
+        // Setup the "current" date as a temporary value to increment array data.
+        $currentDate = new DateTime();
+        $currentDate->setISODate($startDate->format('Y'), $startDate->format('W'));
+
+        // Create the virgin report array from boundary.
+        while ($currentDate->format('Y') <= $endDate->format('Y') && $currentDate <= $endDate) {
+            $report[$currentDate->format('Y')][$currentDate->format('W')] = [];
+            $currentDate->modify('+1 week');
+        }
+
+        // Add data to the report array.
+        foreach ($checkins as $checkin) {
+            // Create DateTime object of the checkin date to get Year and Week.
+            $date = new DateTime($checkin['checkin_start_datetime']);
+            $year = $date->format('Y');
+            $week = $date->format('W');
+
+
+            // Calcul of the worked time.
+            $startDate = strtotime($checkin['checkin_start_datetime']);
+            $endDate = strtotime($checkin['checkin_end_datetime']);
+
+            $jobTimeInSeconds = $endDate - $startDate - ($checkin['checkin_break_time'] * 60);
+            $jobTimeInHours = $jobTimeInSeconds / 60 / 60;
+
+            // Include the data.
             $report[$year][$week][] = [
                 "Date" => $date->format('Y-m-d'),
                 "Hours" => $jobTimeInHours,
@@ -104,6 +125,8 @@ class ReportController extends AbstractController
             ];
         }
 
-        var_dump($report);
+        return $this->render("report/report", [
+            'report' => $report
+        ]);
     }
 }
