@@ -22,7 +22,7 @@
     <?php
     if (isset($hideNavbar) && $hideNavbar === true) {
     } else {
-    ?>
+        ?>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a class="navbar-item" href="https://bulma.io">
@@ -77,14 +77,14 @@
                             </div>
 
                         <?php
-                        }
-                        ?>
+                        } ?>
 
                     </div>
                 </div>
             </div>
         </nav>
-    <?php } ?>
+    <?php
+    } ?>
 
     <?= $pageContent ?>
 
