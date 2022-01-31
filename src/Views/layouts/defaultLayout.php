@@ -7,71 +7,83 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <title>test</title>
+    <title>
+        <?php
+        if (isset($title) && !empty($title)) {
+            echo $title;
+        } else {
+            echo "Working Time Tracker - Store your check-in";
+        }
+        ?>
+    </title>
 </head>
 
 <body>
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="https://bulma.io">
-                <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-            </a>
-
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                <a href="/" class="navbar-item">
-                    Home
+    <?php
+    if (isset($hideNavbar) && $hideNavbar === true) :
+    ?>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="https://bulma.io">
+                    <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
                 </a>
 
-                <a href="/job/list" class="navbar-item">
-                    Manage my jobs
-                </a>
-
-                <a href="/job/checkin" class="navbar-item">
-                    Check-in
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
                 </a>
             </div>
 
-            <div class="navbar-end">
-                <div class="navbar-item">
-                    <?php
-                    if (!isset($_SESSION['user'])) {
-                        ?>
-                        <div class="buttons">
-                            <a href="/signin" class="button is-primary">
-                                <strong>Sign in</strong>
-                            </a>
-                            <a href="login" class="button is-light">
-                                Log in
-                            </a>
-                        </div>
-                    <?php
-                    } else {
-                        ?>
-                        <div class="buttons">
-                            <a href="/user/manage" class="button is-primary">
-                                <?= $_SESSION['user']['firstName'] . ' ' . $_SESSION['user']['lastName'] ?>
-                            </a>
-                            <a href="/logout" class="button is-light">
-                                Log out
-                            </a>
-                        </div>
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    <a href="/" class="navbar-item">
+                        Home
+                    </a>
 
-                    <?php
-                    }
-                    ?>
+                    <a href="/job/list" class="navbar-item">
+                        Manage my jobs
+                    </a>
 
+                    <a href="/job/checkin" class="navbar-item">
+                        Check-in
+                    </a>
+                </div>
+
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <?php
+                        if (!isset($_SESSION['user'])) {
+                        ?>
+                            <div class="buttons">
+                                <a href="/signin" class="button is-primary">
+                                    <strong>Sign in</strong>
+                                </a>
+                                <a href="login" class="button is-light">
+                                    Log in
+                                </a>
+                            </div>
+                        <?php
+                        } else {
+                        ?>
+                            <div class="buttons">
+                                <a href="/user/manage" class="button is-primary">
+                                    <?= $_SESSION['user']['firstName'] . ' ' . $_SESSION['user']['lastName'] ?>
+                                </a>
+                                <a href="/logout" class="button is-light">
+                                    Log out
+                                </a>
+                            </div>
+
+                        <?php
+                        }
+                        ?>
+
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    <?php endif ?>
 
     <?= $pageContent ?>
 

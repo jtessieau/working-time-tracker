@@ -8,6 +8,9 @@ class HomeController extends AbstractController
 {
     public function index()
     {
-        return $this->render('home');
+        return $this->render('home', [
+            "title" => "Wtt - Homepage",
+            "hideNavabar" => true
+        ]);
     }
 }
