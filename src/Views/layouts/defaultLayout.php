@@ -22,7 +22,7 @@
     <?php
     if (isset($hideNavbar) && $hideNavbar === true) {
     } else {
-    ?>
+        ?>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <div class="navbar-item">
@@ -77,14 +77,14 @@
                             </div>
 
                         <?php
-                        }
-                        ?>
+                        } ?>
 
                     </div>
                 </div>
             </div>
         </nav>
-    <?php } ?>
+    <?php
+    } ?>
 
     <?= $pageContent ?>
 
