@@ -20,7 +20,8 @@
 
 <body>
     <?php
-    if (isset($hideNavbar) && $hideNavbar === true) :
+    if (isset($hideNavbar) && $hideNavbar === true) {
+    } else {
     ?>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
@@ -83,7 +84,7 @@
                 </div>
             </div>
         </nav>
-    <?php endif ?>
+    <?php } ?>
 
     <?= $pageContent ?>
 
