@@ -3,7 +3,7 @@
         <h1 class="title has-text-centered">Login</h1>
         <form method="post">
             <div class="field is-horizontal">
-                <div class="field-label">
+                <div class="field-label is-normal">
                     <label class="label" for="email">Email</label>
                 </div>
                 <div class="field-body">
@@ -21,7 +21,7 @@
             </div>
 
             <div class="field is-horizontal">
-                <div class="field-label">
+                <div class="field-label is-normal">
                     <label class="label" for="password">Password</label>
                 </div>
                 <div class="field-body">
@@ -39,9 +39,10 @@
 
             <span class="help is-danger"><?php echo $errorMessages['connection'] ?? '' ?></span>
 
+
             <div class="field is-grouped is-grouped-centered">
                 <div class="control">
-                    <button class="button is-link">Submit</button>
+                    <button class="button is-primary">Submit</button>
                 </div>
             </div>
         </form>
