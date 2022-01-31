@@ -2,11 +2,6 @@
 
 // === Job ===
 $r->addRoute(
-    'GET',
-    '/job',
-    'App\\Controllers\\Job\\JobController@home'
-);
-$r->addRoute(
     ['GET'],
     '/job/list',
     'App\\Controllers\\Job\\JobController@list'

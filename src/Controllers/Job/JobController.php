@@ -25,11 +25,6 @@ class JobController extends AbstractController
         }
     }
 
-    public function home()
-    {
-        return $this->render('job/home');
-    }
-
     public function create()
     {
         $req = Request::createFromglobals();
