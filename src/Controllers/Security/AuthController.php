@@ -63,8 +63,7 @@ class AuthController extends AbstractController
 
         return $this->render('user/LoginForm', [
             'errorMessages' => $errorMessages ?? [],
-            'title' => 'WTT - Login',
-            'hideNavbar' => true
+            'title' => 'WTT - Login'
         ]);
     }
 
