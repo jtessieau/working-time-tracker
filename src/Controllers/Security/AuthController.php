@@ -61,7 +61,7 @@ class AuthController extends AbstractController
             }
         }
 
-        return $this->render('user/LoginForm', [
+        return $this->render('user/loginForm', [
             'errorMessages' => $errorMessages ?? [],
             'title' => 'WTT - Login'
         ]);
