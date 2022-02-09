@@ -41,14 +41,17 @@
                     <a href="/" class="navbar-item">
                         Home
                     </a>
+                    <?php
+                    if (isset($_SESSION['user'])) :
+                    ?>
+                        <a href="/job/list" class="navbar-item">
+                            Manage my jobs
+                        </a>
 
-                    <a href="/job/list" class="navbar-item">
-                        Manage my jobs
-                    </a>
-
-                    <a href="/job/checkin" class="navbar-item">
-                        Check-in
-                    </a>
+                        <a href="/job/checkin" class="navbar-item">
+                            Check-in
+                        </a>
+                    <?php endif ?>
                 </div>
 
                 <div class="navbar-end">
