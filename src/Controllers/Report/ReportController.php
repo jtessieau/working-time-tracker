@@ -98,7 +98,7 @@ class ReportController extends AbstractController
 
         // Create the virgin report array from boundary.
         while ($currentDate->format('Y') <= $endDate->format('Y') && $currentDate <= $endDate) {
-            $report[$currentDate->format('Y')][$currentDate->format('W')] = [];
+            $report[$currentDate->format('Y')]["w" . $currentDate->format('W')] = [];
             $currentDate->modify('+1 week');
         }
 
@@ -118,7 +118,7 @@ class ReportController extends AbstractController
             $jobTimeInHours = $jobTimeInSeconds / 60 / 60;
 
             // Include the data.
-            $report[$year][$week][] = [
+            $report[$year]["w" . $week][] = [
                 "Date" => $date->format('Y-m-d'),
                 "Hours" => $jobTimeInHours,
                 "Total" => $jobTimeInHours * $job['job_rate']

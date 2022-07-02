@@ -28,5 +28,5 @@ $r->addRoute(
 $r->addRoute(
     ['GET', 'POST'],
     '/report/{id}',
-    'App\\Controllers\\Report\\ReportController@report'
+    'App\\Controllers\\Report\\ReportController@weeklyReport'
 );
