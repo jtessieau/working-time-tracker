@@ -9,7 +9,7 @@ use App\Models\UserModel;
 
 class ModifyEmailFormValidation extends FormValidation implements ValidationInterface
 {
-    private static array $fields = [
+    protected static array $fields = [
         'email',
         'emailConfirmation'
     ];
