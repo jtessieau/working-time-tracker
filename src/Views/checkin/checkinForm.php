@@ -49,7 +49,7 @@
                     </div>
                     <div class="field">
                         <div class="control">
-                            <input class=" input" type="time" name="startTime" id="startTime" value="<?php echo $formData['startTime'] ?? date("H:i"); ?>">
+                            <input class=" input" type="time" name="startTime" id="startTime" value="<?php echo $formData['startTime'] ?? "09:00"; ?>">
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                     </div>
                     <div class="field">
                         <div class="control">
-                            <input class="input" type="time" name="endTime" id="endTime" value="<?php echo $formData['endTime'] ?? date("H:i"); ?>">
+                            <input class="input" type="time" name="endTime" id="endTime" value="<?php echo $formData['endTime'] ?? "17:30"; ?>">
                         </div>
                     </div>
 
@@ -99,12 +99,12 @@
 
             <div class="field is-horizontal">
                 <div class="field-label is-normal">
-                    <label class="label" for="breakTime">Unpaid time:</label>
+                    <label class="label" for="breakTime">Unpaid break:</label>
                 </div>
                 <div class="field-body">
                     <div class="field">
                         <div class="control">
-                            <input class="input" type="number" name="breakTime" id="breakTime" value="<?php echo $formData['breakTime'] ?? "0" ?>">
+                            <input class="input" type="number" name="breakTime" id="breakTime" value="<?php echo $formData['breakTime'] ?? "30" ?>">
                         </div>
                     </div>
                 </div>
