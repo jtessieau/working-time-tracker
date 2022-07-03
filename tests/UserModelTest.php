@@ -2,6 +2,7 @@
 
 use App\Models\UserModel;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Dotenv\Dotenv;
 
 final class UserModelTest extends TestCase
 {
@@ -9,6 +10,8 @@ final class UserModelTest extends TestCase
 
     protected function setUp(): void
     {
+        $dotenv = new Dotenv();
+        $dotenv->load(__DIR__ . '/../.env');
         $this->user = new UserModel;
     }
 
@@ -68,16 +71,20 @@ final class UserModelTest extends TestCase
         $this->assertEquals('Firstname', $this->user->getFirstName());
 
         // When first name is composed with hyphen
-        $this->user->setFirstName('Jean-Michel');
+        $this->user->setFirstName('Jean-michel');
         $this->assertEquals('Jean-Michel', $this->user->getFirstName());
 
         // When first name is composed with space
-        $this->user->setFirstName('Jean Michel');
+        $this->user->setFirstName('Jean michel');
         $this->assertEquals('Jean Michel', $this->user->getFirstName());
 
         // When first name contain unauthorised characters
         $this->user->setFirstName('F!rstN@me');
         $this->assertEmpty($this->user->getFirstName());
+
+        // When first name contain quotes
+        $this->user->setFirstName("O'brien");
+        $this->assertEquals("O'Brien", $this->user->getFirstName());
     }
 
     /**
