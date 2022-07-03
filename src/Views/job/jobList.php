@@ -54,8 +54,8 @@
                 </tbody>
             </table>
         <?php } else {
-            echo '<h1 class="title has-text-centered">You have no jobs registred yet</h1>';
-        } ?>
+                                    echo '<h1 class="title has-text-centered">You have no jobs registred yet</h1>';
+                                } ?>
         <div class="has-text-centered">
             <a class="button is-primary" href="/job/start">Register a new job</a>
         </div>
