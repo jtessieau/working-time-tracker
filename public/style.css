@@ -1,0 +1,41 @@
+/* Job list card */
+.job-list .card {
+    border-radius: 20px;
+}
+.job-list .card:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.job-list .card-content {
+    border-radius: 20px 20px 0 0 !important;
+}
+
+.job-list .card-content:hover {
+    background-color: hsla(171, 100%, 41%,0.1);
+}
+
+.job-list .edit-job {
+    color: hsl(204, 86%, 53%) !important;
+}
+
+.job-list .delete-job {
+    color:hsl(348, 100%, 61%);
+}
+
+.job-list .edit-job:hover {
+    background-color: hsl(204, 86%, 53%);
+    border-radius: 0px 0px 0px 20px !important;
+}
+.job-list .delete-job:hover {
+    background-color: hsl(348, 100%, 61%);
+    border-radius: 0px 0px 20px 0px !important;
+}
+
+.job-list .card-footer-item:hover {
+    color: white !important;
+}
+.job-list .is-active {
+    position: absolute !important;
+    right: 10px;
+    top: 10px;
+}

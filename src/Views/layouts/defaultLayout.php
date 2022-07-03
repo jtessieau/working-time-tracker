@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
     <title>
         <?php
         if (isset($title) && !empty($title)) {
@@ -22,7 +23,7 @@
     <?php
     if (isset($hideNavbar) && $hideNavbar === true) {
     } else {
-        ?>
+    ?>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <div class="navbar-item">
@@ -58,7 +59,7 @@
                     <div class="navbar-item">
                         <?php
                         if (!isset($_SESSION['user'])) {
-                            ?>
+                        ?>
                             <div class="buttons">
                                 <a href="/signin" class="button is-primary">
                                     <strong>Sign in</strong>
@@ -69,7 +70,7 @@
                             </div>
                         <?php
                         } else {
-                            ?>
+                        ?>
                             <div class="buttons">
                                 <a href="/user/manage" class="button is-primary">
                                     <?= $_SESSION['user']['firstName'] . ' ' . $_SESSION['user']['lastName'] ?>
