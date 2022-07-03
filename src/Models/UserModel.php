@@ -42,7 +42,7 @@ class UserModel extends AbstractModel
     public function setFirstName(string $firstName): UserModel
     {
         $firstName = trim($firstName);
-        $firstName = filter_var($firstName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+        $firstName = htmlspecialchars($firstName);
         $firstName = ucwords(strtolower($firstName), " -'");
 
         if (preg_match("/^[A-Za-z]*(([ '-])?[A-Za-z]+)*$/", $firstName)) {
@@ -62,7 +62,7 @@ class UserModel extends AbstractModel
     public function setLastName(string $lastName): UserModel
     {
         $lastName = trim($lastName);
-        $lastName = filter_var($lastName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+        $lastName = htmlspecialchars($lastName);
         $lastName = strtoupper($lastName);
 
         if (preg_match("/^[A-Za-z]*(([ '-])?[A-Za-z]+)*$/", $lastName)) {
