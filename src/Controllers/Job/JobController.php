@@ -184,4 +184,23 @@ class JobController extends AbstractController
             'job' => $job
         ]);
     }
+
+    public function showJobDetails(int $id)
+    {
+        $jobModel = new JobModel();
+        $job = $jobModel->findOne($id);
+
+        if (!$this->checkOwner($id)) {
+            $res = new RedirectResponse("/");
+            $res->send();
+        }
+
+        $checkinModel = new CheckinModel();
+        $checkins = $checkinModel->findByJobId($id);
+
+        return $this->render('job/jobDetails', [
+            'job' => $job,
+            'checkins' => $checkins
+        ]);
+    }
 }

@@ -14,7 +14,7 @@
                 ?>
                     <div class="column is-4">
                         <div class="card">
-                            <a href="/job/checkin/list/<?= $job['id'] ?>">
+                            <a href="/job/details/<?= $job['id'] ?>">
                                 <div class="card-content">
                                     <p class="title is-4">
                                         <?= ucwords($job['job_designation']) ?>
