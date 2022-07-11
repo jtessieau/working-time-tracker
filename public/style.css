@@ -15,19 +15,19 @@
 }
 
 .job-list .edit-job {
-    color: hsl(204, 86%, 53%) !important;
+    color: hsl(204, 86%, 65%) !important;
 }
 
-.job-list .delete-job {
-    color:hsl(348, 100%, 61%);
+.job-list .add-checkin {
+    color:hsl(171, 100%, 41%);
 }
 
 .job-list .edit-job:hover {
-    background-color: hsl(204, 86%, 53%);
+    background-color: hsl(204, 86%, 65%);
     border-radius: 0px 0px 0px 20px !important;
 }
-.job-list .delete-job:hover {
-    background-color: hsl(348, 100%, 61%);
+.job-list .add-checkin:hover {
+    background-color: hsl(171, 100%, 41%);
     border-radius: 0px 0px 20px 0px !important;
 }
 

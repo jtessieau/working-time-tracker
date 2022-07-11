@@ -23,7 +23,7 @@
                                 <select name="jobId" id="jobId">
                                     <?php foreach ($jobList as $job) :
                                         $jobDesignation = ucwords($job['job_designation']);
-                                        if ($job['id'] === $formData['jobId']) {
+                                        if ($job['id'] == $formData['jobId'] || $job['id'] == $jobId) {
                                             echo "<option value=\"{$job['id']}\" selected>$jobDesignation</option>";
                                         } else {
                                             echo "<option value=\"{$job['id']}\">$jobDesignation</option>";

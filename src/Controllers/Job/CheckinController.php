@@ -24,7 +24,7 @@ class CheckinController extends AbstractController
         }
     }
 
-    public function create()
+    public function create(int $jobId)
     {
         // Get the current user data from database
         $users = new UserModel();
@@ -59,6 +59,7 @@ class CheckinController extends AbstractController
         }
 
         return $this->render('checkin/checkinForm', [
+            'jobId' => $jobId,
             'jobList' => $jobList,
             'formData' => $formData ?? [],
             'errorMessages' => $errorMessages ?? []

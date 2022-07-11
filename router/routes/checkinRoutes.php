@@ -1,9 +1,10 @@
 <?php
 
 // === Checkin ===
+
 $r->addRoute(
     ['GET', 'POST'],
-    '/job/checkin',
+    '/job/checkin/{id}',
     'App\\Controllers\\Job\\CheckinController@create'
 );
 

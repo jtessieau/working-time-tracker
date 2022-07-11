@@ -38,8 +38,8 @@
                                 <a href="/job/update/<?= $job['id'] ?>" class="card-footer-item edit-job">
                                     <i class=" far fa-edit mr-2"></i>Edit
                                 </a>
-                                <a href=" /job/delete/<?= $job['id'] ?>" class="card-footer-item delete-job">
-                                    <i class="far fa-trash-alt mr-2"></i>Delete
+                                <a href=" /job/checkin/<?= $job['id'] ?>" class="card-footer-item add-checkin">
+                                    <i class="far fa-calendar-plus mr-2"></i>Add checkin
                                 </a>
                             </footer>
                         </div>
