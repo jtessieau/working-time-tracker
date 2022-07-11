@@ -30,7 +30,7 @@
                                 $active ?
                                     '<i class="fas fa-circle is-size-5 has-text-success"></i>'
                                     :
-                                    'i class="fas fa-circle has-text-danger"></i>';
+                                    '<i class="fas fa-circle has-text-danger"></i>';
                                 ?>
                             </div>
 
