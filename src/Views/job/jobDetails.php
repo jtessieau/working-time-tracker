@@ -10,14 +10,20 @@
     </a>
 
     <?php
-    $startDate = new DateTime($job['job_start_date']);
+    $active = false;
 
-    if ($job['job_end_date'] == null) {
-        $active = true;
+    if ($job['job_end_date'] != null) {
+        $endDate = new DateTime($job['job_end_date']);
+        $today = new DateTime();
+
+        if ($today < $endDate) {
+            $active = true;
+        }
     } else {
-        $active = false;
+        $active = true;
     }
     ?>
+
     <?php if ($active) : ?>
         <a href="/job/checkin/<?= $job['id']; ?>" class="button is-primary">
             <i class="far fa-calendar-plus mr-2"></i>Checkin

@@ -3,13 +3,19 @@
         <?php if (!empty($jobs)) { ?>
             <h1 class="title has-text-centered">Your Registred Jobs</h1>
             <div class="columns is-multiline">
-                <?php foreach ($jobs as $job) :
-                    $startDate = new DateTime($job['job_start_date']);
 
-                    if ($job['job_end_date'] == null) {
-                        $active = true;
+                <?php foreach ($jobs as $job) :
+                    $active = false;
+
+                    if ($job['job_end_date'] != null) {
+                        $endDate = new DateTime($job['job_end_date']);
+                        $today = new DateTime();
+
+                        if ($today < $endDate) {
+                            $active = true;
+                        }
                     } else {
-                        $active = false;
+                        $active = true;
                     }
                 ?>
                     <div class="column is-4">
