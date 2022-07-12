@@ -14,7 +14,8 @@
     background-color: hsla(171, 100%, 41%,0.1);
 }
 
-.job-list .edit-job {
+.job-list .edit-job,
+.job-list .edit-job-alone {
     color: hsl(204, 86%, 65%) !important;
 }
 
@@ -25,6 +26,11 @@
 .job-list .edit-job:hover {
     background-color: hsl(204, 86%, 65%);
     border-radius: 0px 0px 0px 20px !important;
+}
+
+.job-list .edit-job-alone:hover {
+    background-color: hsl(204, 86%, 65%);
+    border-radius: 0px 0px 20px 20px !important;
 }
 .job-list .add-checkin:hover {
     background-color: hsl(171, 100%, 41%);

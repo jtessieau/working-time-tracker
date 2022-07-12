@@ -8,9 +8,21 @@
     <a href="/job/delete/<?= $job['id']; ?>" class="button is-danger">
         <i class="far fa-trash-alt mr-2"></i>Delete
     </a>
-    <a href="/job/checkin/<?= $job['id']; ?>" class="button is-primary">
-        <i class="far fa-calendar-plus mr-2"></i>Checkin
-    </a>
+
+    <?php
+    $startDate = new DateTime($job['job_start_date']);
+
+    if ($job['job_end_date'] == null) {
+        $active = true;
+    } else {
+        $active = false;
+    }
+    ?>
+    <?php if ($active) : ?>
+        <a href="/job/checkin/<?= $job['id']; ?>" class="button is-primary">
+            <i class="far fa-calendar-plus mr-2"></i>Checkin
+        </a>
+    <?php endif; ?>
 </div>
 
 <div class="section">
